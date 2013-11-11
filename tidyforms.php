@@ -45,20 +45,80 @@ function tidy_add_form($args) {
 	if( isset($sent) ) {
 		echo 'Form submitted';
 	} else {
-		?>
-		<form action="" method="post">
-			<label>Name</label>
-			<input type="text" name="user_name" value="<?php if( isset($_POST['user_name']) ) { echo $_POST['user_name']; } ?>"><br>
-
-			<label>Email</label>
-			<input type="email" name="user_email" value="<?php if( isset($_POST['user_email']) ) { echo $_POST['user_email']; } ?>"><br>
-			
-			<input type="submit" name="tidy_forms_submit">
-		</form>
-		<?php
+		tidy_contact_form();
 	}
 }
 
 add_action( 'tidy_forms', 'tidy_add_form' );
+
+// TODO:
+// - Shortcode (contact form only)
+// - Create form function
+// - Process form function
+// - Create/send email function
+// - Template tag (process arguments)
+// - Create all functions as class 
+
+function tidy_contact_form($args = null, $data = null) {
+
+	// Defaults - extend these
+	$defaults = array(
+			'form_before'  => '<h2>Contact us</h2>',
+			'form_after'   => '', 
+			'field_before' => '<div class="tidy-field">',
+			'field_after'  => '</div>',
+			'submit_text'  => 'Send message',
+			'form_action'  => '',
+		);
+
+	// Parse arguments with defaults
+	$args = wp_parse_args( $args, $defaults );
+
+	tidy_create_form($args, $data);
+}
+
+function tidy_shortcodes() {
+
+}
+
+function tidy_create_form($args, $data) {
+	// Extract the arguments into variables
+	extract($args);
+
+	// Build form:
+	echo $form_before;
+?>
+	<form action="<?php echo $form_action; ?>" method="post">
+		<?php echo $field_before; ?>
+			<label for="contact-name">Name:</label>
+			<input type="text" id="contact-name" name="contact_name" class="tidy-text">
+		<?php echo $field_after; ?>
+
+		<?php echo $field_before; ?>
+			<label for="contact-email">Email:</label>
+			<input type="text" id="contact-email" name="contact_email" class="tidy-text tidy-email">
+		<?php echo $field_after; ?>
+
+		<?php echo $field_before; ?>
+			<label for="contact-message">Message:</label>
+			<textarea name="contact_message" id="contact-message" cols="30" rows="10" class="tidy-textarea"></textarea>
+		<?php echo $field_after; ?>
+
+		<?php echo $field_before; ?>
+			<input type="submit" id="contact-submit" name="contact_submit" value="<?php echo $submit_text; ?>" class="tidy-submit">
+		<?php echo $field_after; ?>
+	</form>
+<?php
+	echo $form_after;
+
+}
+
+function tidy_process_form() {
+
+}
+
+function tidy_send_email() {
+
+}
 
 ?>
