@@ -37,6 +37,12 @@ if( ! class_exists('Tidy_Forms') ) :
 	require_once( plugin_dir_path( __FILE__ ) . 'class-tidy-forms.php' );
 
 	// Load the plugin (not sure if this is really needed unless we're running the functionality)
-	add_action( 'plugins_loaded', array( 'Tidy_Forms', 'get_instance' ) );
+	add_action( 'plugins_loaded', 'tidy_forms_init' );
+
+	function tidy_forms_init() {
+		$tidy = Tidy_Forms::get_instance();
+
+		$tidy->initialise();
+	}
 
 endif;

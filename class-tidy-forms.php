@@ -17,13 +17,6 @@ class Tidy_Forms {
 	protected static $instance = null;
 
 	/**
-	 * The current version number of the plugin
-	 *
-	 * @var string
-	 */
-	protected static $version = '0.0.1';
-
-	/**
 	 * The slug of the plugin
 	 *
 	 * @var string
@@ -32,11 +25,7 @@ class Tidy_Forms {
 
 
 	private function __construct() {
-		// Include Stylesheet/scripts
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts_styles') );
 
-		// Create post type
-		add_action( 'init', array( $this, 'setup_post_type') );
 	}
 
 	public static function get_instance() {
@@ -51,42 +40,30 @@ class Tidy_Forms {
 		return call_user_func_array(array( static::get_instance(), $method ), $args);
 	}
 
-	public static function admin_scripts_styles() {
+	public function initialise() {
 
-	}
+		// settings
+		$this->settings = array(
 
-	public static function setup_post_type() {
-		 $labels = array(
-			'name'                => __('Tidy Forms', 'dirtisgood'),
-			'singular_name'       => __('Form', 'dirtisgood'),
-			'add_new'             => __('Add New', 'dirtisgood'),
-			'add_new_item'        => __('Add New Form', 'dirtisgood'),
-			'edit_item'           => __('Edit Form', 'dirtisgood'),
-			'new_item'            => __('New Form', 'dirtisgood'),
-			'all_items'           => __('All Forms', 'dirtisgood'),
-			'view_item'           => __('View Form', 'dirtisgood'),
-			'search_items'        => __('Search Forms', 'dirtisgood'),
-			'not_found'           => __('No forms found', 'dirtisgood'), // USE THIS ADAM!
-			'not_found_in_trash'  => __('No forms found in Trash', 'dirtisgood'),
-			'parent_item_colon'   => '',
-			'menu_name'           => __('Tidy Forms', 'dirtisgood'),
+			// basic
+			'name'				=> __('Tidy Forms', 'tidyforms'),
+			'version'			=> '0.0.1',
+			'slug'              => 'tidy-forms',
+
+			// urls
+			'basename'			=> plugin_basename( __FILE__ ),
+			'path'				=> plugin_dir_path( __FILE__ ),
+			'dir'				=> plugin_dir_url( __FILE__ ),
 		);
 
-		$args = array(
-			'labels'              => $labels,
-			'description'         => 'Tidy forms admin',
-			'public'              => true,
-			'capability_type'     => 'post',
-			'has_archive'         => false,
-			'hierarchical'        => false,
-			'exclude_from_search' => true,
-			'publicly_queryable'  => false,
-			'menu_position'       => 45,
-			'menu_icon'           => 'dashicons-feedback',
-			'supports'            => array( 'title', 'author', 'revisions' ),
-		);
+		require_once('inc/helpers.php');
 
-		register_post_type( 'tidy_form', $args );
+
+		if( is_admin() ) {
+			tidy_include('class-tidy-forms-admin.php');
+
+			Tidy_Forms_Admin::get_instance();
+		}
+
 	}
-
 }
