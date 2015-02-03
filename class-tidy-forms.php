@@ -83,7 +83,7 @@ class Tidy_Forms {
 			'publicly_queryable'  => false,
 			'menu_position'       => 45,
 			'menu_icon'           => 'dashicons-feedback',
-			'supports'            => array( 'title', 'author', 'revisions', 'page-attributes' ),
+			'supports'            => array( 'title', 'author', 'revisions' ),
 		);
 
 		register_post_type( 'tidy_form', $args );
