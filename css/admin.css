@@ -23,3 +23,8 @@ table.tidy-fields-table {
 .tidy-fields-table th {
 	border-bottom:1px solid #e1e1e1;
 }
+
+.ui-state-highlight {
+	height:40px;
+	border:1px dashed #e1e1e1;
+}

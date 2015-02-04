@@ -51,6 +51,8 @@ class Tidy_Forms_Admin {
 
 	    if ( 'tidy_form' === $screen ) {
 	    	wp_enqueue_style( 'tidy-forms-admin', tidy_get_dir('css/admin.css'), false, tidy_get_setting('version'), 'screen' );
+
+	    	wp_enqueue_script( 'tidy-forms-admin-js', tidy_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), tidy_get_setting('version'), true );
 	    }
 	}
 
