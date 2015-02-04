@@ -90,7 +90,16 @@ class Tidy_Forms_Admin {
 
 	public function setup_meta_boxes() {
 		add_meta_box(
-			'tidy-forms-settings',
+			'tidy-form-fields',
+			'Fields',
+			array( $this, 'render_fields_meta' ),
+			'tidy_form',
+			'normal',
+			'default'
+		);
+
+		add_meta_box(
+			'tidy-form-settings',
 			'Form settings',
 			array( $this, 'render_settings_meta' ),
 			'tidy_form',
@@ -99,23 +108,93 @@ class Tidy_Forms_Admin {
 		);
 	}
 
+	public function render_fields_meta( $post ) {
+		// Get fields data
+		// Use nonce for verification
+		wp_nonce_field( plugin_basename( __FILE__ ), 'tidy_fields_nonce' );
+
+
+
+
+		// Include fields meta view
+		tidy_get_view('form-fields');
+	}
+
 	public function render_settings_meta( $post ) {
+		// No nonce here, already set in fields meta box
+
+		// Get settings data
+		$content = unserialize( $post->post_content );
+		$settings = $content['settings'];
+
+		// Give the submit text a default setting if none set
+		if( empty($settings['submit_text']) ) {
+			$settings['submit_text'] = 'Submit';
+		}
+
 		// Include settings meta view
+		tidy_get_view('form-settings', $settings);
 	}
 
 	public function save_form_data( $post_id ) {
 
+		// verify if this is an auto save routine.
+		// If it is the post has not been updated, so we don’t want to do anything
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $post_id;
+		}
+
+		// verify this came from the screen and with proper authorization,
+		// because save_post can be triggered at other times
+		if ( !isset( $_POST['tidy_fields_nonce'] ) || !wp_verify_nonce( $_POST['tidy_fields_nonce'], plugin_basename( __FILE__ ) ) ) {
+			return $post_id;
+		}
+
+		// Get the post type object.
+		global $post;
+		$post_type = get_post_type_object( $post->post_type );
+
+		// Check if the current user has permission to edit the post.
+		if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {
+			return $post_id;
+		}
+
+		if ( wp_is_post_revision( $post_id ) ) {
+			return $post_id;
+		}
+
+		// unhook this function so it doesn't loop infinitely
+		remove_action('save_post', array( $this, 'save_form_data' ) );
+
+		// Get fields array
+		$fields = $_POST['tidy_fields'];
+
+		// Get settings array
+		$settings = $_POST['tidy_settings'];
+
+		$all_data = array(
+				'fields'   => $fields,
+				'settings' => $settings,
+			);
+
+		$post = array(
+			'ID'           => $post_id,
+			'post_content' => serialize($all_data),
+			);
+
+		$update = wp_update_post( $post, true );
+
+		if( ! is_wp_error( $update ) ) {
+			// re-hook this function
+			add_action('save_post', array( $this, 'save_form_data' ) );
+		}
 	}
 
 	public function form_shortcode_helper( $post ) {
 
+		// Include shortcode view if on the tidy_form admin screen
 		if( 'tidy_form' === get_current_screen()->id ) {
-			// Change this to a view
-			?>
-			<div class="inside">
-				<div id="tidy-form-shortcode-preview" class="shortcode-preview"><?php // to be filled with something useful ?></div>
-			</div>
-			<?php
+			tidy_get_view('form-shortcode');
 		}
 
 	}

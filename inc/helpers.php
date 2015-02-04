@@ -74,7 +74,7 @@ function tidy_get_path( $path ) {
  * tidy_include
  *
  * Includes file after checking whether the file exists
- * - based on acf_include
+ * - based on tidy_include
  *
  * @param  [string] $file path to the file to include
  */
@@ -86,6 +86,36 @@ function tidy_include( $file ) {
 
 		include_once( $path );
 
+	}
+
+}
+
+/*
+*  tidy_get_view
+*
+*  This function will load in a file from the views folder and allow variables to be passed through
+*
+*  @param	[string] $view_name Name of the view to load
+*  @param	[array] $args Variable for us in the view
+*/
+
+function tidy_get_view( $view_name = '', $args = array() ) {
+
+	// vars
+	$path = tidy_get_path("views/{$view_name}.php");
+
+	if( file_exists($path) ) {
+
+		include( $path );
+
+	}
+
+}
+
+function tidy_isset_echo( $arr, $var ) {
+
+	if( isset( $arr[ $var ] ) ) {
+		echo $arr[ $var ];
 	}
 
 }
