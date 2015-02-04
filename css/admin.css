@@ -1,8 +1,25 @@
 .shortcode-preview {
+	min-height:25px;
 	margin-top:5px;
 	padding:0 10px;
+	line-height:24px;
+	color:#666;
 }
 
 #edit-slug-box {
 	display:none;
+}
+
+table.tidy-fields-table {
+	margin:10px 0;
+	border-bottom:0;
+}
+
+.tidy-fields-table thead th {
+	background-color:#e1e1e1;
+}
+
+.tidy-fields-table td,
+.tidy-fields-table th {
+	border-bottom:1px solid #e1e1e1;
 }

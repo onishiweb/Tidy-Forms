@@ -113,11 +113,12 @@ class Tidy_Forms_Admin {
 		// Use nonce for verification
 		wp_nonce_field( plugin_basename( __FILE__ ), 'tidy_fields_nonce' );
 
-
-
+		// Get settings data
+		$content = unserialize( $post->post_content );
+		$fields = $content['fields'];
 
 		// Include fields meta view
-		tidy_get_view('form-fields');
+		tidy_get_view('form-fields', $fields);
 	}
 
 	public function render_settings_meta( $post ) {
@@ -194,7 +195,7 @@ class Tidy_Forms_Admin {
 
 		// Include shortcode view if on the tidy_form admin screen
 		if( 'tidy_form' === get_current_screen()->id ) {
-			tidy_get_view('form-shortcode');
+			tidy_get_view('form-shortcode', $post);
 		}
 
 	}

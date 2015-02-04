@@ -58,6 +58,9 @@ class Tidy_Forms {
 
 		require_once('inc/helpers.php');
 
+		tidy_include('class-tidy-forms-renderer.php');
+
+		Tidy_Forms_Renderer::get_instance();
 
 		if( is_admin() ) {
 			tidy_include('class-tidy-forms-admin.php');
