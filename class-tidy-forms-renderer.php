@@ -19,7 +19,9 @@ class Tidy_Forms_Renderer {
 	private function __construct() {
 
 		add_action( 'init', array( $this, 'setup_shortcode') );
-		add_action( 'tidy_form', array( $this, 'render_form'), 10, 1 );
+
+		add_filter( 'tidy_form', array( $this, 'process_form'), 5, 1 );
+		add_filter( 'tidy_form', array( $this, 'render_form'), 10, 1 );
 
 	}
 
@@ -42,11 +44,23 @@ class Tidy_Forms_Renderer {
 	public static function render_shortcode( $atts ) {
 		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'tidy_form' );
 
-		do_action( 'tidy_form', $settings );
+		$args = array(
+				'settings' => $settings,
+			);
+
+		do_action( 'tidy_form', $args );
 	}
 
-	public static function render_form( $settings ) {
+	public static function process_form( $args ) {
 
+		echo 'Process ' . $args['settings']['id'];
+		echo '<br>';
+
+	}
+
+	public static function render_form( $args ) {
+
+		echo 'Render ' . $args['settings']['id'];
 
 	}
 }
