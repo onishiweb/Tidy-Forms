@@ -34,7 +34,9 @@ TIDY_FORMS = (function ($) {
 			$('.tidy-fields-sortable').disableSelection();
 		},
 
-		addField = function() {
+		addField = function(e) {
+			e.preventDefault();
+
 			var $field = $('.tidy-field-placeholder').clone(true),
 				$field_title = $field.find('th.row-title'),
 				field_count = $('.tidy-fields .tidy-field').length;
@@ -47,12 +49,19 @@ TIDY_FORMS = (function ($) {
 			$field.slideUp(0).slideDown('fast');
 		},
 
-		editField = function() {
-
+		editField = function(e) {
+			e.preventDefault();
 		},
 
-		deleteField = function() {
+		deleteField = function(e) {
+			e.preventDefault();
 
+			var $this = $(this),
+				$field = $this.parents('.tidy-field');
+
+			$field.slideUp('fast', function () {
+				$field.remove();
+			});
 		};
 
 	return {
