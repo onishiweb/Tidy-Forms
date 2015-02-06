@@ -1,14 +1,14 @@
 <?php
 /**
- * Tidy Forms admin class file
+ * WP Form Architect admin class file
  *
- * @package 	TidyForms
+ * @package 	WP Form Architect
  * @author 		Adam Onishi	<aonishi@wearearchitect.com>
  * @license 	GPL2
  * @copyright 	2015 Adam Onishi
  */
 
-class Tidy_Forms_Admin {
+class Architect_Forms_Admin {
 	/**
 	 * An instance of the class
 	 *
@@ -27,7 +27,7 @@ class Tidy_Forms_Admin {
 		add_action( 'init', array( $this, 'setup_post_type') );
 
 		// Add meta boxes for form creation
-		add_action( 'add_meta_boxes_tidy_form', array( $this, 'setup_meta_boxes' ) );
+		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
 
 		add_action( 'edit_form_before_permalink', array( $this, 'form_shortcode_helper' ) );
@@ -49,16 +49,16 @@ class Tidy_Forms_Admin {
 
 		$screen = get_current_screen()->id;
 
-	    if ( 'tidy_form' === $screen ) {
-	    	wp_enqueue_style( 'tidy-forms-admin', tidy_get_dir('css/admin.css'), false, tidy_get_setting('version'), 'screen' );
+	    if ( 'arc_form' === $screen ) {
+	    	wp_enqueue_style( 'arc-forms-admin', arc_get_dir('css/admin.css'), false, arc_get_setting('version'), 'screen' );
 
-	    	wp_enqueue_script( 'tidy-forms-admin-js', tidy_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), tidy_get_setting('version'), true );
+	    	wp_enqueue_script( 'arc-forms-admin-js', arc_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), arc_get_setting('version'), true );
 	    }
 	}
 
 	public function setup_post_type() {
 		 $labels = array(
-			'name'                => __('Tidy Forms', 'dirtisgood'),
+			'name'                => __('WP Form Architect', 'dirtisgood'),
 			'singular_name'       => __('Form', 'dirtisgood'),
 			'add_new'             => __('Add New', 'dirtisgood'),
 			'add_new_item'        => __('Add New Form', 'dirtisgood'),
@@ -70,7 +70,7 @@ class Tidy_Forms_Admin {
 			'not_found'           => __('No forms found', 'dirtisgood'), // USE THIS ADAM!
 			'not_found_in_trash'  => __('No forms found in Trash', 'dirtisgood'),
 			'parent_item_colon'   => '',
-			'menu_name'           => __('Tidy Forms', 'dirtisgood'),
+			'menu_name'           => __('WP Form Architect', 'dirtisgood'),
 		);
 
 		$args = array(
@@ -87,24 +87,24 @@ class Tidy_Forms_Admin {
 			'supports'            => array( 'title', 'author', 'revisions' ),
 		);
 
-		register_post_type( 'tidy_form', $args );
+		register_post_type( 'arc_form', $args );
 	}
 
 	public function setup_meta_boxes() {
 		add_meta_box(
-			'tidy-form-fields',
+			'arc-form-fields',
 			'Fields',
 			array( $this, 'render_fields_meta' ),
-			'tidy_form',
+			'arc_form',
 			'normal',
 			'default'
 		);
 
 		add_meta_box(
-			'tidy-form-settings',
+			'arc-form-settings',
 			'Form settings',
 			array( $this, 'render_settings_meta' ),
-			'tidy_form',
+			'arc_form',
 			'normal',
 			'default'
 		);
@@ -113,14 +113,14 @@ class Tidy_Forms_Admin {
 	public function render_fields_meta( $post ) {
 		// Get fields data
 		// Use nonce for verification
-		wp_nonce_field( plugin_basename( __FILE__ ), 'tidy_fields_nonce' );
+		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_fields_nonce' );
 
 		// Get settings data
 		$content = unserialize( $post->post_content );
 		$fields = $content['fields'];
 
 		// Include fields meta view
-		tidy_get_view('form-fields', $fields);
+		arc_get_view('form-fields', $fields);
 	}
 
 	public function render_settings_meta( $post ) {
@@ -136,7 +136,7 @@ class Tidy_Forms_Admin {
 		}
 
 		// Include settings meta view
-		tidy_get_view('form-settings', $settings);
+		arc_get_view('form-settings', $settings);
 	}
 
 	public function save_form_data( $post_id ) {
@@ -149,7 +149,7 @@ class Tidy_Forms_Admin {
 
 		// verify this came from the screen and with proper authorization,
 		// because save_post can be triggered at other times
-		if ( !isset( $_POST['tidy_fields_nonce'] ) || !wp_verify_nonce( $_POST['tidy_fields_nonce'], plugin_basename( __FILE__ ) ) ) {
+		if ( !isset( $_POST['arc_fields_nonce'] ) || !wp_verify_nonce( $_POST['arc_fields_nonce'], plugin_basename( __FILE__ ) ) ) {
 			return $post_id;
 		}
 
@@ -170,10 +170,10 @@ class Tidy_Forms_Admin {
 		remove_action('save_post', array( $this, 'save_form_data' ) );
 
 		// Get fields array
-		$fields = $_POST['tidy_fields'];
+		$fields = $_POST['arc_fields'];
 
 		// Get settings array
-		$settings = $_POST['tidy_settings'];
+		$settings = $_POST['arc_settings'];
 
 		$all_data = array(
 				'fields'   => $fields,
@@ -195,9 +195,9 @@ class Tidy_Forms_Admin {
 
 	public function form_shortcode_helper( $post ) {
 
-		// Include shortcode view if on the tidy_form admin screen
-		if( 'tidy_form' === get_current_screen()->id ) {
-			tidy_get_view('form-shortcode', $post);
+		// Include shortcode view if on the arc_form admin screen
+		if( 'arc_form' === get_current_screen()->id ) {
+			arc_get_view('form-shortcode', $post);
 		}
 
 	}

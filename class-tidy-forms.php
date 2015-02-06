@@ -1,14 +1,14 @@
 <?php
 /**
- * Tidy Forms main class file
+ * WP Form Architect main class file
  *
- * @package 	TidyForms
+ * @package 	WP Form Architect
  * @author 		Adam Onishi	<aonishi@wearearchitect.com>
  * @license 	GPL2
  * @copyright 	2015 Adam Onishi
  */
 
-class Tidy_Forms {
+class Architect_Forms {
 	/**
 	 * An instance of the class
 	 *
@@ -21,7 +21,7 @@ class Tidy_Forms {
 	 *
 	 * @var string
 	 */
-	protected static $plugin_slug = 'tidy-forms';
+	protected static $plugin_slug = 'arc-forms';
 
 
 	private function __construct() {
@@ -48,7 +48,7 @@ class Tidy_Forms {
 			// basic
 			'name'				=> __('Tidy Forms', 'tidyforms'),
 			'version'			=> '0.0.1',
-			'slug'              => 'tidy-forms',
+			'slug'              => 'arc-forms',
 
 			// urls
 			'basename'			=> plugin_basename( __FILE__ ),
@@ -58,14 +58,14 @@ class Tidy_Forms {
 
 		require_once('inc/helpers.php');
 
-		tidy_include('class-tidy-forms-renderer.php');
+		arc_include('class-arc-forms-renderer.php');
 
-		Tidy_Forms_Renderer::get_instance();
+		Architect_Forms_Renderer::get_instance();
 
 		if( is_admin() ) {
-			tidy_include('class-tidy-forms-admin.php');
+			arc_include('class-arc-forms-admin.php');
 
-			Tidy_Forms_Admin::get_instance();
+			Architect_Forms_Admin::get_instance();
 		}
 
 	}

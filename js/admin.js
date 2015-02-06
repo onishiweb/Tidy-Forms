@@ -1,5 +1,5 @@
 // Modular JS file
-TIDY_FORMS = (function ($) {
+ARCHITECT_FORMS = (function ($) {
 
 	// Breakpoints
 	var	init = function () {
@@ -11,41 +11,43 @@ TIDY_FORMS = (function ($) {
 		// this runs only when we know the whole DOM is ready
 		domReady = function () {
 
-			if( $('#tidy-form-fields').length ) {
-				$('#tidy-form-fields').on('click', '[tidy-action-add-field]', addField);
+			if( $('#arc-form-fields').length ) {
+				$('#arc-form-fields').on('click', '[arc-action-add-field]', addField);
 			}
 
-			if( $('.tidy-fields-sortable').length ) {
+			if( $('.arc-fields-sortable').length ) {
 				sortableFields();
 			}
 
-			if( $('.tidy-field').length ) {
-				$('.tidy-fields').on('click', '[tidy-action-edit]', editField);
-				$('.tidy-fields').on('click', '[tidy-action-delete]', deleteField);
+			if( $('.arc-field').length ) {
+				$('.arc-fields').on('click', '[arc-action-edit]', editField);
+				$('.arc-fields').on('click', '[arc-action-delete]', deleteField);
 			}
 
 		},
 
 		sortableFields = function() {
-			$('.tidy-fields-sortable').sortable({
-				placeholder:'tidy-sortable-placeholder'
+			$('.arc-fields-sortable').sortable({
+				placeholder:'arc-sortable-placeholder',
+				forcePlaceholderSize:true,
+				update:reorderFieldNumbers
 			});
 
-			$('.tidy-fields-sortable').disableSelection();
+			$('.arc-fields-sortable').disableSelection();
 		},
 
 		addField = function(e) {
 			e.preventDefault();
 
-			var $field = $('.tidy-field-placeholder').clone(true),
+			var $field = $('.arc-field-placeholder').clone(true),
 				$field_title = $field.find('th.row-title'),
-				field_count = $('.tidy-fields .tidy-field').length;
+				field_count = $('.arc-fields .arc-field').length;
 
 
-			$field.removeClass('tidy-field-placeholder');
+			$field.removeClass('arc-field-placeholder');
 			$field_title.text(field_count);
 
-			$('.tidy-fields').append($field);
+			$('.arc-fields').append($field);
 			$field.slideUp(0).slideDown('fast');
 		},
 
@@ -57,11 +59,20 @@ TIDY_FORMS = (function ($) {
 			e.preventDefault();
 
 			var $this = $(this),
-				$field = $this.parents('.tidy-field');
+				$field = $this.parents('.arc-field');
 
 			$field.slideUp('fast', function () {
 				$field.remove();
+				reorderFieldNumbers();
 			});
+		},
+
+		reorderFieldNumbers = function () {
+			var fields = $('.arc-fields .arc-field');
+
+			for( var i=1; i<fields.length; i++ ) {
+				$(fields[i]).find('th.row-title').text(i);
+			}
 		};
 
 	return {
@@ -70,5 +81,5 @@ TIDY_FORMS = (function ($) {
 
 })(jQuery);
 
-TIDY_FORMS.go();
+ARCHITECT_FORMS.go();
 

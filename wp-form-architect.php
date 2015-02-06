@@ -1,15 +1,14 @@
 <?php
 /*
-Plugin Name: Tidy Forms
-Plugin URI: http://wp-tidyforms.com
-Description: Tidy Forms is a new forms generator for WordPress, combining simple form creation and great markup.
+Plugin Name: WP Form Architect
+Description: WP Form Architect is a forms generator for WordPress, combining simple form creation and great markup.
 Version: 0.0.1
-Author: Adam Onishi
-Author URI: http://adamonishi.com
+Author: Architect
+Author URI: http://wearearchitect.com
 License: GPL2
 */
 
-/*  Copyright 2013 Adam Onishi (email: onishiweb at gmail.com)
+/*  Copyright 2013 Architect (email: aonishi at wearearchitect.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,18 +30,18 @@ if( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-if( ! class_exists('Tidy_Forms') ) :
+if( ! class_exists('Architect_Forms') ) :
 
 	// Load the plugin class file
-	require_once( plugin_dir_path( __FILE__ ) . 'class-tidy-forms.php' );
+	require_once( plugin_dir_path( __FILE__ ) . 'class-arc-forms.php' );
 
 	// Load the plugin (not sure if this is really needed unless we're running the functionality)
-	add_action( 'plugins_loaded', 'tidy_forms_init' );
+	add_action( 'plugins_loaded', 'arc_forms_init' );
 
-	function tidy_forms_init() {
-		$tidy = Tidy_Forms::get_instance();
+	function arc_forms_init() {
+		$arc = Architect_Forms::get_instance();
 
-		$tidy->initialise();
+		$arc->initialise();
 	}
 
 endif;

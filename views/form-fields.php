@@ -1,47 +1,38 @@
 
-<div class="tidy-fields-header">
-	<table class="widefat tidy-fields-table">
+<div class="arc-fields-header">
+	<table class="widefat arc-fields-table">
 		<thead>
 			<tr>
 				<th class="row-title">#</th>
-				<th class="tidy-long-col">Field name</th>
-				<th class="tidy-long-col">Field description</th>
-				<th class="tidy-action"></th>
-				<th class="tidy-action"></th>
+				<th class="arc-long-col">Field name</th>
+				<th class="arc-long-col">Field type</th>
+				<th class="arc-action"></th>
+				<th class="arc-action"></th>
 			</tr>
 		</thead>
 	</table>
 </div>
 
-<div class="tidy-fields tidy-fields-sortable">
-	<div class="tidy-field">
-		<table class="widefat tidy-fields-table">
+<div class="arc-fields arc-fields-sortable">
+	<div class="arc-field">
+		<table class="widefat arc-fields-table">
 			<tbody>
 				<tr valign="top">
 					<th class="row-title">1</th>
-					<td class="tidy-long-col">Field name</td>
-					<td class="tidy-long-col">Description</td>
-					<td class="tidy-action"><input type="button" class="button-secondary" value="Edit" tidy-action-edit></td>
-					<td class="tidy-action"><input type="button" class="tidy-button-delete" value="Delete" tidy-action-delete></td>
+					<td class="arc-long-col">Field name</td>
+					<td class="arc-long-col">Text (email)</td>
+					<td class="arc-action"><input type="button" class="button-secondary" value="Edit" arc-action-edit></td>
+					<td class="arc-action"><input type="button" class="arc-button-delete" value="Delete" arc-action-delete></td>
 				</tr>
 			</tbody>
 		</table>
+		<div class="arc-field-settings">
+
+		</div>
 	</div>
 
 	<!-- Placeholder HTML to save building this all with JavaScript -->
-	<div class="tidy-field tidy-field-placeholder">
-		<table class="widefat tidy-fields-table">
-			<tbody>
-				<tr valign="top">
-					<th class="row-title">#</th>
-					<td class="tidy-long-col"><span>Field name</span></td>
-					<td class="tidy-long-col"><span>Description</span></td>
-					<td class="tidy-action"><input type="button" class="button-secondary" value="Edit" tidy-action-edit></td>
-					<td class="tidy-action"><input type="button" class="tidy-button-delete" value="Delete" tidy-action-delete></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+	<?php arc_get_view('form-field-placeholder'); ?>
 </div>
 
-<input type="button" class="button-secondary" value="Add field" tidy-action-add-field>
+<input type="button" class="button-secondary" value="Add field" arc-action-add-field>
