@@ -18,7 +18,7 @@ function arc_get_setting( $name, $allow_filter = true ) {
 
 	// vars
 	$r = null;
-	$tidy = arc_Forms::get_instance();
+	$arc = Architect_Forms::get_instance();
 
 
 	// load from ACF if available

@@ -70,7 +70,7 @@ class Architect_Forms_Admin {
 			'not_found'           => __('No forms found', 'dirtisgood'), // USE THIS ADAM!
 			'not_found_in_trash'  => __('No forms found in Trash', 'dirtisgood'),
 			'parent_item_colon'   => '',
-			'menu_name'           => __('WP Form Architect', 'dirtisgood'),
+			'menu_name'           => __('Form Architect', 'dirtisgood'),
 		);
 
 		$args = array(
