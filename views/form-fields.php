@@ -1,42 +1,38 @@
 
-<div class="tidy-fields-header">
-	<table class="widefat tidy-fields-table">
+<div class="arc-fields-header">
+	<table class="widefat arc-fields-table">
 		<thead>
 			<tr>
-				<th>#</th>
-				<th>Field name</th>
-				<th>Field description</th>
-				<th>Edit</th>
+				<th class="row-title">#</th>
+				<th class="arc-long-col">Field name</th>
+				<th class="arc-long-col">Field type</th>
+				<th class="arc-action"></th>
+				<th class="arc-action"></th>
 			</tr>
 		</thead>
 	</table>
 </div>
 
-<div class="tidy-fields-fields tidy-fields-sortable">
-	<div class="tidy-field ui-state-default">
-		<table class="widefat tidy-fields-table">
+<div class="arc-fields arc-fields-sortable">
+	<div class="arc-field">
+		<table class="widefat arc-fields-table">
 			<tbody>
 				<tr valign="top">
 					<th class="row-title">1</th>
-					<td>Field name</td>
-					<td>Description</td>
-					<td><input type="button" class="button-secondary" value="Edit"></td>
+					<td class="arc-long-col">Field name</td>
+					<td class="arc-long-col">Text (email)</td>
+					<td class="arc-action"><input type="button" class="button-secondary" value="Edit" arc-action-edit></td>
+					<td class="arc-action"><input type="button" class="arc-button-delete" value="Delete" arc-action-delete></td>
 				</tr>
 			</tbody>
 		</table>
+		<div class="arc-field-settings">
+
+		</div>
 	</div>
-	<div class="tidy-field ui-state-default">
-		<table class="widefat tidy-fields-table">
-			<tbody>
-				<tr valign="top">
-					<th class="row-title">2</th>
-					<td>Field name</td>
-					<td>Description</td>
-					<td><input type="button" class="button-secondary" value="Edit"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+
+	<!-- Placeholder HTML to save building this all with JavaScript -->
+	<?php arc_get_view('form-field-placeholder'); ?>
 </div>
 
-<input type="button" class="button-secondary" value="Add field">
+<input type="button" class="button-secondary" value="Add field" arc-action-add-field>

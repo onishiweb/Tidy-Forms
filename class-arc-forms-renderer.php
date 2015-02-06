@@ -1,14 +1,14 @@
 <?php
 /**
- * Tidy Forms renderer class
+ * WP Form Architect renderer class
  *
- * @package 	TidyForms
+ * @package 	WP Form Architect
  * @author 		Adam Onishi	<aonishi@wearearchitect.com>
  * @license 	GPL2
  * @copyright 	2015 Adam Onishi
  */
 
-class Tidy_Forms_Renderer {
+class Architect_Forms_Renderer {
 	/**
 	 * An instance of the class
 	 *
@@ -20,8 +20,8 @@ class Tidy_Forms_Renderer {
 
 		add_action( 'init', array( $this, 'setup_shortcode') );
 
-		add_filter( 'tidy_form', array( $this, 'process_form'), 5, 1 );
-		add_filter( 'tidy_form', array( $this, 'render_form'), 10, 1 );
+		add_filter( 'arc_form', array( $this, 'process_form'), 5, 1 );
+		add_filter( 'arc_form', array( $this, 'render_form'), 10, 1 );
 
 	}
 
@@ -38,17 +38,17 @@ class Tidy_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'tidy-form', array('Tidy_Forms_Renderer', 'render_shortcode') );
+		add_shortcode( 'arc-form', array('arc_Forms_Renderer', 'render_shortcode') );
 	}
 
 	public static function render_shortcode( $atts ) {
-		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'tidy_form' );
+		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'arc_form' );
 
 		$args = array(
 				'settings' => $settings,
 			);
 
-		do_action( 'tidy_form', $args );
+		do_action( 'arc_form', $args );
 	}
 
 	public static function process_form( $args ) {
