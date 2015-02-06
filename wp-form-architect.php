@@ -44,4 +44,18 @@ if( ! class_exists('Architect_Forms') ) :
 		$arc->initialise();
 	}
 
+    /**
+     * wp_architect_form
+     *
+     * Template tag for Architect forms plugin
+     *
+     * @param  [int] $id ID of the form to load
+     */
+    function wp_architect_form( $id ) {
+        $atts = array( 'id' => $id );
+
+        $renderer = Architect_Forms_Renderer::get_instance();
+        $renderer->shortcode( $atts );
+    }
+
 endif;

@@ -38,17 +38,17 @@ class Architect_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'arc-form', array('arc_Forms_Renderer', 'render_shortcode') );
+		add_shortcode( 'architect-form', array($this, 'shortcode') );
 	}
 
-	public static function render_shortcode( $atts ) {
-		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'arc_form' );
+	public static function shortcode( $atts ) {
+		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'architect-form' );
 
 		$args = array(
 				'settings' => $settings,
 			);
 
-		do_action( 'arc_form', $args );
+		do_action( 'architect_form', $args );
 	}
 
 	public static function process_form( $args ) {
