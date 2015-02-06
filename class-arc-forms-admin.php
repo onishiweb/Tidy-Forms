@@ -30,7 +30,15 @@ class Architect_Forms_Admin {
 		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
 
+		// Add shortcode
 		add_action( 'edit_form_before_permalink', array( $this, 'form_shortcode_helper' ) );
+		// add new buttons
+		add_filter('mce_buttons', array( $this, 'register_tinymce_buttons' ) );
+		// Load the TinyMCE plugin : editor_plugin.js (wp2.5)
+		add_filter('mce_external_plugins', array( $this, 'register_tinymce_javascript' ) );
+		// Return the form names and IDs via Ajax
+		add_action('wp_ajax_arc_get_form_values', array( $this, 'get_tinymce_form_data' ) );
+
 	}
 
 	public static function get_instance() {
@@ -46,6 +54,8 @@ class Architect_Forms_Admin {
 	}
 
 	public static function admin_scripts_styles() {
+
+		wp_enqueue_style( 'arc-forms-tinymce', arc_get_dir('css/tinymce.css'), false, arc_get_setting('version'), 'screen' );
 
 		$screen = get_current_screen()->id;
 
@@ -202,4 +212,47 @@ class Architect_Forms_Admin {
 
 	}
 
+	public static function register_tinymce_buttons($buttons) {
+	   array_push($buttons, 'separator', 'architect_forms');
+
+	   return $buttons;
+	}
+
+	public static function register_tinymce_javascript($plugin_array) {
+
+	   $plugin_array['architect_forms'] = arc_get_dir('js/tinymce.js');
+
+	   return $plugin_array;
+	}
+
+	public static function get_tinymce_form_data() {
+		$form_data = array();
+		$args = array(
+				'post_type'      => 'arc_form',
+				'posts_per_page' => '-1',
+				'post_status'    => 'publish',
+			);
+
+		$forms = new WP_Query( $args );
+
+		if( $forms->have_posts() ) {
+
+			foreach( $forms->posts as $form ) {
+				$form_data[] = array(
+						'text'  => $form->post_title,
+						'value' => $form->ID,
+					);
+			}
+
+		} else {
+			$form_data[] = array(
+				'text'  => 'No forms created',
+				'value' => '',
+			);
+		}
+
+		$response = json_encode( $form_data );
+
+		die( $response );
+	}
 }
