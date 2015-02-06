@@ -20,8 +20,8 @@ class Architect_Forms_Renderer {
 
 		add_action( 'init', array( $this, 'setup_shortcode') );
 
-		add_filter( 'arc_form', array( $this, 'process_form'), 5, 1 );
-		add_filter( 'arc_form', array( $this, 'render_form'), 10, 1 );
+		add_filter( 'architect_form', array( $this, 'process_form'), 5, 1 );
+		add_filter( 'architect_form', array( $this, 'render_form'), 10, 1 );
 
 	}
 
@@ -38,7 +38,7 @@ class Architect_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'architect-form', array($this, 'shortcode') );
+		add_shortcode( 'architect-form', array('Architect_Forms_Renderer', 'shortcode') );
 	}
 
 	public static function shortcode( $atts ) {

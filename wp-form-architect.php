@@ -51,8 +51,8 @@ if( ! class_exists('Architect_Forms') ) :
      *
      * @param  [int] $id ID of the form to load
      */
-    function wp_architect_form( $id ) {
-        $atts = array( 'id' => $id );
+    function wp_architect_form( $id, $atts = array() ) {
+        $atts['id'] = $id;
 
         $renderer = Architect_Forms_Renderer::get_instance();
         $renderer->shortcode( $atts );
