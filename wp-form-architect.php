@@ -55,7 +55,7 @@ if( ! class_exists('Architect_Forms') ) :
         $atts['id'] = $id;
 
         $renderer = Architect_Forms_Renderer::get_instance();
-        $renderer->shortcode( $atts );
+        $renderer->setup_action( $atts );
     }
 
 endif;

@@ -14,7 +14,7 @@
 </div>
 
 <div class="arc-fields arc-fields-sortable">
-	<div class="arc-field">
+	<!-- <div class="arc-field">
 		<table class="widefat arc-fields-table">
 			<tbody>
 				<tr valign="top">
@@ -26,13 +26,10 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="arc-field-settings">
-
-		</div>
-	</div>
-
-	<!-- Placeholder HTML to save building this all with JavaScript -->
-	<?php arc_get_view('form-field-placeholder'); ?>
+	</div> -->
 </div>
 
 <input type="button" class="button-secondary" value="Add field" arc-action-add-field>
+
+<!-- Placeholder HTML to save building this all with JavaScript -->
+<?php arc_get_view('form-field-placeholder'); ?>

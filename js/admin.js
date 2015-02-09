@@ -22,6 +22,7 @@ ARCHITECT_FORMS = (function ($) {
 			if( $('.arc-field').length ) {
 				$('.arc-fields').on('click', '[arc-action-edit]', editField);
 				$('.arc-fields').on('click', '[arc-action-delete]', deleteField);
+				$('.arc-fields').on('click', '[arc-action-finished-editing]', closeField);
 			}
 
 		},
@@ -30,7 +31,8 @@ ARCHITECT_FORMS = (function ($) {
 			$('.arc-fields-sortable').sortable({
 				placeholder:'arc-sortable-placeholder',
 				forcePlaceholderSize:true,
-				update:reorderFieldNumbers
+				update:reorderFieldNumbers,
+				cancel:'.editing,input,textarea,button,select,option'
 			});
 
 			$('.arc-fields-sortable').disableSelection();
@@ -40,19 +42,40 @@ ARCHITECT_FORMS = (function ($) {
 			e.preventDefault();
 
 			var $field = $('.arc-field-placeholder').clone(true),
-				$field_title = $field.find('th.row-title'),
-				field_count = $('.arc-fields .arc-field').length;
+				field_count = $('.arc-fields .arc-field').length + 1;
 
 
 			$field.removeClass('arc-field-placeholder');
-			$field_title.text(field_count);
+			// Replace number placeholder with actual number (slightly hacky)
+			$field.html( $field.html().replace(/{#}/g, field_count) );
 
+			// Append field
 			$('.arc-fields').append($field);
+			// Hide extra options
+			$field.find('.arc-field-type-options').slideUp(0);
+			$field.find('.arc-field-advanced-options').slideUp(0);
+			// Reveal options
 			$field.slideUp(0).slideDown('fast');
+		},
+
+		closeField = function(e) {
+			e.preventDefault();
+			var $field = $(this).parents('.arc-field'),
+				$settings = $field.find('.arc-field-settings');
+
+			$field.removeClass('editing');
+			$settings.slideUp('fast');
+
 		},
 
 		editField = function(e) {
 			e.preventDefault();
+
+			var $field = $(this).parents('.arc-field'),
+				$settings = $field.find('.arc-field-settings');
+
+			$field.addClass('editing');
+			$settings.slideDown('fast');
 		},
 
 		deleteField = function(e) {
@@ -70,8 +93,8 @@ ARCHITECT_FORMS = (function ($) {
 		reorderFieldNumbers = function () {
 			var fields = $('.arc-fields .arc-field');
 
-			for( var i=1; i<fields.length; i++ ) {
-				$(fields[i]).find('th.row-title').text(i);
+			for( var i=0; i<fields.length; i++ ) {
+				$(fields[i]).find('th.row-title').text(i+1);
 			}
 		};
 
@@ -82,4 +105,3 @@ ARCHITECT_FORMS = (function ($) {
 })(jQuery);
 
 ARCHITECT_FORMS.go();
-

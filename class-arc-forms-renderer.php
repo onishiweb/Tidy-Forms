@@ -38,10 +38,10 @@ class Architect_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'architect-form', array('Architect_Forms_Renderer', 'shortcode') );
+		add_shortcode( 'architect-form', array('Architect_Forms_Renderer', 'setup_action') );
 	}
 
-	public static function shortcode( $atts ) {
+	public static function setup_action( $atts ) {
 		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'architect-form' );
 
 		$args = array(
