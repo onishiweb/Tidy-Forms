@@ -20,14 +20,14 @@ ARCHITECT_FORMS_TINYMCE = (function ($) {
 
 						// todo: Add loading spinner
 
-						var data = {'action': 'arc_get_form_values'};
+						var request = {'action': 'arc_get_form_values'};
 
 					    $.ajax({
 							type: 'POST',
 							dataType: 'json',
 							url: ajaxurl,
-							data: data,
-							success: function(data) {
+							data: request,
+							success: function(response) {
 								editor.windowManager.open( {
 									title: 'Insert form',
 									body: [
@@ -35,7 +35,7 @@ ARCHITECT_FORMS_TINYMCE = (function ($) {
 											type: 'listbox',
 											name: 'architectFormsBox',
 											label: 'Select form',
-											values: data
+											values: response
 										}
 									],
 									onsubmit: function( e ) {
