@@ -122,14 +122,15 @@ ARCHITECT_FORMS = (function ($) {
 		updateFieldInfo = function($field) {
 			var label = $field.find('[id^=arc-field-label]').val(),
 				$type_select = $field.find('[id^=arc-field-type]'),
-				type = $type_select.find(':selected').text();
+				type = $type_select.find(':selected').val(),
+				type_text = $type_select.find(':selected').text();
 
 			if( label !== '' ) {
 				$field.find('.arc-field-info-label').text(label);
 			}
 
 			if( type !== '' ) {
-				$field.find('.arc-field-info-type').text(type);
+				$field.find('.arc-field-info-type').text(type_text);
 			}
 		},
 
