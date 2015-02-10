@@ -1,3 +1,24 @@
+/**
+ * WordPress blue: #2ea2cc
+ * WordPress dark blue: #0074a2
+ */
+
+.arc-clearfix {
+	zoom:1;
+}
+
+.arc-clearfix:before,
+.arc-clearfix:after {
+	content: '\0020';
+	display: block;
+	height: 0;
+	overflow: hidden;
+}
+
+.arc-clearfix:after {
+	clear: both;
+}
+
 .shortcode-preview {
 	min-height:25px;
 	margin-top:5px;
@@ -24,8 +45,7 @@ table.arc-fields-table {
 .arc-fields-table td,
 .arc-fields-table th {
 	text-align:left;
-	border-top:0;
-	border-bottom:1px solid #e1e1e1;
+	border:0;
 }
 
 .arc-fields-table td span {
@@ -73,4 +93,45 @@ table.arc-fields-table {
 	border:0;
 	background:transparent;
 	cursor:pointer;
+}
+
+.arc-field {
+	border:1px solid #e1e1e1;
+	border-top:0;
+}
+
+.arc-field table {
+	border:0;
+}
+
+.arc-field.editing table {
+	background-color:#28cb8c;
+}
+
+.arc-field fieldset {
+	padding:10px;
+	border-bottom:1px solid #eee;
+}
+
+.arc-field .arc-field-actions {
+	border-bottom:0;
+}
+
+.arc-field label {
+	display:block;
+	margin:0 0 5px;
+	font-size:14px;
+}
+
+.arc-field .arc-field-select {
+	width:100%;
+}
+
+.arc-field-actions .arc-button {
+	float:right;
+	margin-left:10px;
+}
+
+.arc-field-advanced-options .arc-fields-header {
+	padding:0 10px;
 }

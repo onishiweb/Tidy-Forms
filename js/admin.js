@@ -23,6 +23,7 @@ ARCHITECT_FORMS = (function ($) {
 				$('.arc-fields').on('click', '[arc-action-edit]', editField);
 				$('.arc-fields').on('click', '[arc-action-delete]', deleteField);
 				$('.arc-fields').on('click', '[arc-action-finished-editing]', closeField);
+				$('.arc-fields').on('click', '[arc-action-advanced-fields]', advancedFields);
 			}
 
 		},
@@ -74,8 +75,31 @@ ARCHITECT_FORMS = (function ($) {
 			var $field = $(this).parents('.arc-field'),
 				$settings = $field.find('.arc-field-settings');
 
-			$field.addClass('editing');
-			$settings.slideDown('fast');
+			if( $field.hasClass('editing') ) {
+				$settings.slideUp('fast');
+			} else {
+				$settings.slideDown('fast');
+			}
+
+			$field.toggleClass('editing');
+		},
+
+		advancedFields = function(e) {
+			e.preventDefault();
+
+			var $field = $(this).parents('.arc-field'),
+				$settings = $field.find('.arc-field-advanced-options');
+
+			if( $settings.hasClass('active') ) {
+				$settings.slideUp('fast');
+				$(this).text('Advanced field options');
+			} else {
+				$settings.slideDown('fast');
+				$(this).text('Close advanced options');
+			}
+
+			$settings.toggleClass('active');
+
 		},
 
 		deleteField = function(e) {

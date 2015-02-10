@@ -1,4 +1,5 @@
 <div class="arc-field editing arc-field-placeholder">
+
 	<table class="widefat arc-fields-table">
 		<tbody>
 			<tr valign="top">
@@ -10,6 +11,7 @@
 			</tr>
 		</tbody>
 	</table>
+
 	<div class="arc-field-settings">
 
 		<fieldset>
@@ -19,8 +21,8 @@
 		</fieldset>
 
 		<fieldset>
-			<label for="arc-field-type-{#}">Field type</label><br>
-			<select name="arc_field_{#}[type]" id="arc-field-type-{#}">
+			<label for="arc-field-type-{#}">Field type</label>
+			<select name="arc_field_{#}[type]" id="arc-field-type-{#}" class="arc-field-select">
 				<option selected="selected" value="">Select a field type</option>
 				<option value="text">Text</option>
 				<option value="textarea">Textarea</option>
@@ -50,11 +52,11 @@
 			</label>
 		</fieldset>
 
-		<input type="button" class="button-primary" value="Done" arc-action-finished-editing>
-		<input type="button" class="button-secondary" value="Advanced field options" arc-action-advanced-fields>
-
 		<div class="arc-field-advanced-options">
-			<p>Advanced options to configure your form even further.</p>
+			<div class="arc-fields-header">
+				<h4>Advanced options</h4>
+				<p class="description">Configure your form even further.</p>
+			</div>
 
 			<!-- Name -->
 			<fieldset>
@@ -77,6 +79,11 @@
 				<p class="description">Customise the ID used for the input field.</p>
 			</fieldset>
 		</div>
+
+		<fieldset class="arc-field-actions arc-clearfix">
+			<button class="button-primary arc-button" arc-action-finished-editing>Done</button>
+			<button class="button-secondary arc-button" arc-action-advanced-fields>Advanced field options</button>
+		</fieldset>
 
 	</div>
 </div>
