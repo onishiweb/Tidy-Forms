@@ -14,9 +14,16 @@
 </div>
 
 <div class="arc-fields arc-fields-sortable">
+	<!-- Fields go here -->
+	<?php
+	foreach( $args as $field ):
+		arc_get_view('form-field', $field);
+	endforeach;
+	?>
 </div>
 
+<input type="hidden" name="arc_fields_count" id="arc-fields-count" value="0">
 <input type="button" class="button-secondary arc-button-add-field" value="Add field" arc-action-add-field>
 
 <!-- Placeholder HTML to save building this all with JavaScript -->
-<?php arc_get_view('form-field-placeholder'); ?>
+<?php arc_get_view('form-field'); ?>

@@ -58,21 +58,18 @@
 				<p class="description">Configure your form even further.</p>
 			</div>
 
-			<!-- Name -->
 			<fieldset>
 				<label for="arc-field-name-{#}">Field name</label>
 				<input type="text" name="arc_field_{#}[name]" id="arc-field-name-{#}" class="large-text" placeholder="name" value="">
 				<p class="description">Customise the name attribute used in the field.</p>
 			</fieldset>
 
-			<!-- Classes -->
 			<fieldset>
 				<label for="arc-field-classes-{#}">Custom HTML classes (space separated)</label>
 				<input type="text" name="arc_field_{#}[classes]" id="arc-field-classes-{#}" class="large-text" value="">
 				<p class="description">Customise the classes used for the label and form input.</p>
 			</fieldset>
 
-			<!-- ID -->
 			<fieldset>
 				<label for="arc-field-id-{#}">Custom HTML ID</label>
 				<input type="text" name="arc_field_{#}[custom_id]" id="arc-field-id-{#}" class="large-text" value="">
@@ -81,6 +78,7 @@
 		</div>
 
 		<fieldset class="arc-field-actions arc-clearfix">
+			<input type="hidden" name="arc_field_{#}[order]" class="arc-field-order" value="{#}">
 			<button class="button-primary arc-button" arc-action-finished-editing>Done</button>
 			<button class="button-secondary arc-button" arc-action-advanced-fields>Advanced field options</button>
 		</fieldset>

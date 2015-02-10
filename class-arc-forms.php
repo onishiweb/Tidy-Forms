@@ -46,14 +46,22 @@ class Architect_Forms {
 		$this->settings = array(
 
 			// basic
-			'name'				=> __('Tidy Forms', 'tidyforms'),
-			'version'			=> '0.0.1',
-			'slug'              => 'arc-forms',
+			'name'        => __('Tidy Forms', 'tidyforms'),
+			'version'     => '0.0.1',
+			'slug'        => 'arc-forms',
 
 			// urls
-			'basename'			=> plugin_basename( __FILE__ ),
-			'path'				=> plugin_dir_path( __FILE__ ),
-			'dir'				=> plugin_dir_url( __FILE__ ),
+			'basename'    => plugin_basename( __FILE__ ),
+			'path'        => plugin_dir_path( __FILE__ ),
+			'dir'         => plugin_dir_url( __FILE__ ),
+
+			'field_types' => array(
+				'text'     => 'Text',
+				'textarea' => 'Textarea',
+				'select'   => 'Drop down',
+				'radio'    => 'Radio button(s)',
+				'checkbox' => 'Checkbox(es)',
+			),
 		);
 
 		require_once('inc/helpers.php');

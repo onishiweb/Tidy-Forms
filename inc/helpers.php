@@ -28,15 +28,11 @@ function arc_get_setting( $name, $allow_filter = true ) {
 
 	}
 
-	/* @todo: add in filters when a convention has been decided */
 	// filter for 3rd party customization
-	/*
+
 	if( $allow_filter ) {
-
-		$r = apply_filters( "acf/settings/{$name}", $r );
-
+		$r = apply_filters( "architect_forms_{$name}", $r );
 	}
-	*/
 
 	// return
 	return $r;

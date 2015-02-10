@@ -20,11 +20,25 @@ ARCHITECT_FORMS = (function ($) {
 			}
 
 			if( $('.arc-field').length ) {
+				var fields = $('.arc-fields .arc-field');
+
+				for(var i=0; i<fields.length; i++) {
+					initField(fields[i]);
+				}
+
 				$('.arc-fields').on('click', '[arc-action-edit]', editField);
 				$('.arc-fields').on('click', '[arc-action-delete]', deleteField);
-				$('.arc-fields').on('click', '[arc-action-finished-editing]', closeField);
+				$('.arc-fields').on('click', '[arc-action-finished-editing]', editField);
 				$('.arc-fields').on('click', '[arc-action-advanced-fields]', advancedFields);
 			}
+
+		},
+
+		initField = function(field) {
+
+			$(field).find('.arc-field-type-options').slideUp(0);
+			$(field).find('.arc-field-advanced-options').slideUp(0);
+			$(field).find('.arc-field-settings').slideUp(0);
 
 		},
 
@@ -45,10 +59,10 @@ ARCHITECT_FORMS = (function ($) {
 			var $field = $('.arc-field-placeholder').clone(true),
 				field_count = $('.arc-fields .arc-field').length + 1;
 
-
 			$field.removeClass('arc-field-placeholder');
 			// Replace number placeholder with actual number (slightly hacky)
 			$field.html( $field.html().replace(/{#}/g, field_count) );
+			$('#arc-fields-count').val( field_count );
 
 			// Append field
 			$('.arc-fields').append($field);
@@ -59,16 +73,6 @@ ARCHITECT_FORMS = (function ($) {
 			$field.slideUp(0).slideDown('fast');
 		},
 
-		closeField = function(e) {
-			e.preventDefault();
-			var $field = $(this).parents('.arc-field'),
-				$settings = $field.find('.arc-field-settings');
-
-			$field.removeClass('editing');
-			$settings.slideUp('fast');
-
-		},
-
 		editField = function(e) {
 			e.preventDefault();
 
@@ -77,6 +81,7 @@ ARCHITECT_FORMS = (function ($) {
 
 			if( $field.hasClass('editing') ) {
 				$settings.slideUp('fast');
+				updateFieldInfo( $field );
 			} else {
 				$settings.slideDown('fast');
 			}
@@ -114,11 +119,26 @@ ARCHITECT_FORMS = (function ($) {
 			});
 		},
 
+		updateFieldInfo = function($field) {
+			var label = $field.find('[id^=arc-field-label]').val(),
+				$type_select = $field.find('[id^=arc-field-type]'),
+				type = $type_select.find(':selected').text();
+
+			if( label !== '' ) {
+				$field.find('.arc-field-info-label').text(label);
+			}
+
+			if( type !== '' ) {
+				$field.find('.arc-field-info-type').text(type);
+			}
+		},
+
 		reorderFieldNumbers = function () {
 			var fields = $('.arc-fields .arc-field');
 
 			for( var i=0; i<fields.length; i++ ) {
 				$(fields[i]).find('th.row-title').text(i+1);
+				$(fields[i]).find('input.arc-field-order').val(i+1);
 			}
 		};
 

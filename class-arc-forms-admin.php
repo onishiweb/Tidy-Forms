@@ -130,7 +130,7 @@ class Architect_Forms_Admin {
 		$fields = $content['fields'];
 
 		// Include fields meta view
-		arc_get_view('form-fields', $fields);
+		arc_get_view('form-fields-meta', $fields);
 	}
 
 	public function render_settings_meta( $post ) {
@@ -180,7 +180,13 @@ class Architect_Forms_Admin {
 		remove_action('save_post', array( $this, 'save_form_data' ) );
 
 		// Get fields array
-		$fields = $_POST['arc_fields'];
+		$fields = array();
+		$field_count = $_POST['arc_fields_count'];
+
+		for( $i=1; $i<=$field_count; $i++) {
+			$field_order = $_POST['arc_field_' . $i]['order'];
+			$fields[ $field_order ] = $_POST['arc_field_' . $i];
+		}
 
 		// Get settings array
 		$settings = $_POST['arc_settings'];
