@@ -48,7 +48,7 @@ $field_name = 'arc_field_' . $order;
 
 		<fieldset>
 			<label for="arc-field-label-<?php echo $order; ?>">Field label</label>
-			<input type="text" name="<?php echo $field_name; ?>[label]" id="arc-field-label-<?php echo $order; ?>" class="large-text" placeholder="Name" value="<?php arc_isset_echo( $args, 'label' ); ?>" required>
+			<input type="text" name="<?php echo $field_name; ?>[label]" id="arc-field-label-<?php echo $order; ?>" class="large-text" placeholder="Name" value="<?php arc_isset_echo( $args, 'label' ); ?>">
 			<p class="description">Enter the label to display alongside the field.</p>
 		</fieldset>
 
