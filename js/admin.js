@@ -68,17 +68,16 @@ ARCHITECT_FORMS = (function ($) {
 			$(modal).fadeIn(400, callback);
 		},
 
-		closeModal = function(callback) {
-			$('body').off('click', '.arc-lightbox-close, .arc-lightbox-mask', closeModal);
-
+		closeModal = function() {
 			$('.arc-lightbox-modal').fadeOut(200, function() {
 				$(this).remove();
 
 				$('.arc-lightbox-mask').fadeOut(300, function() {
 					$(this).remove();
-					callback();
 				});
 			});
+
+			$('body').trigger('arcCloseModal');
 		},
 
 		sortableFields = function() {
@@ -99,6 +98,13 @@ ARCHITECT_FORMS = (function ($) {
 			openModal( '#arc-field-type-selector', function() {
 				// register click handler
 				$('body').on('click', '.arc-lightbox-modal .arc-field-type-choice', insertField);
+				// register close handler
+				$('body').on('arcCloseModal', function() {
+
+					$('body').off('click', '.arc-lightbox-modal .arc-field-type-choice', insertField);
+					$('body').off('arcCloseModal');
+
+				});
 			});
 
 		},
@@ -130,10 +136,7 @@ ARCHITECT_FORMS = (function ($) {
 			$field.find('.arc-field-advanced-options').slideUp(0);
 
 			// Remove modal
-			closeModal( function() {
-				// register click handler
-				$('body').off('click', '.arc-lightbox-modal .arc-field-type-choice', insertField);
-			});
+			closeModal();
 
 			// Reveal options
 			$field.slideUp(0).slideDown('fast');
