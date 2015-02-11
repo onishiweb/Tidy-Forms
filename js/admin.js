@@ -42,6 +42,39 @@ ARCHITECT_FORMS = (function ($) {
 
 		},
 
+		openModal = function( content, callback ) {
+			var mask = $('<div />', { 'class': 'arc-lightbox-mask' });
+			var modal = $('<div />', { 'class': 'arc-lightbox-modal' });
+			var $content = $( content ).clone(true);
+
+			$('body').append(mask);
+			$(mask).fadeOut(0).fadeIn(200);
+
+			$('body').append(modal);
+			$(modal).append( $content );
+
+			var contentX = ($content.width() / 2) * -1,
+				contentY = ($content.height() / 2) * -1;
+
+			$(modal).fadeOut(0)
+					.css({
+						'margin-top':contentY,
+						'margin-left':contentX
+					});
+
+			$(modal).fadeIn(400, callback);
+		},
+
+		closeModal = function() {
+			$('.arc-lightbox-modal').fadeOut(200, function() {
+				$(this).remove();
+
+				$('.arc-lightbox-mask').fadeOut(300, function() {
+					$(this).remove();
+				});
+			});
+		},
+
 		sortableFields = function() {
 			$('.arc-fields-sortable').sortable({
 				placeholder:'arc-sortable-placeholder',
@@ -56,6 +89,20 @@ ARCHITECT_FORMS = (function ($) {
 		addField = function(e) {
 			e.preventDefault();
 
+			// Open field type selector
+			openModal( '#arc-field-type-selector', function() {
+				// register click handler
+				$('body').on('click', '.arc-lightbox-modal .arc-field-type-choice', insertField);
+				$('body').on('click', '.arc-lightbox-close, .arc-lightbox-mask', closeModal);
+			});
+
+		},
+
+		insertField = function( e ) {
+			var $this = $(this),
+				choice = $this.val();
+
+			// Insert field
 			var $field = $('.arc-field-placeholder').clone(true),
 				field_count = $('.arc-fields .arc-field').length + 1;
 
@@ -66,9 +113,20 @@ ARCHITECT_FORMS = (function ($) {
 
 			// Append field
 			$('.arc-fields').append($field);
+
+			// Set field type
+			$field.find('.arc-field-select option').attr('selected', '');
+			$field.find('.arc-field-select option[value=' + choice + ']').attr('selected', 'selected');
+
+			updateFieldInfo($field);
+
 			// Hide extra options
 			$field.find('.arc-field-type-options').slideUp(0);
 			$field.find('.arc-field-advanced-options').slideUp(0);
+
+			// Remove modal
+			closeModal();
+
 			// Reveal options
 			$field.slideUp(0).slideDown('fast');
 		},

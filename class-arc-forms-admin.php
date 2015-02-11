@@ -130,7 +130,7 @@ class Architect_Forms_Admin {
 		$fields = $content['fields'];
 
 		// Include fields meta view
-		arc_get_view('form-fields-meta', $fields);
+		arc_get_view('form-fields-box', $fields);
 	}
 
 	public function render_settings_meta( $post ) {

@@ -1,4 +1,3 @@
-
 <div class="arc-fields-header">
 	<table class="widefat arc-fields-table">
 		<thead>
@@ -24,6 +23,11 @@
 
 <input type="hidden" name="arc_fields_count" id="arc-fields-count" value="0">
 <input type="button" class="button-secondary arc-button-add-field" value="Add field" arc-action-add-field>
+<a href="#TB_inline?height=300&width=400&inlineId=arc-field-type-selector" class="button-secondary thickbox">Add field</a>
 
 <!-- Placeholder HTML to save building this all with JavaScript -->
 <?php arc_get_view('form-field'); ?>
+<!-- For thickbox type selector -->
+<div style="display:none">
+	<?php arc_get_view('form-field-type-selector'); ?>
+</div>
