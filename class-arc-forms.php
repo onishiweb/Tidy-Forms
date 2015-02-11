@@ -36,10 +36,6 @@ class Architect_Forms {
 		return self::$instance;
 	}
 
-	public static function __callStatic($method, $args) {
-		return call_user_func_array(array( static::get_instance(), $method ), $args);
-	}
-
 	public function initialise() {
 
 		// settings
@@ -66,6 +62,7 @@ class Architect_Forms {
 
 		require_once('inc/helpers.php');
 
+		arc_include('inc/template-tags.php');
 		arc_include('class-arc-forms-renderer.php');
 
 		Architect_Forms_Renderer::get_instance();

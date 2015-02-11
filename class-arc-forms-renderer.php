@@ -33,7 +33,7 @@ class Architect_Forms_Renderer {
 		return self::$instance;
 	}
 
-	public static function __callStatic($method, $args) {
+	public static function call_static($method, $args) {
 		return call_user_func_array(array( static::get_instance(), $method ), $args);
 	}
 

@@ -49,10 +49,6 @@ class Architect_Forms_Admin {
 		return self::$instance;
 	}
 
-	public static function __callStatic($method, $args) {
-		return call_user_func_array(array( static::get_instance(), $method ), $args);
-	}
-
 	public static function admin_scripts_styles() {
 
 		wp_enqueue_style( 'arc-forms-tinymce', arc_get_dir('css/tinymce.css'), false, arc_get_setting('version'), 'screen' );
