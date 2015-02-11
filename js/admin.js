@@ -62,15 +62,21 @@ ARCHITECT_FORMS = (function ($) {
 						'margin-left':contentX
 					});
 
+			// Register click handler to close modal window
+			$('body').on('click', '.arc-lightbox-close, .arc-lightbox-mask', closeModal);
+
 			$(modal).fadeIn(400, callback);
 		},
 
-		closeModal = function() {
+		closeModal = function(callback) {
+			$('body').off('click', '.arc-lightbox-close, .arc-lightbox-mask', closeModal);
+
 			$('.arc-lightbox-modal').fadeOut(200, function() {
 				$(this).remove();
 
 				$('.arc-lightbox-mask').fadeOut(300, function() {
 					$(this).remove();
+					callback();
 				});
 			});
 		},
@@ -93,7 +99,6 @@ ARCHITECT_FORMS = (function ($) {
 			openModal( '#arc-field-type-selector', function() {
 				// register click handler
 				$('body').on('click', '.arc-lightbox-modal .arc-field-type-choice', insertField);
-				$('body').on('click', '.arc-lightbox-close, .arc-lightbox-mask', closeModal);
 			});
 
 		},
@@ -125,7 +130,10 @@ ARCHITECT_FORMS = (function ($) {
 			$field.find('.arc-field-advanced-options').slideUp(0);
 
 			// Remove modal
-			closeModal();
+			closeModal( function() {
+				// register click handler
+				$('body').off('click', '.arc-lightbox-modal .arc-field-type-choice', insertField);
+			});
 
 			// Reveal options
 			$field.slideUp(0).slideDown('fast');
@@ -155,9 +163,11 @@ ARCHITECT_FORMS = (function ($) {
 
 			if( $settings.hasClass('active') ) {
 				$settings.slideUp('fast');
+				// @todo: translate string
 				$(this).text('Advanced field options');
 			} else {
 				$settings.slideDown('fast');
+				// @todo: translate string
 				$(this).text('Close advanced options');
 			}
 
