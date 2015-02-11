@@ -184,7 +184,15 @@ ARCHITECT_FORMS = (function ($) {
 				type_text = $type_select.find(':selected').text();
 
 			if( label !== '' ) {
+				// Update info
 				$field.find('.arc-field-info-label').text(label);
+				// Update name field if not already set
+				var $name = $field.find('[id^=arc-field-name]'),
+					name_value = label.replace(/[ -]/g,'_').toLowerCase();
+
+				if( $name.val() === '' ) {
+					$name.val(name_value);
+				}
 			}
 
 			if( type !== '' ) {
