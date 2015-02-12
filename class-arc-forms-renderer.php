@@ -16,6 +16,8 @@ class Architect_Forms_Renderer {
 	 */
 	protected static $instance = null;
 
+	public static $form;
+
 	private function __construct() {
 
 		add_action( 'init', array( $this, 'setup_shortcode') );
@@ -38,29 +40,60 @@ class Architect_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'architect-form', array('Architect_Forms_Renderer', 'setup_action') );
+		add_shortcode( 'architect-form', array('Architect_Forms_Renderer', 'setup_form') );
 	}
 
-	public static function setup_action( $atts ) {
-		$settings = shortcode_atts( array( 'id' => '' ), $atts, 'architect-form' );
+	public static function setup_form( $atts ) {
+		$settings = shortcode_atts( arc_get_setting('setting_defaults'), $atts, 'architect-form' );
 
-		$args = array(
-				'settings' => $settings,
+		$id = $settings['id'];
+
+		// get form details
+		$form = get_post( $id );
+		$content = unserialize( $form->post_content );
+
+		// Add the title to general settings
+		$content['settings']['title'] = $form->post_title;
+
+		// Setup the form details in the class ready to be used
+		self::$form = array(
+				'id'       => $id, // ID of the form
+				'settings' => $settings, // Config options for form
+				'fields'   => $content['fields'], // Form fields
+				'general'  => $content['settings'], // Form general settings
 			);
 
-		do_action( 'architect_form', $args );
+		arc_get_view('form-container');
 	}
 
-	public static function process_form( $args ) {
+	public static function process_form() {
 
-		echo 'Process ' . $args['settings']['id'];
+		echo 'Process ' . self::$form['id'];
 		echo '<br>';
 
 	}
 
-	public static function render_form( $args ) {
+	public static function render_form() {
 
-		echo 'Render ' . $args['settings']['id'];
+		arc_get_view('form');
 
+	}
+
+	public static function get_form_title() {
+
+		// if title output setting = false, return
+
+		$title = self::$form['general']['title'];
+
+		return $title;
+	}
+
+	public static function get_form_intro() {
+
+		// if title output setting = false, return
+
+		$title = self::$form['general']['intro_text'];
+
+		return apply_filters( 'the_content', $title );
 	}
 }

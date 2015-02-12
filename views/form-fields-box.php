@@ -31,6 +31,7 @@
 
 <!-- Placeholder HTML to save building this all with JavaScript -->
 <?php arc_get_view('form-field'); ?>
+
 <!-- For thickbox type selector -->
 <div style="display:none">
 	<?php arc_get_view('form-field-type-selector'); ?>
