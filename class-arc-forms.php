@@ -57,6 +57,7 @@ class Architect_Forms {
 				'select'   => 'Drop down',
 				'radio'    => 'Radio button(s)',
 				'checkbox' => 'Checkbox(es)',
+				'title'    => 'Title',
 			),
 
 			'setting_defaults' => array(
