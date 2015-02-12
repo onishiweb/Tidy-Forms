@@ -109,12 +109,17 @@ function architect_the_form_intro( $echo = true ) {
  *
  * Output a form field
  *
- * @param  string  $type 	The type of input for the form
- * @param  array   $args 	Array of arguments for outputting the form
+ * @param  array   $field 	Array of data for the field to be output
  * @param  boolean $args 	Whether to output the field or return
  */
-function architect_the_form_field( $type, $args = array(), $echo = true ) {
+function architect_the_form_field( $field = array(), $echo = true ) {
+	$field_html = Architect_Forms_Renderer::get_form_field( $field );
 
+	if( $echo ) {
+		echo $field_html;
+	} else {
+		return $field_html;
+	}
 }
 
 /**
