@@ -90,10 +90,53 @@ class Architect_Forms_Renderer {
 
 	public static function get_form_intro() {
 
-		// if title output setting = false, return
-
 		$title = self::$form['general']['intro_text'];
 
-		return apply_filters( 'the_content', $title );
+		if( $title !== '' ) {
+			return apply_filters( 'the_content', $title );
+		} else {
+			return;
+		}
 	}
+
+	public static function get_form_confirmation() {
+
+	}
+
+	public static function get_form_field( $field = array() ) {
+
+		if( empty($field) ) {
+			return;
+		}
+
+		$field_method = 'get_' . $field['type'] . '_field';
+
+		self::$field_method($field);
+
+	}
+
+	private static function get_text_field( $args = array() ) {
+
+	}
+
+	private static function get_textarea_field( $args = array() ) {
+
+	}
+
+	private static function get_select_field( $args = array() ) {
+
+	}
+
+	private static function get_radio_field( $args = array() ) {
+
+	}
+
+	private static function get_checkbox_field( $args = array() ) {
+
+	}
+
+	private static function get_title_field( $args = array() ) {
+
+	}
+
 }
