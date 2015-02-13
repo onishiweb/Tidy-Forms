@@ -203,7 +203,7 @@ class Architect_Forms_Renderer {
 		$output = self::field_before( 'arc-form-field-submit');
 
 		$output.= '<input type="submit" name="arc_form_submit" class="arc-form-submit" value="' . $text . '">';
-		$output.= apply_filters( 'architect_form_hidden_fields', $fields );
+		$output.= apply_filters( 'architect_form_hidden_fields', $hidden_fields );
 
 		$output.= self::field_after();
 
