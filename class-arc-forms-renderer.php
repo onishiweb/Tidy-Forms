@@ -137,7 +137,7 @@ class Architect_Forms_Renderer {
 
 		$output.= self::$field_method($field);
 
-		$output.= '<p class="description">' . $field['description'] . '</p>';
+		$output.= '<span class="arc-field-description">' . $field['description'] . '</span>';
 
 		$output.= self::field_after();
 
@@ -170,29 +170,132 @@ class Architect_Forms_Renderer {
 
 	private static function get_text_field( $args = array() ) {
 
-		// 	<label for=""></label>
-		// 	<input type="text">
+		extract($args);
+
+		$id = str_replace('_', '-', $name);
+
+		if( $custom_id !== '' ) {
+			$id = $custom_id;
+		}
+
+		$output = '<label for="arc-' . $id . '">' . $label . '</label>';
+		$output.= '<input type="text" name="arc_' . $name . '" id="arc-' . $id . '" class="arc-form-text" value="" >';
+
+		return $output;
 
 	}
 
 	private static function get_textarea_field( $args = array() ) {
 
+		extract($args);
+
+		$id = str_replace('_', '-', $name);
+
+		if( $custom_id !== '' ) {
+			$id = $custom_id;
+		}
+
+		$output = '<label for="arc-' . $id . '">' . $label . '</label>';
+		$output.= '<textarea name="arc_' . $name . '" id="arc-' . $id . '" class="arc-form-textarea" cols="80" rows="5"></textarea>';
+
+		return $output;
 	}
 
 	private static function get_select_field( $args = array() ) {
+		extract($args);
 
+		$options = explode("\n", $input_options);
+
+		$id = str_replace('_', '-', $name);
+
+		if( $custom_id !== '' ) {
+			$id = $custom_id;
+		}
+
+		$output = '<label for="arc-' . $id . '">' . $label . '</label>';
+		$output.= '<select name="arc_' . $name . '" id="arc-' . $id . '" class="arc-form-select">';
+
+		foreach( $options as $opt ) {
+			$values = explode(' : ', $opt);
+
+			if( count($values) > 1 ) {
+				$output.= '<option value="' . $values[0] . '">' . $values[1] . '</option>';
+			} else {
+				$output.= '<option value="' . $values[0] . '">' . $values[0] . '</option>';
+			}
+		}
+
+		$output.= '</select>';
+
+		return $output;
 	}
 
 	private static function get_radio_field( $args = array() ) {
+		extract($args);
 
+		$options = explode("\n", $input_options);
+
+		$id = str_replace('_', '-', $name);
+
+		if( $custom_id !== '' ) {
+			$id = $custom_id;
+		}
+
+		$output = '<span class="arc-form-label">' . $label . '</span>';
+
+		for($i=0; $i<count($options); $i++) {
+			$values = explode(' : ', $options[$i]);
+
+			if( count($values) > 1 ) {
+				$output.= '<label for="arc-' . $id . '-' . $i . '">';
+				$output.= '<input type="radio" name="arc_' . $name . '" id="arc-' . $id . '-' . $i . '" class="arc-form-radio" value="' . $values[0] . '">';
+				$output.= '<span class="arc-form-radio-label">' . $values[1] . '</span></label>';
+			} else {
+				$output.= '<label for="arc-' . $id . '-' . $i . '">';
+				$output.= '<input type="radio" name="arc_' . $name . '" id="arc-' . $id . '-' . $i . '" class="arc-form-radio" value="' . $values[0] . '">';
+				$output.= '<span class="arc-form-radio-label">' . $values[0] . '</span></label>';
+			}
+		}
+
+		return $output;
 	}
 
 	private static function get_checkbox_field( $args = array() ) {
+		extract($args);
 
+		$options = explode("\n", $input_options);
+
+		$id = str_replace('_', '-', $name);
+
+		if( $custom_id !== '' ) {
+			$id = $custom_id;
+		}
+
+		$output = '<span class="arc-form-label">' . $label . '</span>';
+
+		for($i=0; $i<count($options); $i++) {
+			$values = explode(' : ', $options[$i]);
+
+			if( count($values) > 1 ) {
+				$output.= '<label for="arc-' . $id . '-' . $i . '">';
+				$output.= '<input type="checkbox" name="arc_' . $name . '[]" id="arc-' . $id . '-' . $i . '" class="arc-form-checkbox" value="' . $values[0] . '">';
+				$output.= '<span class="arc-form-checkbox-label">' . $values[1] . '</span></label>';
+			} else {
+				$output.= '<label for="arc-' . $id . '-' . $i . '">';
+				$output.= '<input type="checkbox" name="arc_' . $name . '[]" id="arc-' . $id . '-' . $i . '" class="arc-form-checkbox" value="' . $values[0] . '">';
+				$output.= '<span class="arc-form-checkbox-label">' . $values[0] . '</span></label>';
+			}
+		}
+
+		return $output;
 	}
 
 	private static function get_title_field( $args = array() ) {
+		extract($args);
 
+		$output = '<span class="arc-form-title">' . $label . '</span>';
+
+		return $output;
 	}
 
 	public static function get_form_submit() {
