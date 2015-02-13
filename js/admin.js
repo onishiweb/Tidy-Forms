@@ -36,9 +36,17 @@ ARCHITECT_FORMS = (function ($) {
 
 		initField = function(field) {
 
-			$(field).find('.arc-field-type-options').slideUp(0);
+			var field_type = $(field).find('.arc-field-select option:selected').val();
+
+			if( field_type === 'text' || field_type === 'textarea' || field_type === 'title' ) {
+				$(field).find('.arc-field-type-options').slideUp(0);
+
+			}
+
 			$(field).find('.arc-field-advanced-options').slideUp(0);
 			$(field).find('.arc-field-settings').slideUp(0);
+
+			$(field).on('change', '.arc-field-select', fieldOptions);
 
 		},
 
@@ -129,6 +137,8 @@ ARCHITECT_FORMS = (function ($) {
 			$field.find('.arc-field-select option').attr('selected', '');
 			$field.find('.arc-field-select option[value=' + choice + ']').attr('selected', 'selected');
 
+			$field.on('change', '.arc-field-select', fieldOptions);
+
 			updateFieldInfo($field);
 
 			// Hide extra options
@@ -178,11 +188,31 @@ ARCHITECT_FORMS = (function ($) {
 
 		},
 
+		fieldOptions = function(e) {
+			var $this = $(this),
+				$field = $this.parents('.arc-field'),
+				$options = $field.find('.arc-field-type-options'),
+				option = $this.find(':selected').val();
+
+			if( option === 'select' || option === 'radio' || option === 'checkbox' ) {
+				if( ! $options.hasClass('active') ) {
+					$options.slideDown('fast').addClass('active');
+				}
+			} else {
+				if( $options.hasClass('active') ) {
+					$options.slideUp('fast').removeClass('active');
+					$options.find('textarea').val('');
+				}
+			}
+		},
+
 		deleteField = function(e) {
 			e.preventDefault();
 
 			var $this = $(this),
 				$field = $this.parents('.arc-field');
+
+			$field.off('change', '.arc-field-select', advancedFields);
 
 			$field.slideUp('fast', function () {
 				$field.remove();

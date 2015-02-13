@@ -63,13 +63,15 @@ $field_name = 'arc_field_' . $order;
 
 			</select>
 			<p class="description">Select the type of the field.</p>
+		</fieldset>
 
-			<div class="arc-field-type-options">
+		<div class="arc-field-type-options">
+			<fieldset>
 				<label for="arc-field-type-options-<?php echo $order; ?>">Field input options</label>
 				<textarea name="<?php echo $field_name; ?>[input_options]" id="arc-field-type-options-<?php echo $order; ?>" class="large-text" cols="80" rows="5"><?php arc_isset_echo( $args, 'input_options' ); ?></textarea>
 				<p class="description">Enter options for dropdown, radio, or checkboxes (one per line)</p>
-			</div>
-		</fieldset>
+			</fieldset>
+		</div>
 
 		<fieldset>
 			<label for="arc-field-description-<?php echo $order; ?>">Description/instructions</label>
