@@ -105,6 +105,28 @@ function architect_the_form_intro( $echo = true ) {
 }
 
 /**
+ * architect_form_have_fields
+ *
+ * Checks whether there are any fields to output
+ *
+ * @return boolean 			True if there are fields to output
+ */
+function architect_form_have_fields() {
+	return Architect_Forms_Renderer::have_fields();
+}
+
+/**
+ * architect_the_form_fields
+ *
+ * Gets and returns an array of the available form fields
+ *
+ * @return array 			array of form fields
+ */
+function architect_the_form_fields() {
+	return Architect_Forms_Renderer::get_fields();
+}
+
+/**
  * architect_the_form_field
  *
  * Output a form field
@@ -132,7 +154,13 @@ function architect_the_form_field( $field = array(), $echo = true ) {
  * @return string     		The html submit button
  */
 function architect_the_form_submit( $echo = true ) {
+	$submit = Architect_Forms_Renderer::get_form_submit();
 
+	if( $echo ) {
+		echo $submit;
+	} else {
+		return $submit;
+	}
 }
 
 /**
@@ -147,3 +175,28 @@ function architect_the_form_submit( $echo = true ) {
 function architect_the_form_confirmation( $echo = true ) {
 
 }
+
+/**
+ * architect_the_form_fields_before
+ *
+ * Output the opening tag of the element at the start of the form
+ *
+ * @return string 		HTML to go before the form fields
+ */
+function architect_the_form_fields_before() {
+
+	return '<ul class="arc-form-wrap">';
+}
+
+/**
+ * architect_the_form_fields_after
+ *
+ * Output the closing tag of the element at the end of the form
+ *
+ * @return string 		HTML to go after the form fields
+ */
+function architect_the_form_fields_after() {
+
+	return '</ul>';
+}
+

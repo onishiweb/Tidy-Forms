@@ -16,7 +16,7 @@ class Architect_Forms_Renderer {
 	 */
 	protected static $instance = null;
 
-	public static $form;
+	public static $form; // The static instance of all form settings
 
 	private function __construct() {
 
@@ -100,7 +100,29 @@ class Architect_Forms_Renderer {
 	}
 
 	public static function get_form_confirmation() {
+		$thanks = self::$form['general']['thank_you_text'];
 
+		if( $thanks !== '' ) {
+			return apply_filters( 'the_content', $thanks );
+		} else {
+			return;
+		}
+	}
+
+	public static function have_fields() {
+		$fields = self::$form['fields'];
+
+		if( count($fields) > 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static function get_fields() {
+		$fields = self::$form['fields'];
+
+		return $fields;
 	}
 
 	public static function get_form_field( $field = array() ) {
@@ -111,11 +133,45 @@ class Architect_Forms_Renderer {
 
 		$field_method = 'get_' . $field['type'] . '_field';
 
-		self::$field_method($field);
+		$output = self::field_before( $field['classes'] );
+
+		$output.= self::$field_method($field);
+
+		$output.= '<p class="description">' . $field['description'] . '</p>';
+
+		$output.= self::field_after();
+
+		return $output;
 
 	}
 
+	private static function field_before( $classes ) {
+		$before = self::$form['settings']['field_wrap'];
+		$classes.= ' ' . self::$form['settings']['field_class'];
+		$output = '';
+
+		if( ! empty($before) ) {
+			$output = '<' . $before . ' class="' . $classes . '">';
+		}
+
+		return apply_filters( 'architect_form_field_before', $output );
+	}
+
+	private static function field_after() {
+		$after = self::$form['settings']['field_wrap'];
+		$output = '';
+
+		if( ! empty($after) ) {
+			$output = '</' . $after . '>';
+		}
+
+		return apply_filters( 'architect_form_field_after', $output );
+	}
+
 	private static function get_text_field( $args = array() ) {
+
+		// 	<label for=""></label>
+		// 	<input type="text">
 
 	}
 
@@ -139,4 +195,18 @@ class Architect_Forms_Renderer {
 
 	}
 
+	public static function get_form_submit() {
+		$text = self::$form['general']['submit_text'];
+
+		$hidden_fields = '';
+
+		$output = self::field_before( 'arc-form-field-submit');
+
+		$output.= '<input type="submit" name="arc_form_submit" class="arc-form-submit" value="' . $text . '">';
+		$output.= apply_filters( 'architect_form_hidden_fields', $fields );
+
+		$output.= self::field_after();
+
+		return $output;
+	}
 }

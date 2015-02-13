@@ -10,17 +10,17 @@
 <?php architect_the_form_intro(); ?>
 
 <!-- Form -->
-<form action="#arc-form" method="post" class="arc-form">
+<form action="#<?php architect_the_form_id(); ?>" method="post" class="<?php architect_the_form_class(); ?>">
 	<!-- Form fields wrap -->
-	<ul class="arc-form-wrap">
+	<?php architect_the_form_fields_before(); ?>
 
-		<!-- Field before -->
-		<li class="arc-form-field">
-			<label for=""></label>
-			<input type="text">
-			<p class="description"></p>
-		<!-- Field after -->
-		</li>
+		<?php if( architect_form_have_fields() ): foreach( architect_the_form_fields() as $field ): ?>
 
-	</ul>
+			<?php architect_the_form_field($field); ?>
+
+		<?php endforeach; endif; ?>
+
+		<?php architect_the_form_submit(); ?>
+
+	<?php architect_the_form_fields_after(); ?>
 </form>
