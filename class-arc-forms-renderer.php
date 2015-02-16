@@ -229,10 +229,16 @@ class Architect_Forms_Renderer {
 
 		extract($args);
 
+		$type = 'text';
+
+		if( $text_validation !== '' ) {
+			$type = $text_validation;
+		}
+
 		$atts = self::get_field_attributes( $args );
 
 		$output = '<label for="arc-' . $atts['id'] . '">' . $label . '</label>';
-		$output.= '<input type="text" name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" ' . $atts['required'] . ' value="" >';
+		$output.= '<input type="' . $type . '" name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" ' . $atts['required'] . ' value="" >';
 
 		return $output;
 
