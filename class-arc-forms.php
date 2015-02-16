@@ -71,10 +71,17 @@ class Architect_Forms {
 
 		require_once('inc/helpers.php');
 
-		arc_include('inc/template-tags.php');
-		arc_include('class-arc-forms-renderer.php');
 
-		Architect_Forms_Renderer::get_instance();
+
+		if( ! is_admin() ) {
+			arc_include('inc/template-tags.php');
+			arc_include('class-arc-forms-renderer.php');
+			arc_include('class-arc-forms-validator.php');
+
+			Architect_Forms_Renderer::get_instance();
+			Architect_Forms_Validator::get_instance();
+		}
+
 
 		if( is_admin() ) {
 			arc_include('class-arc-forms-admin.php');

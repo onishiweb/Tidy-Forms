@@ -22,7 +22,7 @@ class Architect_Forms_Renderer {
 
 		add_action( 'init', array( $this, 'setup_shortcode') );
 
-		add_filter( 'architect_form', array( $this, 'process_form'), 5, 1 );
+		add_filter( 'architect_form', array( 'Architect_Forms_Validator', 'process_form'), 5, 1 );
 		add_filter( 'architect_form', array( $this, 'render_form'), 10, 1 );
 
 	}
@@ -40,7 +40,7 @@ class Architect_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'architect-form', array('Architect_Forms_Renderer', 'setup_form') );
+		add_shortcode( 'architect-form', array($this, 'setup_form') );
 	}
 
 	public static function setup_form( $atts ) {
@@ -55,27 +55,24 @@ class Architect_Forms_Renderer {
 		// Add the title to general settings
 		$content['settings']['title'] = $form->post_title;
 
-		// Setup the form details in the class ready to be used
-		self::$form = array(
+		$args = array(
 				'id'       => $id, // ID of the form
 				'settings' => $settings, // Config options for form
 				'fields'   => $content['fields'], // Form fields
 				'general'  => $content['settings'], // Form general settings
 			);
 
-		arc_get_view('form-container');
+		arc_get_view('form-container', $args );
 	}
 
-	public static function process_form() {
+	public static function render_form( $args ) {
 
-		echo 'Process ' . self::$form['id'];
-		echo '<br>';
-
-	}
-
-	public static function render_form() {
+		// Setup the form details in the class ready to be used
+		self::$form = $args; // This way it'll get the errors array...
 
 		arc_get_view('form');
+
+		return $args;
 
 	}
 

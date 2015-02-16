@@ -81,7 +81,7 @@ $field_name = 'arc_field_' . $order;
 
 		<fieldset>
 			<label for="arc-field-required-<?php echo $order; ?>">
-				<input name="<?php echo $field_name; ?>[required]" type="checkbox" id="arc-field-required-<?php echo $order; ?>" <?php checked( $required ); ?>>
+				<input name="<?php echo $field_name; ?>[required]" type="checkbox" id="arc-field-required-<?php echo $order; ?>" <?php checked( $required, 'on' ); ?>>
 				Required?
 			</label>
 		</fieldset>
