@@ -17,7 +17,8 @@ class Architect_Forms_Validator {
 	protected static $instance = null;
 
 	private function __construct() {
-		// Nothing to see here
+		// Include validation libraries
+		arc_include('inc/validate-date.php');
 	}
 
 	public static function get_instance() {
@@ -47,6 +48,13 @@ class Architect_Forms_Validator {
 
 			switch ($type)  {
 				case 'text':
+					if( $field['text_validation'] !== '' ) {
+						$validation = 'validate_' .$field['text_validation'];
+
+						if( ! self::$validation( $_POST[ $name ] ) ) {
+							$errors[ $name ] = __('Error: This is a required field', 'arcforms');
+						}
+					}
 				case 'textarea':
 				case 'select':
 					if( isset($field['required']) && ! self::validate_required($_POST[ $name ]) ) {
@@ -92,6 +100,33 @@ class Architect_Forms_Validator {
 	private static function validate_email( $value ) {
 
 		if( ! is_email( $value ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static function validate_number( $value ) {
+
+		if( ! is_int($value) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static function validate_url( $value ) {
+
+		if ( ! filter_var($value, FILTER_VALIDATE_URL) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static function validate_date( $value ) {
+
+		if( ! arc_validate_date($value, 'YYYY-MM-DD') ) {
 			return false;
 		}
 
