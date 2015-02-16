@@ -108,6 +108,8 @@ class Architect_Forms_Validator {
 
 	private static function validate_number( $value ) {
 
+		$num = intval($value);
+
 		if( ! is_int($value) ) {
 			return false;
 		}
