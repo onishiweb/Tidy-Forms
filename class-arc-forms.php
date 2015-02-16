@@ -66,6 +66,7 @@ class Architect_Forms {
 				'all_fields_class' => 'arc-form-wrap',
 				'field_wrap'       => 'li', // li, div, p, or ''
 				'field_class'      => 'arc-form-field',
+				'field_prefix'     => 'arc_',
 			),
 		);
 

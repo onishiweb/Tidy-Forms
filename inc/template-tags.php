@@ -212,7 +212,9 @@ function architect_the_form_confirmation( $echo = true ) {
  * @return string 		HTML to go before the form fields
  */
 function architect_the_form_fields_before() {
-	return '<ul class="arc-form-wrap">';
+	do_action('architect_form_before_fields');
+
+	echo '<ul class="arc-form-wrap">';
 }
 
 /**
@@ -224,6 +226,8 @@ function architect_the_form_fields_before() {
  */
 function architect_the_form_fields_after() {
 
-	return '</ul>';
+	echo '</ul>';
+
+	do_action('architect_form_after_fields');
 }
 

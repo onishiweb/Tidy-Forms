@@ -91,7 +91,9 @@ class Architect_Forms_Renderer {
 	public static function get_form_classes() {
 		// Check for custom classes
 
-		return esc_attr('arc-form');
+		$class = 'arc-form';
+
+		return esc_attr( $class );
 	}
 
 	public static function get_form_title() {
@@ -105,10 +107,10 @@ class Architect_Forms_Renderer {
 
 	public static function get_form_intro() {
 
-		$title = self::$form['general']['intro_text'];
+		$intro = self::$form['general']['intro_text'];
 
-		if( $title !== '' ) {
-			return apply_filters( 'the_content', $title );
+		if( $intro !== '' ) {
+			return apply_filters( 'the_content', $intro );
 		} else {
 			return;
 		}
@@ -147,12 +149,24 @@ class Architect_Forms_Renderer {
 		}
 
 		$field_method = 'get_' . $field['type'] . '_field';
+		$error = false;
+		$name = 'arc_' . $field['name'];
+
+		if( ! empty( self::$form['errors'][ $name ] ) ) {
+			$error = self::$form['errors'][ $name ];
+		}
 
 		$output = self::field_before( $field['classes'] );
 
 		$output.= self::$field_method($field);
 
-		$output.= '<span class="arc-field-description">' . $field['description'] . '</span>';
+		if( ! empty($field['description']) ) {
+			$output.= '<span class="arc-field-description">' . $field['description'] . '</span>';
+		}
+
+		if( ! empty($error) ) {
+			$output.= '<span class="arc-field-error">' . $error . '</span>';
+		}
 
 		$output.= self::field_after();
 
@@ -183,18 +197,38 @@ class Architect_Forms_Renderer {
 		return apply_filters( 'architect_form_field_after', $output );
 	}
 
+	private static function get_field_attributes($args) {
+		$id = str_replace('_', '-', $args['name']);
+
+		if( ! empty( $args['custom_id'] ) ) {
+			$id = $args['custom_id'];
+		}
+
+		$class = 'arc-field-' . $args['type'];
+		$required = '';
+
+		if( !empty( $args['required'] ) ) {
+			$class.= ' arc-field-required';
+			$required = ' required';
+		}
+
+		$atts = array(
+				'id'       => $id,
+				'class'    => $class,
+				'required' => $required,
+			);
+
+		return $atts;
+	}
+
 	private static function get_text_field( $args = array() ) {
 
 		extract($args);
 
-		$id = str_replace('_', '-', $name);
+		$atts = self::get_field_attributes( $args );
 
-		if( $custom_id !== '' ) {
-			$id = $custom_id;
-		}
-
-		$output = '<label for="arc-' . $id . '">' . $label . '</label>';
-		$output.= '<input type="text" name="arc_' . $name . '" id="arc-' . $id . '" class="arc-form-text" value="" >';
+		$output = '<label for="arc-' . $atts['id'] . '">' . $label . '</label>';
+		$output.= '<input type="text" name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" ' . $atts['required'] . ' value="" >';
 
 		return $output;
 
@@ -204,14 +238,10 @@ class Architect_Forms_Renderer {
 
 		extract($args);
 
-		$id = str_replace('_', '-', $name);
+		$atts = self::get_field_attributes( $args );
 
-		if( $custom_id !== '' ) {
-			$id = $custom_id;
-		}
-
-		$output = '<label for="arc-' . $id . '">' . $label . '</label>';
-		$output.= '<textarea name="arc_' . $name . '" id="arc-' . $id . '" class="arc-form-textarea" cols="80" rows="5"></textarea>';
+		$output = '<label for="arc-' . $atts['id'] . '">' . $label . '</label>';
+		$output.= '<textarea name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" ' . $atts['required'] . ' cols="80" rows="5"></textarea>';
 
 		return $output;
 	}
@@ -219,16 +249,12 @@ class Architect_Forms_Renderer {
 	private static function get_select_field( $args = array() ) {
 		extract($args);
 
+		$atts = self::get_field_attributes( $args );
+
 		$options = explode("\n", $input_options);
 
-		$id = str_replace('_', '-', $name);
-
-		if( $custom_id !== '' ) {
-			$id = $custom_id;
-		}
-
-		$output = '<label for="arc-' . $id . '">' . $label . '</label>';
-		$output.= '<select name="arc_' . $name . '" id="arc-' . $id . '" class="arc-form-select">';
+		$output = '<label for="arc-' . $atts['id'] . '">' . $label . '</label>';
+		$output.= '<select name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" ' . $atts['required'] . '>';
 
 		foreach( $options as $opt ) {
 			$values = explode(' : ', $opt);
@@ -248,13 +274,9 @@ class Architect_Forms_Renderer {
 	private static function get_radio_field( $args = array() ) {
 		extract($args);
 
+		$atts = self::get_field_attributes( $args );
+
 		$options = explode("\n", $input_options);
-
-		$id = str_replace('_', '-', $name);
-
-		if( $custom_id !== '' ) {
-			$id = $custom_id;
-		}
 
 		$output = '<span class="arc-form-label">' . $label . '</span>';
 
@@ -262,12 +284,12 @@ class Architect_Forms_Renderer {
 			$values = explode(' : ', $options[$i]);
 
 			if( count($values) > 1 ) {
-				$output.= '<label for="arc-' . $id . '-' . $i . '">';
-				$output.= '<input type="radio" name="arc_' . $name . '" id="arc-' . $id . '-' . $i . '" class="arc-form-radio" value="' . $values[0] . '">';
+				$output.= '<label for="arc-' . $atts['id'] . '-' . $i . '">';
+				$output.= '<input type="radio" name="arc_' . $name . '" id="arc-' . $atts['id'] . '-' . $i . '" class="' . $atts['class'] . '" value="' . $values[0] . '">';
 				$output.= '<span class="arc-form-radio-label">' . $values[1] . '</span></label>';
 			} else {
-				$output.= '<label for="arc-' . $id . '-' . $i . '">';
-				$output.= '<input type="radio" name="arc_' . $name . '" id="arc-' . $id . '-' . $i . '" class="arc-form-radio" value="' . $values[0] . '">';
+				$output.= '<label for="arc-' . $atts['id'] . '-' . $i . '">';
+				$output.= '<input type="radio" name="arc_' . $name . '" id="arc-' . $atts['id'] . '-' . $i . '" class="' . $atts['class'] . '" value="' . $values[0] . '">';
 				$output.= '<span class="arc-form-radio-label">' . $values[0] . '</span></label>';
 			}
 		}
@@ -278,13 +300,9 @@ class Architect_Forms_Renderer {
 	private static function get_checkbox_field( $args = array() ) {
 		extract($args);
 
+		$atts = self::get_field_attributes( $args );
+
 		$options = explode("\n", $input_options);
-
-		$id = str_replace('_', '-', $name);
-
-		if( $custom_id !== '' ) {
-			$id = $custom_id;
-		}
 
 		$output = '<span class="arc-form-label">' . $label . '</span>';
 
@@ -292,12 +310,12 @@ class Architect_Forms_Renderer {
 			$values = explode(' : ', $options[$i]);
 
 			if( count($values) > 1 ) {
-				$output.= '<label for="arc-' . $id . '-' . $i . '">';
-				$output.= '<input type="checkbox" name="arc_' . $name . '[]" id="arc-' . $id . '-' . $i . '" class="arc-form-checkbox" value="' . $values[0] . '">';
+				$output.= '<label for="arc-' . $atts['id'] . '-' . $i . '">';
+				$output.= '<input type="checkbox" name="arc_' . $name . '[]" id="arc-' . $atts['id'] . '-' . $i . '" class="' . $atts['class'] . '" value="' . $values[0] . '">';
 				$output.= '<span class="arc-form-checkbox-label">' . $values[1] . '</span></label>';
 			} else {
-				$output.= '<label for="arc-' . $id . '-' . $i . '">';
-				$output.= '<input type="checkbox" name="arc_' . $name . '[]" id="arc-' . $id . '-' . $i . '" class="arc-form-checkbox" value="' . $values[0] . '">';
+				$output.= '<label for="arc-' . $atts['id'] . '-' . $i . '">';
+				$output.= '<input type="checkbox" name="arc_' . $name . '[]" id="arc-' . $atts['id'] . '-' . $i . '" class="' . $atts['class'] . '" value="' . $values[0] . '">';
 				$output.= '<span class="arc-form-checkbox-label">' . $values[0] . '</span></label>';
 			}
 		}

@@ -45,24 +45,38 @@ class Architect_Forms_Validator {
 			$type = $field['type'];
 			$name = 'arc_' . $field['name'];
 
-			if( $type !== 'title') {
+			switch ($type)  {
+				case 'text':
+				case 'textarea':
+				case 'select':
+					if( isset($field['required']) && ! self::validate_required($_POST[ $name ]) ) {
+						$errors[ $name ] = __('Error: This is a required field', 'arcforms');
+					}
 
-				$value = $_POST[ $name ];
+					break;
+				case 'radio':
+				case 'checkbox':
+					if( isset($field['required']) && ! isset( $_POST[ $name ]) ) {
+						$errors[ $name ] = __('Error: This is a required field, please select an option', 'arcforms');
+					}
 
-				if( isset($field['required']) && ! self::validate_required($value) ) {
-					$errors[ $name ] = __('Error: This is a required field', 'arcforms');
-				}
+					break;
+				default:
+					break;
 			}
 		}
 
 		if( ! empty($errors) ) {
 			$args['errors'] = $errors;
+
+			add_action( 'architect_form_before_fields', array('Architect_Forms_Validator', 'get_error_notification') );
 		}
 
 		return $args;
 	}
 
 	private static function validate_required( $value ) {
+
 		if( empty($value ) ) {
 			return false;
 		}
@@ -71,11 +85,19 @@ class Architect_Forms_Validator {
 	}
 
 	private static function validate_email( $value ) {
+
 		if( ! is_email( $value ) ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	public static function get_error_notification() {
+		// TODO: Add to general settings
+		echo '<div class="arc-forms-notification arc-forms-error">';
+		_e('Error: Sorry your form could not be submitted. Please check the fields below and submit again', 'arcforms');
+		echo '</div>';
 	}
 
 }
