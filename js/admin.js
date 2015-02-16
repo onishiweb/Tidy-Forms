@@ -36,7 +36,7 @@ ARCHITECT_FORMS = (function ($) {
 
 		initField = function(field) {
 
-			var field_type = $(field).find('.arc-field-select option:selected').val();
+			var field_type = $(field).find('.arc-field-type-select option:selected').val();
 
 			if( field_type === 'text' || field_type === 'textarea' || field_type === 'title' ) {
 				$(field).find('.arc-field-options').slideUp(0);
@@ -53,7 +53,7 @@ ARCHITECT_FORMS = (function ($) {
 			$(field).find('.arc-field-advanced-options').slideUp(0);
 			$(field).find('.arc-field-settings').slideUp(0);
 
-			$(field).on('change', '.arc-field-select', fieldOptions);
+			$(field).on('change', '.arc-field-type-select', fieldOptions);
 
 		},
 
@@ -141,10 +141,10 @@ ARCHITECT_FORMS = (function ($) {
 			$('.arc-fields').append($field);
 
 			// Set field type
-			$field.find('.arc-field-select option').attr('selected', '');
-			$field.find('.arc-field-select option[value=' + choice + ']').attr('selected', 'selected');
+			$field.find('.arc-field-type-select option').attr('selected', '');
+			$field.find('.arc-field-type-select option[value=' + choice + ']').attr('selected', 'selected');
 
-			$field.on('change', '.arc-field-select', fieldOptions);
+			$field.on('change', '.arc-field-type-select', fieldOptions);
 
 			updateFieldInfo($field);
 
@@ -257,7 +257,7 @@ ARCHITECT_FORMS = (function ($) {
 			var $this = $(this),
 				$field = $this.parents('.arc-field');
 
-			$field.off('change', '.arc-field-select', advancedFields);
+			$field.off('change', '.arc-field-type-select', advancedFields);
 
 			$field.slideUp('fast', function () {
 				$field.remove();

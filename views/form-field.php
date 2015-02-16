@@ -57,7 +57,7 @@ $field_name = 'arc_field_' . $order;
 
 		<fieldset>
 			<label for="arc-field-type-<?php echo $order; ?>">Field type</label>
-			<select name="<?php echo $field_name; ?>[type]" id="arc-field-type-<?php echo $order; ?>" class="arc-field-select">
+			<select name="<?php echo $field_name; ?>[type]" id="arc-field-type-<?php echo $order; ?>" class="arc-field-select arc-field-type-select">
 				<option <?php if( ! $type ) { echo 'selected="selected"'; } ?> value="">Select a field type</option>
 
 				<?php foreach( $field_types as $value => $label ): ?>
