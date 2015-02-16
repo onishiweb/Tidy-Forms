@@ -32,8 +32,13 @@ function architect_the_form( $id, $args = array() ) {
  */
 function architect_the_form_id( $echo = true ) {
 
-	// Use esc_attr() function
+	$id = Architect_Forms_Renderer::get_form_id();
 
+	if( $echo ) {
+		echo $id;
+	} else {
+		return $id;
+	}
 
 }
 
@@ -48,7 +53,13 @@ function architect_the_form_id( $echo = true ) {
  */
 function architect_the_form_class( $echo = true ) {
 
-	// use esc_attr() function
+	$classes = Architect_Forms_Renderer::get_form_classes();
+
+	if( $echo ) {
+		echo $classes;
+	} else {
+		return $classes;
+	}
 
 }
 
@@ -184,7 +195,6 @@ function architect_the_form_confirmation( $echo = true ) {
  * @return string 		HTML to go before the form fields
  */
 function architect_the_form_fields_before() {
-
 	return '<ul class="arc-form-wrap">';
 }
 

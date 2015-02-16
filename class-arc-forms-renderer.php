@@ -79,6 +79,24 @@ class Architect_Forms_Renderer {
 
 	}
 
+	public static function get_form_id() {
+
+		$id = self::$form['id'];
+
+		// Check if a custom ID has been set
+
+		$form_id = 'arc-form-' . $id;
+
+		return esc_attr( $form_id );
+
+	}
+
+	public static function get_form_classes() {
+		// Check for custom classes
+
+		return esc_attr('arc-form');
+	}
+
 	public static function get_form_title() {
 
 		// if title output setting = false, return
