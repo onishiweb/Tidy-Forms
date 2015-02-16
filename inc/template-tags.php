@@ -22,6 +22,17 @@ function architect_the_form( $id, $args = array() ) {
 }
 
 /**
+ * architect_the_form_action
+ *
+ * Function wrapper for the apply_filters function
+ *
+ * @param  array 	$args Array of arguments
+ */
+function architect_the_form_action( $args ) {
+	apply_filters( 'architect_form', $args );
+}
+
+/**
  * architect_the_form_id
  *
  * Output the HTML ID of the form - to go on the form container element
@@ -184,7 +195,13 @@ function architect_the_form_submit( $echo = true ) {
  * @return string        The confirmation message from the form settings
  */
 function architect_the_form_confirmation( $echo = true ) {
+	$confirmation = Architect_Forms_Renderer::get_form_confirmation();
 
+	if( $echo ) {
+		echo $confirmation;
+	} else {
+		return $confirmation;
+	}
 }
 
 /**
