@@ -70,6 +70,11 @@ class Architect_Forms_Validator {
 			$args['errors'] = $errors;
 
 			add_action( 'architect_form_before_fields', array('Architect_Forms_Validator', 'get_error_notification') );
+		} else {
+			// Save/send form data
+
+			// Set thanks message
+			$args['submitted'] = true;
 		}
 
 		return $args;

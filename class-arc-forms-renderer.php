@@ -68,9 +68,13 @@ class Architect_Forms_Renderer {
 	public static function render_form( $args ) {
 
 		// Setup the form details in the class ready to be used
-		self::$form = $args; // This way it'll get the errors array...
+		self::$form = $args;
 
-		arc_get_view('form');
+		if( isset($args['submitted']) ) {
+			arc_get_view('form-confirmation');
+		} else {
+			arc_get_view('form');
+		}
 
 		return $args;
 
