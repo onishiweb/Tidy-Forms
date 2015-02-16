@@ -39,8 +39,15 @@ ARCHITECT_FORMS = (function ($) {
 			var field_type = $(field).find('.arc-field-select option:selected').val();
 
 			if( field_type === 'text' || field_type === 'textarea' || field_type === 'title' ) {
-				$(field).find('.arc-field-type-options').slideUp(0);
+				$(field).find('.arc-field-options').slideUp(0);
+			} else {
+				$(field).find('.arc-field-options').addClass('active');
+			}
 
+			if( field_type !== 'text' ) {
+				$(field).find('.arc-field-text-validation').slideUp(0);
+			} else {
+				$(field).find('.arc-field-text-validation').addClass('active');
 			}
 
 			$(field).find('.arc-field-advanced-options').slideUp(0);
@@ -142,7 +149,18 @@ ARCHITECT_FORMS = (function ($) {
 			updateFieldInfo($field);
 
 			// Hide extra options
-			$field.find('.arc-field-type-options').slideUp(0);
+			if( choice === 'text' || choice === 'textarea' || choice === 'title' ) {
+				$field.find('.arc-field-options').slideUp(0);
+			} else {
+				$field.find('.arc-field-options').addClass('active');
+			}
+
+			if( choice !== 'text' ) {
+				$field.find('.arc-field-text-validation').slideUp(0);
+			} else {
+				$field.find('.arc-field-text-validation').addClass('active');
+			}
+
 			$field.find('.arc-field-advanced-options').slideUp(0);
 
 			// Remove modal
@@ -191,18 +209,45 @@ ARCHITECT_FORMS = (function ($) {
 		fieldOptions = function(e) {
 			var $this = $(this),
 				$field = $this.parents('.arc-field'),
-				$options = $field.find('.arc-field-type-options'),
+				$options = $field.find('.arc-field-options'),
+				$validation = $field.find('.arc-field-text-validation'),
 				option = $this.find(':selected').val();
 
-			if( option === 'select' || option === 'radio' || option === 'checkbox' ) {
-				if( ! $options.hasClass('active') ) {
-					$options.slideDown('fast').addClass('active');
-				}
-			} else {
-				if( $options.hasClass('active') ) {
-					$options.slideUp('fast').removeClass('active');
-					$options.find('textarea').val('');
-				}
+			switch(option) {
+				case 'select':
+				case 'radio':
+				case 'checkbox':
+					if( $validation.hasClass('active') ) {
+						$validation.removeClass('active').slideUp(400, function() {
+							$options.slideDown('fast').addClass('active');
+						});
+					} else if( ! $options.hasClass('active') ) {
+						$options.slideDown('fast').addClass('active');
+					}
+
+					break;
+				case 'text':
+					if( $options.hasClass('active') ) {
+						$options.removeClass('active').slideUp(400, function () {
+							$validation.slideDown('fast').addClass('active');
+							$options.find('textarea').val('');
+						});
+					} else if( ! $validation.hasClass('active') ) {
+						$validation.slideDown('fast').addClass('active');
+					}
+
+					break;
+				default:
+					if( $options.hasClass('active') ) {
+						$options.slideUp('fast').removeClass('active');
+						$options.find('textarea').val('');
+					}
+
+					if( $validation.hasClass('active') ) {
+						$validation.slideUp('fast').removeClass('active');
+					}
+
+					break;
 			}
 		},
 

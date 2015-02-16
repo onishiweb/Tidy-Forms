@@ -25,7 +25,7 @@ class Architect_Forms {
 
 
 	private function __construct() {
-
+		// Nothing to see here
 	}
 
 	public static function get_instance() {
@@ -42,16 +42,16 @@ class Architect_Forms {
 		$this->settings = array(
 
 			// basic
-			'name'             => __('WP Form Architect', 'arcforms'),
-			'version'          => '0.0.1',
-			'slug'             => 'arc-forms',
+			'name'               => __('WP Form Architect', 'arcforms'),
+			'version'            => '0.0.1',
+			'slug'               => 'arc-forms',
 
 			// urls
-			'basename'         => plugin_basename( __FILE__ ),
-			'path'             => plugin_dir_path( __FILE__ ),
-			'dir'              => plugin_dir_url( __FILE__ ),
+			'basename'           => plugin_basename( __FILE__ ),
+			'path'               => plugin_dir_path( __FILE__ ),
+			'dir'                => plugin_dir_url( __FILE__ ),
 
-			'field_types'      => array(
+			'field_types'        => array(
 				'text'     => 'Text',
 				'textarea' => 'Textarea',
 				'select'   => 'Drop down',
@@ -60,7 +60,14 @@ class Architect_Forms {
 				'title'    => 'Title',
 			),
 
-			'setting_defaults' => array(
+			'validation_methods' => array(
+				'email'  => 'Email',
+				'url'    => 'URL',
+				'number' => 'Number',
+				'date'   => 'Date',
+			),
+
+			'setting_defaults'   => array(
 				'id'               => 0,
 				'all_fields_wrap'  => 'ul', // ul, div, or ''
 				'all_fields_class' => 'arc-form-wrap',
@@ -72,8 +79,6 @@ class Architect_Forms {
 
 		require_once('inc/helpers.php');
 
-
-
 		if( ! is_admin() ) {
 			arc_include('inc/template-tags.php');
 			arc_include('class-arc-forms-renderer.php');
@@ -83,12 +88,10 @@ class Architect_Forms {
 			Architect_Forms_Validator::get_instance();
 		}
 
-
 		if( is_admin() ) {
 			arc_include('class-arc-forms-admin.php');
 
 			Architect_Forms_Admin::get_instance();
 		}
-
 	}
 }

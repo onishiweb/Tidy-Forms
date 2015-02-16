@@ -142,6 +142,10 @@ table.arc-fields-table {
 	font-size:14px;
 }
 
+.arc-field .arc-field-type-options {
+	padding:10px 0 0;
+}
+
 .arc-field .arc-field-select {
 	width:100%;
 }

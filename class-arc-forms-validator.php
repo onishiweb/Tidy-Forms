@@ -17,7 +17,7 @@ class Architect_Forms_Validator {
 	protected static $instance = null;
 
 	private function __construct() {
-
+		// Nothing to see here
 	}
 
 	public static function get_instance() {

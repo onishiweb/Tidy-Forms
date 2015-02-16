@@ -5,9 +5,11 @@
 
 // Get settings (filterable)
 $field_types = arc_get_setting('field_types', true);
+$field_validation = arc_get_setting('validation_methods', true);
 // Defaults
 $required = '';
 $type = false;
+$validation = false;
 $order = '{#}';
 $field_class = 'editing arc-field-placeholder';
 // Placeholder labels
@@ -20,6 +22,7 @@ if( ! empty($args) ) {
 	$field_label = $args['label'];
 	$type = $args['type'];
 	$type_label = $field_types[ $type ];
+	$validation = $args['text_validation'];
 
 	if( isset($args['required']) ) {
 		$required = $args['required'];
@@ -62,16 +65,28 @@ $field_name = 'arc_field_' . $order;
 				<?php endforeach; ?>
 
 			</select>
-			<p class="description">Select the type of the field.</p>
-		</fieldset>
 
-		<div class="arc-field-type-options">
-			<fieldset>
-				<label for="arc-field-type-options-<?php echo $order; ?>">Field input options</label>
-				<textarea name="<?php echo $field_name; ?>[input_options]" id="arc-field-type-options-<?php echo $order; ?>" class="large-text" cols="80" rows="5"><?php arc_isset_echo( $args, 'input_options' ); ?></textarea>
-				<p class="description">Enter options for dropdown, radio, or checkboxes (one per line)</p>
-			</fieldset>
-		</div>
+			<div class="arc-field-type-options">
+
+				<div class="arc-field-text-validation">
+					<label for="arc-field-text-validation-<?php echo $order; ?>">Validation method</label>
+					<select name="<?php echo $field_name; ?>[text_validation]" id="arc-field-text-validation-<?php echo $order; ?>" class="arc-field-select">
+						<option <?php if( ! $validation ) { echo 'selected="selected"'; } ?> value="">Any text</option>
+						<?php foreach( $field_validation as $value => $label ): ?>
+							<option value="<?php echo $value; ?>" <?php selected($validation, $value); ?>><?php echo $label; ?></option>
+						<?php endforeach; ?>
+					</select>
+					<p class="description">Select validation to be applied to the text field (optional).</p>
+				</div>
+
+				<div class="arc-field-options">
+					<label for="arc-field-type-options-<?php echo $order; ?>">Field input options</label>
+					<textarea name="<?php echo $field_name; ?>[input_options]" id="arc-field-type-options-<?php echo $order; ?>" class="large-text" cols="80" rows="5"><?php arc_isset_echo( $args, 'input_options' ); ?></textarea>
+					<p class="description">Enter options for dropdown, radio, or checkboxes (one per line)</p>
+				</div>
+			</div>
+
+		</fieldset>
 
 		<fieldset>
 			<label for="arc-field-description-<?php echo $order; ?>">Description/instructions</label>
