@@ -254,7 +254,7 @@ class Architect_Forms_Renderer {
 		$atts = self::get_field_attributes( $args );
 
 		$output = '<label for="arc-' . $atts['id'] . '">' . $label . '</label>';
-		$output.= '<textarea name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" cols="80" rows="5">' . $atts['value'] . '</textarea>';
+		$output.= '<textarea name="arc_' . $name . '" id="arc-' . $atts['id'] . '" class="' . $atts['class'] . '" ' . $required . ' cols="80" rows="5">' . $atts['value'] . '</textarea>';
 
 		return $output;
 	}
