@@ -26,6 +26,9 @@ class Architect_Forms_Admin {
 		// Create post type
 		add_action( 'init', array( $this, 'setup_post_type') );
 
+		// Setup submenu for entries
+		add_action( 'admin_menu', array( $this, 'register_submenu_page') );
+
 		// Add meta boxes for form creation
 		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
@@ -63,6 +66,10 @@ class Architect_Forms_Admin {
 	}
 
 	public function setup_post_type() {
+
+		/**
+		 * Custom form post type
+		 */
 		 $labels = array(
 			'name'                => __('WP Form Architect', 'dirtisgood'),
 			'singular_name'       => __('Form', 'dirtisgood'),
@@ -81,7 +88,7 @@ class Architect_Forms_Admin {
 
 		$args = array(
 			'labels'              => $labels,
-			'description'         => 'Tidy forms admin',
+			'description'         => 'WP Form Architect admin',
 			'public'              => true,
 			'capability_type'     => 'post',
 			'has_archive'         => false,
@@ -94,6 +101,50 @@ class Architect_Forms_Admin {
 		);
 
 		register_post_type( 'arc_form', $args );
+
+		/**
+		 * Entries post type
+		 */
+		$labels = array(
+			'name'                => __('Entries', 'dirtisgood'),
+			'singular_name'       => __('Entry', 'dirtisgood'),
+			'add_new'             => __('Add New', 'dirtisgood'),
+			'add_new_item'        => __('Add New Entry', 'dirtisgood'),
+			'edit_item'           => __('Edit Entry', 'dirtisgood'),
+			'new_item'            => __('New Entry', 'dirtisgood'),
+			'all_items'           => __('All Entries', 'dirtisgood'),
+			'view_item'           => __('View Entry', 'dirtisgood'),
+			'search_items'        => __('Search Entries', 'dirtisgood'),
+			'not_found'           => __('No entries found', 'dirtisgood'), // USE THIS ADAM!
+			'not_found_in_trash'  => __('No entries found in Trash', 'dirtisgood'),
+			'parent_item_colon'   => '',
+			'menu_name'           => __('Entries', 'dirtisgood'),
+		);
+
+		$args = array(
+			'labels'              => $labels,
+			'description'         => 'WP Form Arcitect entries',
+			'public'              => true,
+			'capability_type'     => 'post',
+			'has_archive'         => false,
+			'hierarchical'        => false,
+			'exclude_from_search' => true,
+			'show_in_menu'        => false,
+			'publicly_queryable'  => false,
+			'supports'            => array( 'title', 'editor' ),
+		);
+
+		register_post_type( 'arc_form_entry', $args );
+	}
+
+	public static function register_submenu_page() {
+		add_submenu_page( 'edit.php?post_type=arc_form', 'Entries', 'Entries', 'edit_theme_options', 'arc-form-entries', array( 'Architect_Forms_Admin', 'render_entries_submenu' ) );
+	}
+
+	public static function render_entries_submenu() {
+		$args = array();
+
+		arc_get_view('entries', $args);
 	}
 
 	public function setup_meta_boxes() {
