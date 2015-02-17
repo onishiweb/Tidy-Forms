@@ -41,23 +41,28 @@ class Architect_Forms_Validator {
 	private static function validate_form( $args ) {
 		$fields = $args['fields'];
 		$errors = array();
+		$new_fields = array();
 
 		foreach($fields as $field) {
 			$type = $field['type'];
 			$name = 'arc_' . $field['name'];
+
+			if( isset($_POST[ $name ]) ) {
+				$value = $_POST[ $name ];
+			}
 
 			switch ($type)  {
 				case 'text':
 					if( $field['text_validation'] !== '' ) {
 						$validation = 'validate_' .$field['text_validation'];
 
-						if( ! self::$validation( $_POST[ $name ] ) ) {
-							$errors[ $name ] = __('Error: This is a required field', 'arcforms');
+						if( ! self::$validation( $value ) ) {
+							$errors[ $name ] = __('Error: Please check the information entered', 'arcforms');
 						}
 					}
 				case 'textarea':
 				case 'select':
-					if( isset($field['required']) && ! self::validate_required($_POST[ $name ]) ) {
+					if( isset($field['required']) && ! self::validate_required( $value ) ) {
 						$errors[ $name ] = __('Error: This is a required field', 'arcforms');
 					}
 
@@ -72,7 +77,14 @@ class Architect_Forms_Validator {
 				default:
 					break;
 			}
+
+			// Add the value here to the $fields array
+			$field['value'] = $value;
+			$new_fields[] = $field;
 		}
+
+		// Add fields data back into Args
+		$args['fields'] = $new_fields;
 
 		if( ! empty($errors) ) {
 			$args['errors'] = $errors;
@@ -80,6 +92,7 @@ class Architect_Forms_Validator {
 			add_action( 'architect_form_before_fields', array('Architect_Forms_Validator', 'get_error_notification') );
 		} else {
 			// Save/send form data
+			Architect_Forms_Data::save_entry($args);
 
 			// Set thanks message
 			$args['submitted'] = true;
@@ -110,7 +123,7 @@ class Architect_Forms_Validator {
 
 		$num = intval($value);
 
-		if( ! is_int($value) ) {
+		if( ! is_int($num) ) {
 			return false;
 		}
 

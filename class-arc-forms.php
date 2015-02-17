@@ -79,7 +79,12 @@ class Architect_Forms {
 
 		require_once('inc/helpers.php');
 
+		arc_include('class-arc-forms-data.php');
+
+		Architect_Forms_Data::get_instance();
+
 		if( ! is_admin() ) {
+			// TODO: Check if them customiser still works with these only being included when not in the admin
 			arc_include('inc/template-tags.php');
 			arc_include('class-arc-forms-renderer.php');
 			arc_include('class-arc-forms-validator.php');
