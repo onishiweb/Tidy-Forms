@@ -58,7 +58,14 @@ class Architect_Forms_Admin {
 
 		$screen = get_current_screen()->id;
 
-	    if ( 'arc_form' === $screen || 'arc_form_page_arc-form-entries' === $screen ) {
+		$arc_form_screens = array(
+				'arc_form',
+				'arc_form_entry',
+				'edit-arc_form_entry',
+				'arc_form_page_arc-form-entries',
+			);
+
+	    if ( in_array($screen, $arc_form_screens) ) {
 	    	wp_enqueue_style( 'arc-forms-admin', arc_get_dir('css/admin.css'), false, arc_get_setting('version'), 'screen' );
 
 	    	wp_enqueue_script( 'arc-forms-admin-js', arc_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), arc_get_setting('version'), true );

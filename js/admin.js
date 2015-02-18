@@ -32,6 +32,10 @@ ARCHITECT_FORMS = (function ($) {
 				$('.arc-fields').on('click', '[arc-action-advanced-fields]', advancedFields);
 			}
 
+			if( $('body.post-type-arc_form_entry').length ) {
+				revealFormsSubmenu();
+			}
+
 		},
 
 		initField = function(field) {
@@ -55,6 +59,15 @@ ARCHITECT_FORMS = (function ($) {
 
 			$(field).on('change', '.arc-field-type-select', fieldOptions);
 
+		},
+
+		revealFormsSubmenu = function() {
+			$('#menu-posts-arc_form').addClass('wp-has-current-submenu').removeClass('wp-not-current-submenu');
+
+			// Find the entries sub-menu (no classes on sub-menu items)
+			var $menu_item = $('#menu-posts-arc_form').find('a:contains(Entries)');
+
+			$menu_item.parent().addClass('current');
 		},
 
 		openModal = function( content, callback ) {

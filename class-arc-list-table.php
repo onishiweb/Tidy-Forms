@@ -131,7 +131,7 @@ class Architect_List_Table extends WP_List_Table {
 		$edit_url = admin_url( 'post.php?post='. $item['id'] . '&action=edit');
 		$entries_url = admin_url( 'edit.php?post_type=arc_form_entry&arc_form_id='. $item['id'] );
 
-		$title = '<strong><a href="' . $edit_url . '" class="row-title">' . $item['title'] . '</a></strong>';
+		$title = '<strong><a href="' . $entries_url . '" class="row-title">' . $item['title'] . '</a></strong>';
 
 		$actions = array(
 			'edit'    => sprintf('<a href="%s">Edit</a>',$edit_url),
