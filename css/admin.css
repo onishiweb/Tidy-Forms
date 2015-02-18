@@ -158,3 +158,9 @@ table.arc-fields-table {
 .arc-field-advanced-options .arc-fields-header {
 	padding:0 10px;
 }
+
+.arc_form_page_arc-form-entries.wp-list-table .column-id { width: 5%; }
+.arc_form_page_arc-form-entries.wp-list-table .column-title { width: 40%; }
+.arc_form_page_arc-form-entries.wp-list-table .column-shortcode { width: 35%; }
+.arc_form_page_arc-form-entries.wp-list-table .column-entries { width: 20%; }
+

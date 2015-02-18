@@ -46,10 +46,10 @@ class Architect_List_Table extends WP_List_Table {
 		// Entries
 
 		$columns = array(
-			'id'          => 'ID',
-			'title'       => 'Title',
-			'shortcode'   => 'Shortcode',
-			'entries'     => 'Entries',
+			'id'        => 'ID',
+			'title'     => 'Title',
+			'shortcode' => 'Shortcode',
+			'entries'   => 'Entries',
 		);
 
 		return $columns;
@@ -122,6 +122,26 @@ class Architect_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Define the data and actions to show in the title column
+	 *
+	 * @param  Array $item Data for the item being displayed
+	 * @return string      Content for the table
+	 */
+	function column_title($item) {
+		$edit_url = admin_url( 'post.php?post='. $item['id'] . '&action=edit');
+		$entries_url = admin_url( 'edit.php?post_type=arc_form_entry&arc_form_id='. $item['id'] );
+
+		$title = '<strong><a href="' . $edit_url . '" class="row-title">' . $item['title'] . '</a></strong>';
+
+		$actions = array(
+			'edit'    => sprintf('<a href="%s">Edit</a>',$edit_url),
+			'entries' => sprintf('<a href="%s">View entries</a>',$entries_url),
+		);
+
+		return sprintf('%1$s %2$s', $title, $this->row_actions($actions) );
+	}
+
+	/**
 	 * Define what data to show on each column of the table
 	 *
 	 * @param  Array $item        Data
@@ -131,11 +151,6 @@ class Architect_List_Table extends WP_List_Table {
 	 */
 	public function column_default( $item, $column_name ) {
 		switch( $column_name ) {
-			case 'title':
-				// TODO: Construct link
-				$link = '#';
-				return '<a href="' . $link . '">' . $item[ 'title' ] . '</a>';
-				break;
 			case 'id':
 			case 'shortcode':
 			case 'entries':
