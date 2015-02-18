@@ -142,9 +142,10 @@ class Architect_Forms_Admin {
 	}
 
 	public static function render_entries_submenu() {
-		$args = array();
+		$data_table = new Architect_List_Table();
+		$data_table->prepare_items();
 
-		arc_get_view('entries', $args);
+		arc_get_view('entries', $data_table);
 	}
 
 	public function setup_meta_boxes() {

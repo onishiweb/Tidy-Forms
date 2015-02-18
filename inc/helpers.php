@@ -76,7 +76,7 @@ function arc_get_path( $path ) {
  */
 function arc_include( $file ) {
 
-	$path = arc_get_path( $file );
+	$path = arc_get_path( $file );;
 
 	if( file_exists($path) ) {
 

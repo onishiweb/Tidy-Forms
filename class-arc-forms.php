@@ -94,6 +94,7 @@ class Architect_Forms {
 		}
 
 		if( is_admin() ) {
+			arc_include('class-arc-list-table.php');
 			arc_include('class-arc-forms-admin.php');
 
 			Architect_Forms_Admin::get_instance();
