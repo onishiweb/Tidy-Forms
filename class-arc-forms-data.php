@@ -59,9 +59,31 @@ class Architect_Forms_Data {
 		if( ! is_wp_error( $post ) ) {
 			// Store form ID as postmeta
 			add_post_meta( $post, '_arc_form_id', $id, true );
+
+			// Update entry count
+			$count = get_post_meta( $id, '_arc_form_entry_count', true );
+			if( !empty($count) ) {
+				$count++;
+			} else {
+				$count = 1;
+			}
+
+			update_post_meta( $id, '_arc_form_entry_count', $count, $count - 1 );
+
+			// Loop through fields to create content
+			foreach( $fields as $field ) {
+				$name = $field['name'];
+				$value = $field['value'];
+
+				if( is_array($value) ) {
+					$value = implode(', ', $field['value']);
+				}
+
+				add_post_meta( $post, '_arc_'.$name, $value, true );
+			}
+
 		} else {
 			// TODO: Handle error
-
 		}
 	}
 }

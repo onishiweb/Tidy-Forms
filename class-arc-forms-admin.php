@@ -33,6 +33,12 @@ class Architect_Forms_Admin {
 		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
 
+		// Edit post columns for entries post type
+		add_filter( 'manage_arc_form_entry_posts_columns', array( $this, 'entries_table_columns' ) );
+		add_action( 'manage_arc_form_entry_posts_custom_column', array( $this, 'entries_table_content' ), 10, 2 );
+
+		add_filter( 'pre_get_posts', array( $this, 'entries_table_filter' ) );
+
 		// Add shortcode
 		add_action( 'edit_form_before_permalink', array( $this, 'form_shortcode_helper' ) );
 		// add new buttons
@@ -65,11 +71,11 @@ class Architect_Forms_Admin {
 				'arc_form_page_arc-form-entries',
 			);
 
-	    if ( in_array($screen, $arc_form_screens) ) {
-	    	wp_enqueue_style( 'arc-forms-admin', arc_get_dir('css/admin.css'), false, arc_get_setting('version'), 'screen' );
+		if ( in_array($screen, $arc_form_screens) ) {
+			wp_enqueue_style( 'arc-forms-admin', arc_get_dir('css/admin.css'), false, arc_get_setting('version'), 'screen' );
 
-	    	wp_enqueue_script( 'arc-forms-admin-js', arc_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), arc_get_setting('version'), true );
-	    }
+			wp_enqueue_script( 'arc-forms-admin-js', arc_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), arc_get_setting('version'), true );
+		}
 	}
 
 	public function setup_post_type() {
@@ -142,6 +148,53 @@ class Architect_Forms_Admin {
 		);
 
 		register_post_type( 'arc_form_entry', $args );
+	}
+
+	public static function entries_table_columns( $defaults ) {
+
+		if( isset($_GET['arc_form_id']) ) {
+			$form = get_post($_GET['arc_form_id']);
+
+			$content = unserialize( $form->post_content );
+			$fields = $content['fields'];
+			$max = max(3, count($fields));
+
+			$defaults = array(
+					'cb'     => '<input type="checkbox" />',
+					'id'     => 'ID',
+				);
+
+			for( $i=0; $i<$max; $i++) {
+				if( 'title' !== $fields[$i]['type'] ) {
+					$defaults[ $fields[$i]['name'] ] = $fields[$i]['label'];
+				}
+			}
+
+			$defaults['date'] = 'Date';
+
+		}
+
+		return $defaults;
+	}
+
+	public static function entries_table_content( $column_name, $post_id ) {
+		if( 'id' === $column_name ) {
+			echo $post_id;
+		} else {
+			// Get content from post meta
+			$meta = '_arc_' . $column_name;
+			echo get_post_meta( $post_id, $meta, true );
+		}
+	}
+
+	public static function entries_table_filter( $query ) {
+
+		if( is_admin() && 'edit-arc_form_entry' === get_current_screen()->id && isset( $_GET['arc_form_id'] ) ) {
+			$query->set( 'meta_key', '_arc_form_id' );
+			$query->set( 'meta_value', $_GET['arc_form_id'] );
+		}
+
+		return $query;
 	}
 
 	public static function register_submenu_page() {

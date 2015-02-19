@@ -114,7 +114,7 @@ class Architect_List_Table extends WP_List_Table {
 					'id'        => $form->ID,
 					'title'     => $form->post_title,
 					'shortcode' => '[arc-form id="' . $form->ID . '"]',
-					'entries'   => '#',
+					'entries'   => get_post_meta( $form->ID, '_arc_form_entry_count', true ),
 				);
 		}
 
