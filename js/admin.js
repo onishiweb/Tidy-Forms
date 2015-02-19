@@ -19,6 +19,10 @@ ARCHITECT_FORMS = (function ($) {
 				sortableFields();
 			}
 
+			if( $('#arc-form-settings').length ) {
+				initSettings();
+			}
+
 			if( $('.arc-field').length ) {
 				var fields = $('.arc-fields .arc-field');
 
@@ -59,6 +63,29 @@ ARCHITECT_FORMS = (function ($) {
 
 			$(field).on('change', '.arc-field-type-select', fieldOptions);
 
+		},
+
+		initSettings = function() {
+			var $emailField = $('#arc-send-via-email'),
+				$toEmail = $('#arc-form-settings').find('.arc-form-to-email');
+
+			if( ! $emailField.is(':checked') ) {
+				$toEmail.slideUp(0);
+			}
+
+			$('#arc-form-settings').on('change', '#arc-send-via-email', showHideToEmail);
+
+		},
+
+		showHideToEmail = function() {
+			var $emailField = $('#arc-send-via-email'),
+				$toEmail = $('#arc-form-settings').find('.arc-form-to-email');
+
+			if( $emailField.is(':checked') ) {
+				$toEmail.slideDown();
+			} else {
+				$toEmail.slideUp('fast');
+			}
 		},
 
 		revealFormsSubmenu = function() {
