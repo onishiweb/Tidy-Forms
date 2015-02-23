@@ -232,6 +232,15 @@ class Architect_Forms_Admin {
 			'normal',
 			'default'
 		);
+
+		add_meta_box(
+			'arc-form-entries',
+			'Form entries',
+			array( $this, 'render_entries_meta' ),
+			'arc_form',
+			'side',
+			'default'
+		);
 	}
 
 	public function render_fields_meta( $post ) {
@@ -261,6 +270,15 @@ class Architect_Forms_Admin {
 
 		// Include settings meta view
 		arc_get_view('form-settings', $settings);
+	}
+
+	public function render_entries_meta( $post ) {
+
+		// Get entries count
+		// Setup download link - ID of post
+
+		arc_get_view('form-entries-sidebar');
+
 	}
 
 	public function save_form_data( $post_id ) {
