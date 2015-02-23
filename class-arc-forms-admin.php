@@ -144,7 +144,7 @@ class Architect_Forms_Admin {
 			'exclude_from_search' => true,
 			'show_in_menu'        => false,
 			'publicly_queryable'  => false,
-			'supports'            => array( 'title', 'editor' ),
+			'supports'            => array( 'editor' ),
 		);
 
 		register_post_type( 'arc_form_entry', $args );
