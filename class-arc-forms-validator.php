@@ -92,6 +92,8 @@ class Architect_Forms_Validator {
 			add_action( 'architect_form_before_fields', array('Architect_Forms_Validator', 'get_error_notification') );
 		} else {
 			// Save/send form data
+			do_action( 'architect_forms_after_validation', $args );
+			Architect_Forms_Data::email_entry($args);
 			Architect_Forms_Data::save_entry($args);
 
 			// Set thanks message

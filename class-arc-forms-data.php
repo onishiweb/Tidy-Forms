@@ -28,10 +28,10 @@ class Architect_Forms_Data {
 		return self::$instance;
 	}
 
-	public static function save_entry( $args ) {
+	public static function save_entry( $data ) {
 		// Setup variables
-		$id = $args['id'];
-		$fields = $args['fields'];
+		$id = $data['id'];
+		$fields = $data['fields'];
 		$content = '';
 
 		// Loop through fields to create content
@@ -85,5 +85,44 @@ class Architect_Forms_Data {
 		} else {
 			// TODO: Handle error
 		}
+	}
+
+	public static function email_entry( $data ) {
+		// Setup variables
+		$id = $data['id'];
+		$form_title = get_the_title( $id );
+		$fields = $data['fields'];
+		$settings = $data['general'];
+
+		if( ! isset( $settings['send_via_email'] ) ) {
+			return;
+		}
+
+		$to_email = get_bloginfo( 'admin_email' );
+		$site_name = get_bloginfo( 'name' );
+		$subject = 'New Submission - Form: ' . $form_title;
+		$domain_name = preg_replace('/^www\./','',$_SERVER['SERVER_NAME']);
+
+		if( ! empty($settings['send_to_email']) ) {
+			$to_email = $settings['send_to_email'];
+		}
+
+		$email_args = array(
+				'subject' => $subject,
+				'fields' => $fields,
+			);
+
+		ob_start();
+
+		arc_get_view('email-template', $email_args);
+
+		$message = ob_get_contents();
+		ob_end_clean();
+
+		$headers = "From: {$site_name} <donotreply@{$domain_name}> \r\n" .
+					"MIME-Version: 1.0\r\n" .
+					"Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+		wp_mail( $to_email, $subject, $message, $headers );
 	}
 }
