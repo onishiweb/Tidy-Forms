@@ -179,7 +179,13 @@ class Architect_Forms_Admin {
 
 	public static function entries_table_content( $column_name, $post_id ) {
 		if( 'id' === $column_name ) {
-			echo $post_id;
+			$edit_url = admin_url( 'post.php?post='. $post_id . '&action=edit');
+
+			$title = '<strong><a href="' . $edit_url . '" class="row-title">' . $post_id . '</a></strong>';
+
+			$actions = sprintf('<div class="row-actions"><span class="edit"><a href="%s">View entry</a></span></div>',$edit_url);
+
+			echo sprintf('%1$s %2$s', $title, $actions );
 		} else {
 			// Get content from post meta
 			$meta = '_arc_' . $column_name;
