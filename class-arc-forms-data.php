@@ -125,4 +125,90 @@ class Architect_Forms_Data {
 
 		wp_mail( $to_email, $subject, $message, $headers );
 	}
+
+	public static function export_form( $form_id ) {
+
+		if( ! is_user_logged_in() || ! current_user_can( 'edit_others_posts' ) ) {
+			return;
+		}
+
+		$uploads = wp_upload_dir();
+		$export_fields = array();
+		$export_data = array();
+
+		$args = array(
+				'post_type'      => 'arc_form_entry',
+				'posts_per_page' => '-1',
+				'meta_key'       => '_arc_form_id',
+				'meta_value'     => $form_id,
+				'post_status'    => 'all',
+			);
+
+		$entries = new WP_Query($args);
+
+		$form = get_post($form_id);
+
+		$content = unserialize( $form->post_content );
+		$fields = $content['fields'];
+
+		foreach( $fields as $field ) {
+			$export_fields[ $field['name'] ] = $field['label'];
+		}
+
+		foreach( $entries->posts as $entry ) {
+
+			$post_id = $entry->ID;
+
+			$post_data = array();
+
+			foreach( $export_fields as $key => $title ) {
+				$post_data[ $key ] = get_post_meta ($post_id, '_arc_'.$key, true);
+			}
+
+			$export_data[] = $post_data;
+		}
+
+		$fullpath = $uploads['basedir'] . '/form-export-' . $form_id . '.csv'; //Full path of document
+		$fh = fopen($fullpath, 'w');
+
+		if( ! $fh ) {
+			// Error
+			die();
+		}
+
+		// Write headers
+		$headers = implode('", "', $export_fields);
+		fwrite( $fh, '"' . $headers . '"' );
+		fwrite( $fh,  PHP_EOL );
+
+		// Write entries
+		foreach ( $export_data as $row ) {
+			$entry = implode( '", "', $row);
+			fwrite( $fh, '"' . $entry . '"' );
+			fwrite( $fh,  PHP_EOL );
+		}
+
+		fclose($fh);
+
+		if (file_exists($fullpath)) {
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename='.basename($fullpath));
+			header('Content-Transfer-Encoding: binary');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($fullpath));
+
+			header('HTTP/1.0 200 OK', true, 200);
+			ob_clean();
+			flush();
+			readfile($fullpath);
+			die();
+		} else {
+			echo '<pre>';
+			echo 'There is an error with the csv file'.PHP_EOL.$fullpath;
+			echo '</pre>';
+		}
+	}
 }

@@ -205,6 +205,7 @@ class Architect_Forms_Admin {
 
 	public static function register_submenu_page() {
 		add_submenu_page( 'edit.php?post_type=arc_form', 'Entries', 'Entries', 'edit_theme_options', 'arc-form-entries', array( 'Architect_Forms_Admin', 'render_entries_submenu' ) );
+		add_submenu_page( 'edit.php?post_type=arc_form', 'Export entries', 'Export', 'edit_theme_options', 'arc-form-export', array( 'Architect_Forms_Admin', 'render_export_submenu' ) );
 	}
 
 	public static function render_entries_submenu() {
@@ -212,6 +213,17 @@ class Architect_Forms_Admin {
 		$data_table->prepare_items();
 
 		arc_get_view('entries', $data_table);
+	}
+
+	public static function render_export_submenu() {
+		$forms = new WP_Query( array('post_type' => 'arc_form', 'posts_per_page' => '-1') );
+
+		$args = array(
+				'forms'      => $forms->posts,
+				'export_url' => plugins_url( 'export.php', __FILE__ ),
+			);
+
+		arc_get_view('export', $args);
 	}
 
 	public function setup_meta_boxes() {
@@ -270,14 +282,34 @@ class Architect_Forms_Admin {
 
 		// Include settings meta view
 		arc_get_view('form-settings', $settings);
+
+		$args = array(
+				'post_type'      => 'arc_form_entry',
+				'posts_per_page' => '-1',
+				'meta_key'       => '_arc_form_id',
+				'meta_value'     => '48',
+			);
+
+		$entries = new WP_Query($args);
 	}
 
 	public function render_entries_meta( $post ) {
 
-		// Get entries count
-		// Setup download link - ID of post
+		// Use nonce for verification
+		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_entries_export_nonce' );
 
-		arc_get_view('form-entries-sidebar');
+		// Get entries count
+		$entry_count = get_post_meta( $post->ID, '_arc_form_entry_count', true );
+
+		// Setup args
+		$args = array(
+				'form_id'     => $post->ID,
+				'entry_count' => $entry_count,
+				'entry_link'  => admin_url( 'edit.php?post_type=arc_form_entry&arc_form_id='. $post->ID ),
+				'export_url'  => plugins_url( 'export.php', __FILE__ ),
+			);
+
+		arc_get_view('form-entries-sidebar', $args);
 
 	}
 
