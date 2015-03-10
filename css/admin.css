@@ -70,7 +70,8 @@
  */
 
 #arc-form-fields h3.hndle,
-#arc-form-settings h3.hndle {
+#arc-form-settings h3.hndle,
+#arc-entry-notes h3.hndle {
 	color:#fff;
 	font-weight:normal;
 	background-color:#40849f;
@@ -81,8 +82,13 @@
 	color:#fff;
 }
 
+#arc-entry-notes .handlediv {
+	display:none;
+}
+
 #arc-form-fields .inside,
-#arc-form-settings .inside {
+#arc-form-settings .inside,
+#arc-entry-notes .inside {
 	margin:0;
 }
 
@@ -297,3 +303,37 @@ table.arc-fields-table {
 .arc_form_page_arc-form-entries.wp-list-table .column-shortcode { width: 35%; }
 .arc_form_page_arc-form-entries.wp-list-table .column-entries { width: 20%; }
 
+/**
+ * Entry post
+ */
+
+#arc-entry-data .handlediv,
+#arc-entry-data h3.hndle {
+	display:none;
+}
+
+#arc-entry-data .inside {
+	margin:0;
+	padding:0;
+}
+
+.arc-entry-data-list,
+.arc-entry-data-list dd {
+	margin:0;
+}
+
+.arc-entry-data-list dt,
+.arc-entry-data-list dd {
+	padding:10px 13px;
+}
+
+.arc-entry-data-list dt {
+	font-size:16px;
+	line-height:1.125;
+	background-color:#f5f5f5;
+}
+
+.arc-entry-data-list dd {
+	font-size:14px;
+	line-height:1.28;
+}
