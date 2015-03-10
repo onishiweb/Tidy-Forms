@@ -13,6 +13,9 @@ ARCHITECT_FORMS = (function ($) {
 
 			if( $('#arc-form-fields').length ) {
 				$('#arc-form-fields').on('click', '[arc-action-add-field]', addField);
+
+
+				showTableHeader();
 			}
 
 			if( $('.arc-fields-sortable').length ) {
@@ -75,6 +78,14 @@ ARCHITECT_FORMS = (function ($) {
 
 			$('#arc-form-settings').on('change', '#arc-send-via-email', showHideToEmail);
 
+		},
+
+		showTableHeader = function() {
+			if( $('#arc-fields-count').val() > 0 ) {
+				$('#arc-form-fields .arc-fields-header').addClass('has-fields');
+			} else {
+				$('#arc-form-fields .arc-fields-header').removeClass('has-fields');
+			}
 		},
 
 		showHideToEmail = function() {
@@ -206,8 +217,9 @@ ARCHITECT_FORMS = (function ($) {
 			// Remove modal
 			closeModal();
 
-			// Reveal options
+			// Reveal options & show table header if first field
 			$field.slideUp(0).slideDown('fast');
+			showTableHeader();
 		},
 
 		editField = function(e) {
@@ -295,12 +307,15 @@ ARCHITECT_FORMS = (function ($) {
 			e.preventDefault();
 
 			var $this = $(this),
-				$field = $this.parents('.arc-field');
+				$field = $this.parents('.arc-field'),
+				count = $('#arc-fields-count').val() - 1;
 
 			$field.off('change', '.arc-field-type-select', advancedFields);
 
 			$field.slideUp('fast', function () {
 				$field.remove();
+				$('#arc-fields-count').val( count );
+				showTableHeader();
 				reorderFieldNumbers();
 			});
 		},

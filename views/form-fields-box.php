@@ -10,6 +10,10 @@
 			</tr>
 		</thead>
 	</table>
+
+	<div class="arc-fields-no-fields">
+		<?php _e('There are no fields currently. Click on the button below to add a new field.', 'arcforms'); ?>
+	</div>
 </div>
 
 <div class="arc-fields arc-fields-sortable">

@@ -1,6 +1,12 @@
 /**
  * WordPress blue: #2ea2cc
  * WordPress dark blue: #0074a2
+ * TF Blue: #40849f;
+ * TF Grey: #e1e1e1;
+ */
+
+/**
+ * CLEARFIX
  */
 
 .arc-clearfix {
@@ -18,6 +24,10 @@
 .arc-clearfix:after {
 	clear: both;
 }
+
+/**
+ * LIGHTBOX
+ */
 
 .arc-lightbox-mask {
 	position:fixed;
@@ -38,6 +48,10 @@
 	background-color:#fff;
 }
 
+/**
+ * SHORTCODE
+ */
+
 .shortcode-preview {
 	min-height:25px;
 	margin-top:5px;
@@ -47,6 +61,46 @@
 }
 
 #edit-slug-box {
+	display:none;
+}
+
+/**
+ * EDITOR
+ */
+
+#arc-form-fields h3.hndle,
+#arc-form-settings h3.hndle {
+	color:#fff;
+	font-weight:normal;
+	background-color:#40849f;
+}
+
+#arc-form-fields .handlediv,
+#arc-form-settings .handlediv {
+	color:#fff;
+}
+
+/**
+ * FIELDS TABLE
+ */
+
+.arc-fields-no-fields {
+	margin-top:10px;
+	padding:10px;
+	font-size:12px;
+	font-style:italic;
+	background-color:#e1e1e1;
+}
+
+.arc-fields-header .arc-fields-table {
+	display:none;
+}
+
+.arc-fields-header.has-fields .arc-fields-table {
+	display:table;
+}
+
+.arc-fields-header.has-fields .arc-fields-no-fields {
 	display:none;
 }
 
