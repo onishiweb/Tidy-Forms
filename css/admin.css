@@ -2,6 +2,7 @@
  * WordPress blue: #2ea2cc
  * WordPress dark blue: #0074a2
  * TF Blue: #40849f;
+ * TF Light blue: #5FC4EB;
  * TF Grey: #e1e1e1;
  */
 
@@ -80,6 +81,11 @@
 	color:#fff;
 }
 
+#arc-form-fields .inside,
+#arc-form-settings .inside {
+	margin:0;
+}
+
 /**
  * FIELDS TABLE
  */
@@ -90,6 +96,10 @@
 	font-size:12px;
 	font-style:italic;
 	background-color:#e1e1e1;
+}
+
+.arc-fields-header {
+	margin-top:10px;
 }
 
 .arc-fields-header .arc-fields-table {
@@ -119,6 +129,7 @@ table.arc-fields-table {
 .arc-fields-table th {
 	text-align:left;
 	border:0;
+	vertical-align:middle;
 }
 
 .arc-fields-table td span {
@@ -137,9 +148,32 @@ table.arc-fields-table {
 	width:10%;
 }
 
-.arc-fields-header {
-	margin-top:10px;
+/**
+ * Fieldset
+ */
+
+.arc-fieldset {
+	margin:10px 0;
 }
+
+.arc-fieldset label {
+	display:block;
+	margin:0 0 10px;
+	font-size:14px;
+}
+
+.arc-fieldset p.description {
+	margin:10px 0 20px;
+	font-size:12px;
+}
+
+.arc-fields .arc-fieldset {
+	padding:0 10px;
+}
+
+/**
+ * Fields
+ */
 
 .arc-fields {
 	margin-bottom:10px;
@@ -151,14 +185,6 @@ table.arc-fields-table {
 
 .arc-fields-sortable .ui-sortable-handle {
 	cursor:move;
-}
-
-.ui-sortable-helper {
-	border-top:1px solid #e1e1e1;
-}
-
-.arc-sortable-placeholder {
-	background-color:#eee;
 }
 
 .arc-button-delete {
@@ -177,28 +203,53 @@ table.arc-fields-table {
 	border:0;
 }
 
-.arc-field.editing table {
-	background-color:#28cb8c;
+.arc-field.editing {
+	overflow-x:hidden;
 }
 
-.arc-field fieldset {
-	padding:10px;
-	border-bottom:1px solid #eee;
+.arc-field.editing table {
+	background-color:#3DAC8F;
+	box-shadow:0 2px 5px 0 rgba(0,0,0,0.3);
+}
+
+.arc-field.editing table td,
+.arc-field.editing table th {
+	color:#fff;
 }
 
 .arc-field .arc-field-actions {
 	border-bottom:0;
 }
 
-.arc-field label {
-	display:block;
-	margin:0 0 5px;
-	font-size:14px;
-}
-
-.arc-field .arc-field-type-options {
+.arc-fieldset .arc-field-extra-options {
+	float:left;
+	width:100%;
 	padding:10px 0 0;
 }
+
+.arc-fieldset .arc-field-extra-options label {
+	float:left;
+	width:22%;
+	padding:6px 3% 6px 0;
+}
+
+.arc-fieldset .arc-field-extra-options input,
+.arc-fieldset .arc-field-extra-options textarea,
+.arc-fieldset .arc-field-extra-options select {
+	float:right;
+	width:73%;
+	margin-right:10px;
+}
+
+.arc-fieldset .arc-field-extra-options textarea {
+	margin-top:2px;
+}
+
+.arc-fieldset .arc-field-extra-options .description {
+	width:22%;
+	padding-right:3%;
+}
+
 
 .arc-field .arc-field-select {
 	width:100%;
@@ -210,8 +261,33 @@ table.arc-fields-table {
 }
 
 .arc-field-advanced-options .arc-fields-header {
-	padding:0 10px;
+	padding:10px 10px;
+	background-color:#e1e1e1;
 }
+
+.arc-field-advanced-options .arc-fields-header h4 {
+	margin:0 0 10px;
+}
+
+.arc-field-advanced-options .arc-fields-header .description {
+	font-size:12px;
+}
+
+/**
+ * Sortable
+ */
+
+.ui-sortable-helper {
+	border-top:1px solid #e1e1e1;
+}
+
+.arc-sortable-placeholder {
+	background-color:#eee;
+}
+
+/**
+ * Entries
+ */
 
 .arc_form_page_arc-form-entries.wp-list-table .column-id { width: 5%; }
 .arc_form_page_arc-form-entries.wp-list-table .column-title { width: 40%; }
