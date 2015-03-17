@@ -52,12 +52,12 @@ class Architect_Forms {
 			'dir'                => plugin_dir_url( __FILE__ ),
 
 			'field_types'        => array(
+				'title'    => 'Title',
 				'text'     => 'Text',
 				'textarea' => 'Textarea',
-				'select'   => 'Drop down',
 				'radio'    => 'Radio button(s)',
 				'checkbox' => 'Checkbox(es)',
-				'title'    => 'Title',
+				'select'   => 'Drop down',
 			),
 
 			'validation_methods' => array(
