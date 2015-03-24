@@ -30,8 +30,10 @@ class Architect_Forms_Admin {
 		add_action( 'admin_menu', array( $this, 'register_submenu_page') );
 
 		// Add meta boxes for form creation
-		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_meta_boxes' ) );
+		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_form_meta_boxes' ) );
+		add_action( 'add_meta_boxes_arc_form_entry', array( $this, 'setup_entry_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
+		add_action( 'save_post', array( $this, 'save_entry_data' ) );
 
 		// Edit post columns for entries post type
 		add_filter( 'manage_arc_form_entry_posts_columns', array( $this, 'entries_table_columns' ) );
@@ -144,7 +146,7 @@ class Architect_Forms_Admin {
 			'exclude_from_search' => true,
 			'show_in_menu'        => false,
 			'publicly_queryable'  => false,
-			'supports'            => array( 'editor' ),
+			'supports'            => false,
 		);
 
 		register_post_type( 'arc_form_entry', $args );
@@ -226,7 +228,7 @@ class Architect_Forms_Admin {
 		arc_get_view('export', $args);
 	}
 
-	public function setup_meta_boxes() {
+	public function setup_form_meta_boxes() {
 		add_meta_box(
 			'arc-form-fields',
 			'Fields',
@@ -253,6 +255,28 @@ class Architect_Forms_Admin {
 			'side',
 			'default'
 		);
+	}
+
+	public function setup_entry_meta_boxes() {
+
+		add_meta_box(
+			'arc-entry-data',
+			'Form entry',
+			array( $this, 'render_entry_content' ),
+			'arc_form_entry',
+			'normal',
+			'default'
+		);
+
+		add_meta_box(
+			'arc-entry-notes',
+			'Notes',
+			array( $this, 'render_entry_notes' ),
+			'arc_form_entry',
+			'normal',
+			'default'
+		);
+
 	}
 
 	public function render_fields_meta( $post ) {
@@ -282,15 +306,6 @@ class Architect_Forms_Admin {
 
 		// Include settings meta view
 		arc_get_view('form-settings', $settings);
-
-		$args = array(
-				'post_type'      => 'arc_form_entry',
-				'posts_per_page' => '-1',
-				'meta_key'       => '_arc_form_id',
-				'meta_value'     => '48',
-			);
-
-		$entries = new WP_Query($args);
 	}
 
 	public function render_entries_meta( $post ) {
@@ -311,6 +326,39 @@ class Architect_Forms_Admin {
 
 		arc_get_view('form-entries-sidebar', $args);
 
+	}
+
+	public function render_entry_content( $post ) {
+		$entry_id = $post->ID;
+		$form_id = get_post_meta( $entry_id, '_arc_form_id', true );
+
+		$form = get_post( $form_id );
+		$content = unserialize( $form->post_content );
+		$fields = $content['fields'];
+
+		$data = array();
+
+		foreach( $fields as $field ) {
+			$data[] = array(
+					'label' => $field['label'],
+					'entry' => get_post_meta( $entry_id, '_arc_' . $field['name'], true),
+				);
+		}
+
+		arc_get_view('entry-data', $data);
+	}
+
+	public function render_entry_notes( $post ) {
+		// Use nonce for verification
+		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_entry_nonce' );
+
+		$notes = get_post_meta( $post->ID, '_arc_entry_note', true );
+
+		$data = array(
+				'notes' => $notes,
+			);
+
+		arc_get_view('entry-notes', $data);
 	}
 
 	public function save_form_data( $post_id ) {
@@ -371,6 +419,48 @@ class Architect_Forms_Admin {
 			// re-hook this function
 			add_action('save_post', array( $this, 'save_form_data' ) );
 		}
+	}
+
+	public function save_entry_data( $post_id ) {
+		// verify if this is an auto save routine.
+		// If it is the post has not been updated, so we don’t want to do anything
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $post_id;
+		}
+
+		// verify this came from the screen and with proper authorization,
+		// because save_post can be triggered at other times
+		if ( !isset( $_POST['arc_entry_nonce'] ) || !wp_verify_nonce( $_POST['arc_entry_nonce'], plugin_basename( __FILE__ ) ) ) {
+			return $post_id;
+		}
+
+		// Get the post type object.
+		global $post;
+		$post_type = get_post_type_object( $post->post_type );
+
+		// Check if the current user has permission to edit the post.
+		if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {
+			return $post_id;
+		}
+
+		if ( wp_is_post_revision( $post_id ) ) {
+			return $post_id;
+		}
+
+		$key = '_arc_entry_note';
+
+		$current = get_post_meta( $post_id, $key, true );
+		$value = $_POST['arc_entry_notes'];
+
+		// add/update record (both are taken care of by update_post_meta)
+		if ( $value && '' == $current ) {
+			add_post_meta( $post_id, $key, $value, true );
+		} elseif ( $value && $value != $current ) {
+			update_post_meta( $post_id, $key, $value );
+		} elseif ( '' == $value && $current ) {
+			delete_post_meta( $post_id, $key, $current );
+		}
+
 	}
 
 	public function form_shortcode_helper( $post ) {

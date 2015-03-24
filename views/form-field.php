@@ -49,13 +49,13 @@ $field_name = 'arc_field_' . $order;
 
 	<div class="arc-field-settings">
 
-		<fieldset>
+		<fieldset class="arc-fieldset">
 			<label for="arc-field-label-<?php echo $order; ?>">Field label</label>
 			<input type="text" name="<?php echo $field_name; ?>[label]" id="arc-field-label-<?php echo $order; ?>" class="large-text" placeholder="Name" value="<?php arc_isset_echo( $args, 'label' ); ?>">
 			<p class="description">Enter the label to display alongside the field.</p>
 		</fieldset>
 
-		<fieldset>
+		<fieldset class="arc-fieldset">
 			<label for="arc-field-type-<?php echo $order; ?>">Field type</label>
 			<select name="<?php echo $field_name; ?>[type]" id="arc-field-type-<?php echo $order; ?>" class="arc-field-select arc-field-type-select">
 				<option <?php if( ! $type ) { echo 'selected="selected"'; } ?> value="">Select a field type</option>
@@ -66,7 +66,7 @@ $field_name = 'arc_field_' . $order;
 
 			</select>
 
-			<div class="arc-field-type-options">
+			<div class="arc-field-extra-options">
 
 				<div class="arc-field-text-validation">
 					<label for="arc-field-text-validation-<?php echo $order; ?>">Validation method</label>
@@ -88,17 +88,18 @@ $field_name = 'arc_field_' . $order;
 
 		</fieldset>
 
-		<fieldset>
+		<fieldset class="arc-fieldset">
 			<label for="arc-field-description-<?php echo $order; ?>">Description/instructions</label>
 			<textarea name="<?php echo $field_name; ?>[description]" id="arc-field-description-<?php echo $order; ?>" class="large-text" cols="80" rows="5"><?php arc_isset_echo( $args, 'description' ); ?></textarea>
 			<p class="description">Add a description/instruction text to the field.</p>
 		</fieldset>
 
-		<fieldset>
+		<fieldset class="arc-fieldset">
 			<label for="arc-field-required-<?php echo $order; ?>">
 				<input name="<?php echo $field_name; ?>[required]" type="checkbox" id="arc-field-required-<?php echo $order; ?>" <?php checked( $required, 'on' ); ?>>
 				Required?
 			</label>
+			<p class="description">Is this a required field?</p>
 		</fieldset>
 
 		<div class="arc-field-advanced-options">
@@ -107,26 +108,26 @@ $field_name = 'arc_field_' . $order;
 				<p class="description">Configure your form even further.</p>
 			</div>
 
-			<fieldset>
+			<fieldset class="arc-fieldset">
 				<label for="arc-field-name-<?php echo $order; ?>">Field name</label>
 				<input type="text" name="<?php echo $field_name; ?>[name]" id="arc-field-name-<?php echo $order; ?>" class="large-text" placeholder="name" value="<?php arc_isset_echo( $args, 'name' ); ?>">
 				<p class="description">Customise the name attribute used in the field.</p>
 			</fieldset>
 
-			<fieldset>
+			<fieldset class="arc-fieldset">
 				<label for="arc-field-classes-<?php echo $order; ?>">Custom HTML classes (space separated)</label>
 				<input type="text" name="<?php echo $field_name; ?>[classes]" id="arc-field-classes-<?php echo $order; ?>" class="large-text" value="<?php arc_isset_echo( $args, 'classes' ); ?>">
 				<p class="description">Customise the classes used for the label and form input.</p>
 			</fieldset>
 
-			<fieldset>
+			<fieldset class="arc-fieldset">
 				<label for="arc-field-id-<?php echo $order; ?>">Custom HTML ID</label>
 				<input type="text" name="<?php echo $field_name; ?>[custom_id]" id="arc-field-id-<?php echo $order; ?>" class="large-text" value="<?php arc_isset_echo( $args, 'custom_id' ); ?>">
 				<p class="description">Customise the ID used for the input field.</p>
 			</fieldset>
 		</div>
 
-		<fieldset class="arc-field-actions arc-clearfix">
+		<fieldset class="arc-fieldset arc-field-actions arc-clearfix">
 			<input type="hidden" name="<?php echo $field_name; ?>[order]" class="arc-field-order" value="<?php echo $order; ?>">
 			<button class="button-primary arc-button" arc-action-finished-editing>Done</button>
 			<button class="button-secondary arc-button" arc-action-advanced-fields>Advanced field options</button>
