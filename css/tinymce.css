@@ -1,0 +1,7 @@
+i.mce-i-arc-form-mce-button:before {
+	content: "\f175";
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 20px/1 'dashicons';
+	vertical-align: top;
+}
