@@ -1,7 +1,7 @@
 <div class="wrap">
 	<h2>Export entries</h2>
 
-	<form action="<?php echo $args['export_url']; ?>" method="get">
+	<form action="<?php echo admin_url( 'admin-post.php' ); ?>" method="post">
 		<p>Select a form to export the entries from:</p>
 
 		<ul>
@@ -15,6 +15,7 @@
 			</li>
 			<li>
 				<?php wp_nonce_field( 'arc_form_entries_export', 'arc_form_export_nonce', false ); ?>
+        <input type="hidden" name="action" value="arc_export_entries">
 				<input type="submit" class="button-primary" name="arc_export_entries" value="Export">
 			</li>
 		</ul>

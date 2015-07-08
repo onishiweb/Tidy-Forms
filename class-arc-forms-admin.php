@@ -50,6 +50,9 @@ class Architect_Forms_Admin {
 		// Return the form names and IDs via Ajax
 		add_action('wp_ajax_arc_get_form_values', array( $this, 'get_tinymce_form_data' ) );
 
+    // Export action
+    add_action( 'admin_post_arc_export_entries', array('Architect_Forms_Data', 'export_form'), 1 );
+
 	}
 
 	public static function get_instance() {

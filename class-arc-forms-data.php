@@ -126,11 +126,22 @@ class Architect_Forms_Data {
 		wp_mail( $to_email, $subject, $message, $headers );
 	}
 
-	public static function export_form( $form_id ) {
+	public static function export_form() {
 
 		if( ! is_user_logged_in() || ! current_user_can( 'edit_others_posts' ) ) {
-			return;
+			wp_die( 'You do not have permission to perform this action', 'Export error' );
 		}
+
+    if ( ! isset( $_POST['arc_form_export_nonce'] ) || ! wp_verify_nonce( $_POST['arc_form_export_nonce'], 'arc_form_entries_export' ) ) {
+      wp_die( 'Invalid nonce', 'Export error' );
+    }
+
+    $form_id = intval( $_POST['arc_export_form'], 10);
+    $forms = new WP_Query( array('post_type' => 'arc_form', 'posts_per_page' => '-1', 'fields' => 'ids' ) );
+
+    if( ! is_numeric($form_id) || ! in_array($form_id, $forms->posts) ) {
+      wp_die( 'Invalid form ID', 'Export error' );
+    }
 
 		$uploads = wp_upload_dir();
 		$export_fields = array();
