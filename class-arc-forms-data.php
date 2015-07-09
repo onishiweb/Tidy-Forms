@@ -158,6 +158,7 @@ class Architect_Forms_Data {
 		$entries = new WP_Query($args);
 
 		$form = get_post($form_id);
+    $form_name = $form->post_title;
 
 		$content = unserialize( $form->post_content );
 		$fields = $content['fields'];
@@ -179,12 +180,14 @@ class Architect_Forms_Data {
 			$export_data[] = $post_data;
 		}
 
-		$fullpath = $uploads['basedir'] . '/form-export-' . $form_id . '.csv'; //Full path of document
+    $export_filename = 'export-' . strtolower( str_replace(' ', '-', $form_name) ) . '-' . date('Y-m-d');
+
+		$fullpath = $uploads['basedir'] . '/' . $export_filename . '.csv'; //Full path of document
 		$fh = fopen($fullpath, 'w');
 
 		if( ! $fh ) {
 			// Error
-			die();
+			wp_die( 'Sorry there was an error creating the export file, please try again', 'Export error' );
 		}
 
 		// Write headers
@@ -215,11 +218,16 @@ class Architect_Forms_Data {
 			ob_clean();
 			flush();
 			readfile($fullpath);
+
+      ignore_user_abort(true);
+      unlink($fullpath);
+
 			die();
 		} else {
-			echo '<pre>';
-			echo 'There is an error with the csv file'.PHP_EOL.$fullpath;
-			echo '</pre>';
+      ignore_user_abort(true);
+      unlink($fullpath);
+
+			wp_die( 'Sorry there was an error creating the export file, please try again', 'Export error' );
 		}
 	}
 }
