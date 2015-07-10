@@ -14,7 +14,6 @@ ARCHITECT_FORMS = (function ($) {
 			if( $('#arc-form-fields').length ) {
 				$('#arc-form-fields').on('click', '[arc-action-add-field]', addField);
 
-
 				showTableHeader();
 			}
 
