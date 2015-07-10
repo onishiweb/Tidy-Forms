@@ -160,7 +160,7 @@ class Architect_Forms_Admin {
 		if( isset($_GET['arc_form_id']) ) {
 			$form = get_post($_GET['arc_form_id']);
 
-			$content = unserialize( $form->post_content );
+			$content = get_post_meta( $post_id, '_arc_form_data', true );
 			$fields = $content['fields'];
 			$max = max(3, count($fields));
 
@@ -199,6 +199,10 @@ class Architect_Forms_Admin {
 	}
 
 	public static function entries_table_filter( $query ) {
+
+    if( ! get_current_screen() ) {
+      return $query;
+    }
 
 		if( is_admin() && 'edit-arc_form_entry' === get_current_screen()->id && isset( $_GET['arc_form_id'] ) ) {
 			$query->set( 'meta_key', '_arc_form_id' );
@@ -288,7 +292,7 @@ class Architect_Forms_Admin {
 		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_fields_nonce' );
 
 		// Get settings data
-		$content = unserialize( $post->post_content );
+		$content = get_post_meta( $post->ID, '_arc_form_data', true );
 		$fields = $content['fields'];
 
 		// Include fields meta view
@@ -299,7 +303,7 @@ class Architect_Forms_Admin {
 		// No nonce here, already set in fields meta box
 
 		// Get settings data
-		$content = unserialize( $post->post_content );
+		$content = get_post_meta( $post->ID, '_arc_form_data', true );
 		$settings = $content['settings'];
 
 		// Give the submit text a default setting if none set
@@ -335,8 +339,7 @@ class Architect_Forms_Admin {
 		$entry_id = $post->ID;
 		$form_id = get_post_meta( $entry_id, '_arc_form_id', true );
 
-		$form = get_post( $form_id );
-		$content = unserialize( $form->post_content );
+		$content = get_post_meta( $form_id, '_arc_form_data', true );
 		$fields = $content['fields'];
 
 		$data = array();
@@ -411,17 +414,21 @@ class Architect_Forms_Admin {
 				'settings' => $settings,
 			);
 
-		$post = array(
-			'ID'           => $post_id,
-			'post_content' => serialize($all_data),
-			);
+    $key = '_arc_form_data';
 
-		$update = wp_update_post( $post, true );
+    $current = get_post_meta( $post_id, $key, true );
+    $value = $all_data;
 
-		if( ! is_wp_error( $update ) ) {
-			// re-hook this function
-			add_action('save_post', array( $this, 'save_form_data' ) );
-		}
+    // add/update record (both are taken care of by update_post_meta)
+    if ( $value && '' == $current ) {
+      add_post_meta( $post_id, $key, $value, true );
+    } elseif ( $value && $value != $current ) {
+      update_post_meta( $post_id, $key, $value );
+    } elseif ( '' == $value && $current ) {
+      delete_post_meta( $post_id, $key, $current );
+    }
+
+		add_action('save_post', array( $this, 'save_form_data' ) );
 	}
 
 	public function save_entry_data( $post_id ) {

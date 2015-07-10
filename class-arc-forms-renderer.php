@@ -50,7 +50,7 @@ class Architect_Forms_Renderer {
 
 		// get form details
 		$form = get_post( $id );
-		$content = unserialize( $form->post_content );
+		$content = get_post_meta( $id, '_arc_form_data', true );
 
 		// Add the title to general settings
 		$content['settings']['title'] = $form->post_title;

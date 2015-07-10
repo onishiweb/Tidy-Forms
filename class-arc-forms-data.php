@@ -160,7 +160,7 @@ class Architect_Forms_Data {
 		$form = get_post($form_id);
     $form_name = $form->post_title;
 
-		$content = unserialize( $form->post_content );
+		$content = get_post_meta( $form_id, '_arc_form_data', true );
 		$fields = $content['fields'];
 
 		foreach( $fields as $field ) {
