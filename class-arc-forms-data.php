@@ -182,52 +182,28 @@ class Architect_Forms_Data {
 
     $export_filename = 'export-' . strtolower( str_replace(' ', '-', $form_name) ) . '-' . date('Y-m-d');
 
-		$fullpath = $uploads['basedir'] . '/' . $export_filename . '.csv'; //Full path of document
-		$fh = fopen($fullpath, 'w');
+    array_unshift($export_data, $export_fields);
 
-		if( ! $fh ) {
-			// Error
-			wp_die( 'Sorry there was an error creating the export file, please try again', 'Export error' );
-		}
+		header('Content-Description: File Transfer');
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename=' . $export_filename);
+		header('Content-Transfer-Encoding: binary');
+		header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1
+    header('Pragma: no-cache'); // HTTP 1.0
+    header('Expires: 0');
+		header('HTTP/1.0 200 OK', true, 200);
 
-		// Write headers
-		$headers = implode('", "', $export_fields);
-		fwrite( $fh, '"' . $headers . '"' );
-		fwrite( $fh,  PHP_EOL );
+    ob_start(); // buffer the output ...
 
-		// Write entries
-		foreach ( $export_data as $row ) {
-			$entry = implode( '", "', $row);
-			fwrite( $fh, '"' . $entry . '"' );
-			fwrite( $fh,  PHP_EOL );
-		}
+    $fp = fopen('php://output', 'w'); // this file actual writes to php output
+    foreach($export_data as $row) {
+      fputcsv($fp, $row);
+    }
 
-		fclose($fh);
+    header('Content-Length: ' . ob_get_length() );
 
-		if (file_exists($fullpath)) {
-			header('Content-Description: File Transfer');
-			header('Content-Type: application/octet-stream');
-			header('Content-Disposition: attachment; filename='.basename($fullpath));
-			header('Content-Transfer-Encoding: binary');
-			header('Expires: 0');
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: ' . filesize($fullpath));
+    fclose($fp);
 
-			header('HTTP/1.0 200 OK', true, 200);
-			ob_clean();
-			flush();
-			readfile($fullpath);
-
-      ignore_user_abort(true);
-      unlink($fullpath);
-
-			die();
-		} else {
-      ignore_user_abort(true);
-      unlink($fullpath);
-
-			wp_die( 'Sorry there was an error creating the export file, please try again', 'Export error' );
-		}
+		die( ob_get_clean() );
 	}
 }
