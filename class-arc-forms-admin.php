@@ -35,6 +35,8 @@ class Architect_Forms_Admin {
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
 		add_action( 'save_post', array( $this, 'save_entry_data' ) );
 
+    add_action( 'post_updated_messages', array( $this, 'update_notices') );
+
 		// Edit post columns for entries post type
 		add_filter( 'manage_arc_form_entry_posts_columns', array( $this, 'entries_table_columns' ) );
 		add_action( 'manage_arc_form_entry_posts_custom_column', array( $this, 'entries_table_content' ), 10, 2 );
@@ -472,6 +474,24 @@ class Architect_Forms_Admin {
 		}
 
 	}
+
+  public static function update_notices( $messages ) {
+    $messages['arc_form'] = array(
+      0  => '',
+      1  => 'Form updated.',
+      2  => 'Form updated.',
+      3  => 'Form updated.',
+      4  => 'Form updated.',
+      5  => '',
+      6  => 'Form created.',
+      7  => 'Form saved.',
+      8  => 'Form updated.',
+      9  => 'Form scheduled.',
+      10 => 'Form draft updated.',
+    );
+
+    return $messages;
+  }
 
 	public function form_shortcode_helper( $post ) {
 
