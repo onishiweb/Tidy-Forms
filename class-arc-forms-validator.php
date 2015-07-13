@@ -48,7 +48,7 @@ class Architect_Forms_Validator {
 			$name = 'arc_' . $field['name'];
 
 			if( isset($_POST[ $name ]) ) {
-				$value = $_POST[ $name ];
+				$value = stripslashes( $_POST[ $name ] );
 			}
 
 			switch ($type)  {
