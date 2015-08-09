@@ -41,32 +41,5 @@ class Tidy_Forms {
 	}
 
 	public function initialise() {
-
-		// settings
-		$this->settings = array(
-
-			// basic
-			'name'				=> __('Tidy Forms', 'tidyforms'),
-			'version'			=> '0.0.1',
-			'slug'              => 'tidy-forms',
-
-			// urls
-			'basename'			=> plugin_basename( __FILE__ ),
-			'path'				=> plugin_dir_path( __FILE__ ),
-			'dir'				=> plugin_dir_url( __FILE__ ),
-		);
-
-		require_once('inc/helpers.php');
-
-		tidy_include('class-tidy-forms-renderer.php');
-
-		Tidy_Forms_Renderer::get_instance();
-
-		if( is_admin() ) {
-			tidy_include('class-tidy-forms-admin.php');
-
-			Tidy_Forms_Admin::get_instance();
-		}
-
 	}
 }

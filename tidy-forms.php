@@ -2,8 +2,8 @@
 /*
 Plugin Name: Tidy Forms
 Plugin URI: http://wp-tidyforms.com
-Description: Tidy Forms is a new forms generator for WordPress, combining simple form creation and great markup.
-Version: 0.0.1
+Description: Tidy Forms is a forms generator for WordPress, combining simple form creation, a great developer API, and clean markup.
+Version: 0.0.2
 Author: Adam Onishi
 Author URI: http://adamonishi.com
 License: GPL2
