@@ -16,16 +16,8 @@ class Tidy_Forms {
 	 */
 	protected static $instance = null;
 
-	/**
-	 * The slug of the plugin
-	 *
-	 * @var string
-	 */
-	protected static $plugin_slug = 'tidy-forms';
-
-
 	private function __construct() {
-
+		// Do nothing on construct - everythig in initialise()
 	}
 
 	public static function get_instance() {
@@ -41,5 +33,55 @@ class Tidy_Forms {
 	}
 
 	public function initialise() {
+		/**
+		 * The main settings array for the plugin
+		 *
+		 * @var array
+		 */
+		$this->settings = array(
+			// basic
+			'name'               => __('Tidy Forms', 'tidyforms'),
+			'version'            => '0.1.0',
+			'slug'               => 'tidy-forms',
+
+			// urls
+			'basename'           => plugin_basename( __FILE__ ),
+			'path'               => plugin_dir_path( __FILE__ ),
+			'dir'                => plugin_dir_url( __FILE__ ),
+
+			'field_types'        => array(
+				'title'    => 'Title',
+				'text'     => 'Text',
+				'textarea' => 'Textarea',
+				'radio'    => 'Radio button(s)',
+				'checkbox' => 'Checkbox(es)',
+				'select'   => 'Drop down',
+			),
+
+			'validation_methods' => array(
+				'email'  => 'Email',
+				'url'    => 'URL',
+				'number' => 'Number',
+				'date'   => 'Date',
+			),
+
+			'setting_defaults'   => array(
+				'id'               => 0,
+				'all_fields_wrap'  => 'ul', // ul, div, or ''
+				'all_fields_class' => 'tidy-form-wrap',
+				'field_wrap'       => 'li', // li, div, p, or ''
+				'field_class'      => 'tidy-form-field',
+				'field_prefix'     => 'tidy_',
+			),
+		);
+
+		require_once('lib/helpers.php');
+
+		if( is_admin() ) {
+			tidy_include('class-tidy-admin.php');
+			tidy_include('class-admin-init.php');
+
+			$admin = Tidy_Forms_Admin_Init::get_instance();
+		}		
 	}
 }
