@@ -2,38 +2,40 @@
 /**
  * Template tags
  *
- * @package  WP Form Architect
- * @author   Adam Onishi <aonishi@wearearchitect.com>
+ * @package     Tidy Forms
+ * @author      Adam Onishi <onishiweb@gmail.com>
+ * @license     GPL2
+ * @copyright   2016 Adam Onishi
  */
 
 /**
- * wp_architect_form
+ * wp_tidy_form
  *
- * Template tag for Architect forms plugin
+ * Template tag for Tidy Forms plugin
  *
  * @param  int 		$id 	ID of the form to load
  * @param  array 	$args 	Arguments for the form construction
  */
-function architect_the_form( $id, $args = array() ) {
+function tidy_the_form( $id, $args = array() ) {
     $args['id'] = $id;
 
-    $renderer = Architect_Forms_Renderer::get_instance();
+    $renderer = Tidy_Forms_Renderer::get_instance();
     $renderer->setup_form( $args );
 }
 
 /**
- * architect_the_form_action
+ * tidy_the_form_action
  *
  * Function wrapper for the apply_filters function
  *
  * @param  array 	$args Array of arguments
  */
-function architect_the_form_action( $args ) {
-	apply_filters( 'architect_form', $args );
+function tidy_the_form_action( $args ) {
+	apply_filters( 'tidy_form', $args );
 }
 
 /**
- * architect_the_form_id
+ * tidy_the_form_id
  *
  * Output the HTML ID of the form - to go on the form container element
  *
@@ -41,9 +43,9 @@ function architect_the_form_action( $args ) {
  *
  * @return string        The ID for the form
  */
-function architect_the_form_id( $echo = true ) {
+function tidy_the_form_id( $echo = true ) {
 
-	$id = Architect_Forms_Renderer::get_form_id();
+	$id = Tidy_Forms_Renderer::get_form_id();
 
 	if( $echo ) {
 		echo $id;
@@ -54,7 +56,7 @@ function architect_the_form_id( $echo = true ) {
 }
 
 /**
- * architect_the_form_class
+ * tidy_the_form_class
  *
  * Output the HTML classes of the form - to go on the form element
  *
@@ -62,9 +64,9 @@ function architect_the_form_id( $echo = true ) {
  *
  * @return string        The classes for the form
  */
-function architect_the_form_class( $echo = true ) {
+function tidy_the_form_class( $echo = true ) {
 
-	$classes = Architect_Forms_Renderer::get_form_classes();
+	$classes = Tidy_Forms_Renderer::get_form_classes();
 
 	if( $echo ) {
 		echo $classes;
@@ -75,7 +77,7 @@ function architect_the_form_class( $echo = true ) {
 }
 
 /**
- * architect_the_form_title
+ * tidy_the_form_title
  *
  * Output the form title if set to in the form settings
  *
@@ -83,9 +85,9 @@ function architect_the_form_class( $echo = true ) {
  *
  * @return string       	The title of the form
  */
-function architect_the_form_title( $echo = true ) {
+function tidy_the_form_title( $echo = true ) {
 
-	$title = Architect_Forms_Renderer::get_form_title();
+	$title = Tidy_Forms_Renderer::get_form_title();
 
 	if( $echo ) {
 		echo $title;
@@ -95,20 +97,20 @@ function architect_the_form_title( $echo = true ) {
 }
 
 /**
- * architect_the_form_output_title
+ * tidy_the_form_output_title
  *
  * Checks the setting for whether the form title should be output
  *
  * @return boolean 			True if form title should be output
  */
-function architect_should_output_title() {
+function tidy_should_output_title() {
 	// Setup setting for title output
 
 	return true;
 }
 
 /**
- * architect_the_form_intro
+ * tidy_the_form_intro
  *
  * Output the form introduction if there is one
  *
@@ -116,8 +118,8 @@ function architect_should_output_title() {
  *
  * @return string        	The introduction text for the form
  */
-function architect_the_form_intro( $echo = true ) {
-	$intro = Architect_Forms_Renderer::get_form_intro();
+function tidy_the_form_intro( $echo = true ) {
+	$intro = Tidy_Forms_Renderer::get_form_intro();
 
 	if( $echo ) {
 		echo $intro;
@@ -127,37 +129,37 @@ function architect_the_form_intro( $echo = true ) {
 }
 
 /**
- * architect_form_have_fields
+ * tidy_form_have_fields
  *
  * Checks whether there are any fields to output
  *
  * @return boolean 			True if there are fields to output
  */
-function architect_form_have_fields() {
-	return Architect_Forms_Renderer::have_fields();
+function tidy_form_have_fields() {
+	return Tidy_Forms_Renderer::have_fields();
 }
 
 /**
- * architect_the_form_fields
+ * tidy_the_form_fields
  *
  * Gets and returns an array of the available form fields
  *
  * @return array 			array of form fields
  */
-function architect_the_form_fields() {
-	return Architect_Forms_Renderer::get_fields();
+function tidy_the_form_fields() {
+	return Tidy_Forms_Renderer::get_fields();
 }
 
 /**
- * architect_the_form_field
+ * tidy_the_form_field
  *
  * Output a form field
  *
  * @param  array   $field 	Array of data for the field to be output
  * @param  boolean $args 	Whether to output the field or return
  */
-function architect_the_form_field( $field = array(), $echo = true ) {
-	$field_html = Architect_Forms_Renderer::get_form_field( $field );
+function tidy_the_form_field( $field = array(), $echo = true ) {
+	$field_html = Tidy_Forms_Renderer::get_form_field( $field );
 
 	if( $echo ) {
 		echo $field_html;
@@ -167,7 +169,7 @@ function architect_the_form_field( $field = array(), $echo = true ) {
 }
 
 /**
- * architect_the_form_submit
+ * tidy_the_form_submit
  *
  * Output the submit button for the form with the submit text setting
  *
@@ -175,8 +177,8 @@ function architect_the_form_field( $field = array(), $echo = true ) {
  *
  * @return string     		The html submit button
  */
-function architect_the_form_submit( $echo = true ) {
-	$submit = Architect_Forms_Renderer::get_form_submit();
+function tidy_the_form_submit( $echo = true ) {
+	$submit = Tidy_Forms_Renderer::get_form_submit();
 
 	if( $echo ) {
 		echo $submit;
@@ -186,7 +188,7 @@ function architect_the_form_submit( $echo = true ) {
 }
 
 /**
- * architect_the_form_confirmation
+ * tidy_the_form_confirmation
  *
  * Output the confirmation text of the form
  *
@@ -194,8 +196,8 @@ function architect_the_form_submit( $echo = true ) {
  *
  * @return string        The confirmation message from the form settings
  */
-function architect_the_form_confirmation( $echo = true ) {
-	$confirmation = Architect_Forms_Renderer::get_form_confirmation();
+function tidy_the_form_confirmation( $echo = true ) {
+	$confirmation = Tidy_Forms_Renderer::get_form_confirmation();
 
 	if( $echo ) {
 		echo $confirmation;
@@ -205,29 +207,29 @@ function architect_the_form_confirmation( $echo = true ) {
 }
 
 /**
- * architect_the_form_fields_before
+ * tidy_the_form_fields_before
  *
  * Output the opening tag of the element at the start of the form
  *
  * @return string 		HTML to go before the form fields
  */
-function architect_the_form_fields_before() {
-	do_action('architect_form_before_fields');
+function tidy_the_form_fields_before() {
+	do_action('tidy_form_before_fields');
 
-	echo '<ul class="arc-form-wrap">';
+	echo '<ul class="tidy-form-wrap">';
 }
 
 /**
- * architect_the_form_fields_after
+ * tidy_the_form_fields_after
  *
  * Output the closing tag of the element at the end of the form
  *
  * @return string 		HTML to go after the form fields
  */
-function architect_the_form_fields_after() {
+function tidy_the_form_fields_after() {
 
 	echo '</ul>';
 
-	do_action('architect_form_after_fields');
+	do_action('tidy_form_after_fields');
 }
 

@@ -1,6 +1,6 @@
 <!-- Form title -->
-<?php if( architect_should_output_title() ): ?>
-	<h2><?php architect_the_form_title(); ?></h2>
+<?php if( tidy_should_output_title() ): ?>
+	<h2><?php tidy_the_form_title(); ?></h2>
 <?php endif; ?>
 
-<?php architect_the_form_confirmation(); ?>
+<?php tidy_the_form_confirmation(); ?>

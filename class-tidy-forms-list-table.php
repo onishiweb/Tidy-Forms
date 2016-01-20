@@ -7,7 +7,7 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 /**
  * Create a new table class that will extend the WP_List_Table
  */
-class Architect_List_Table extends WP_List_Table {
+class Tidy_List_Table extends WP_List_Table {
 
 	public function prepare_items() {
 		$columns = $this->get_columns();
@@ -92,7 +92,7 @@ class Architect_List_Table extends WP_List_Table {
 
 		// Query for forms here
 		$args = array(
-				'post_type'   => 'arc_form',
+				'post_type'   => 'tidy_form',
 				'post_status' => 'any',
 			);
 
@@ -113,8 +113,8 @@ class Architect_List_Table extends WP_List_Table {
 			$data[] = array(
 					'id'        => $form->ID,
 					'title'     => $form->post_title,
-					'shortcode' => '[arc-form id="' . $form->ID . '"]',
-					'entries'   => get_post_meta( $form->ID, '_arc_form_entry_count', true ),
+					'shortcode' => '[tidy-form id="' . $form->ID . '"]',
+					'entries'   => get_post_meta( $form->ID, '_tidy_form_entry_count', true ),
 				);
 		}
 
@@ -129,7 +129,7 @@ class Architect_List_Table extends WP_List_Table {
 	 */
 	function column_title($item) {
 		$edit_url = admin_url( 'post.php?post='. $item['id'] . '&action=edit');
-		$entries_url = admin_url( 'edit.php?post_type=arc_form_entry&arc_form_id='. $item['id'] );
+		$entries_url = admin_url( 'edit.php?post_type=tidy_form_entry&tidy_form_id='. $item['id'] );
 
 		$title = '<strong><a href="' . $entries_url . '" class="row-title">' . $item['title'] . '</a></strong>';
 

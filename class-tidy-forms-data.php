@@ -1,14 +1,14 @@
 <?php
 /**
- * WP Form Architect data class
+ * Tidy Forms data class
  *
- * @package 	WP Form Architect
- * @author 		Adam Onishi	<aonishi@wearearchitect.com>
- * @license 	GPL2
- * @copyright 	2015 Adam Onishi
+ * @package     Tidy Forms
+ * @author      Adam Onishi <onishiweb@gmail.com>
+ * @license     GPL2
+ * @copyright   2016 Adam Onishi
  */
 
-class Architect_Forms_Data {
+class Tidy_Forms_Data {
 	/**
 	 * An instance of the class
 	 *
@@ -48,7 +48,7 @@ class Architect_Forms_Data {
 
 		// Create new post type arguments
 		$args = array(
-				'post_type'    => 'arc_form_entry',
+				'post_type'    => 'tidy_form_entry',
 				'post_content' => $content,
 			);
 
@@ -58,17 +58,17 @@ class Architect_Forms_Data {
 		// Check is not an error
 		if( ! is_wp_error( $post ) ) {
 			// Store form ID as postmeta
-			add_post_meta( $post, '_arc_form_id', $id, true );
+			add_post_meta( $post, '_tidy_form_id', $id, true );
 
 			// Update entry count
-			$count = get_post_meta( $id, '_arc_form_entry_count', true );
+			$count = get_post_meta( $id, '_tidy_form_entry_count', true );
 			if( !empty($count) ) {
 				$count++;
 			} else {
 				$count = 1;
 			}
 
-			update_post_meta( $id, '_arc_form_entry_count', $count, $count - 1 );
+			update_post_meta( $id, '_tidy_form_entry_count', $count, $count - 1 );
 
 			// Loop through fields to create content
 			foreach( $fields as $field ) {
@@ -79,7 +79,7 @@ class Architect_Forms_Data {
 					$value = implode(', ', $field['value']);
 				}
 
-				add_post_meta( $post, '_arc_'.$name, $value, true );
+				add_post_meta( $post, '_tidy_'.$name, $value, true );
 			}
 
 		} else {
@@ -114,7 +114,7 @@ class Architect_Forms_Data {
 
 		ob_start();
 
-		arc_get_view('email-template', $email_args);
+		tidy_get_view('email-template', $email_args);
 
 		$message = ob_get_contents();
 		ob_end_clean();
@@ -132,12 +132,12 @@ class Architect_Forms_Data {
 			wp_die( 'You do not have permission to perform this action', 'Export error' );
 		}
 
-    if ( ! isset( $_POST['arc_form_export_nonce'] ) || ! wp_verify_nonce( $_POST['arc_form_export_nonce'], 'arc_form_entries_export' ) ) {
+    if ( ! isset( $_POST['tidy_form_export_nonce'] ) || ! wp_verify_nonce( $_POST['tidy_form_export_nonce'], 'tidy_form_entries_export' ) ) {
       wp_die( 'Invalid nonce', 'Export error' );
     }
 
-    $form_id = intval( $_POST['arc_export_form'], 10);
-    $forms = new WP_Query( array('post_type' => 'arc_form', 'posts_per_page' => '-1', 'fields' => 'ids' ) );
+    $form_id = intval( $_POST['tidy_export_form'], 10);
+    $forms = new WP_Query( array('post_type' => 'tidy_form', 'posts_per_page' => '-1', 'fields' => 'ids' ) );
 
     if( ! is_numeric($form_id) || ! in_array($form_id, $forms->posts) ) {
       wp_die( 'Invalid form ID', 'Export error' );
@@ -148,9 +148,9 @@ class Architect_Forms_Data {
 		$export_data = array();
 
 		$args = array(
-				'post_type'      => 'arc_form_entry',
+				'post_type'      => 'tidy_form_entry',
 				'posts_per_page' => '-1',
-				'meta_key'       => '_arc_form_id',
+				'meta_key'       => '_tidy_form_id',
 				'meta_value'     => $form_id,
 				'post_status'    => 'all',
 			);
@@ -160,7 +160,7 @@ class Architect_Forms_Data {
 		$form = get_post($form_id);
     $form_name = $form->post_title;
 
-		$content = get_post_meta( $form_id, '_arc_form_data', true );
+		$content = get_post_meta( $form_id, '_tidy_form_data', true );
 		$fields = $content['fields'];
 
 		foreach( $fields as $field ) {
@@ -174,7 +174,7 @@ class Architect_Forms_Data {
 			$post_data = array();
 
 			foreach( $export_fields as $key => $title ) {
-				$post_data[ $key ] = get_post_meta ($post_id, '_arc_'.$key, true);
+				$post_data[ $key ] = get_post_meta ($post_id, '_tidy_'.$key, true);
 			}
 
 			$export_data[] = $post_data;

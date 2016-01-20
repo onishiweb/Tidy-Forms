@@ -1,14 +1,14 @@
 <?php
 /**
- * WP Form Architect admin class file
+ * Tidy Forms admin class file
  *
- * @package 	WP Form Architect
- * @author 		Adam Onishi	<aonishi@wearearchitect.com>
+ * @package 	Tidy Forms
+ * @author 		Adam Onishi	<onishiweb@gmail.com>
  * @license 	GPL2
- * @copyright 	2015 Adam Onishi
+ * @copyright 	2016 Adam Onishi
  */
 
-class Architect_Forms_Admin {
+class Tidy_Forms_Admin {
 	/**
 	 * An instance of the class
 	 *
@@ -30,16 +30,16 @@ class Architect_Forms_Admin {
 		add_action( 'admin_menu', array( $this, 'register_submenu_page') );
 
 		// Add meta boxes for form creation
-		add_action( 'add_meta_boxes_arc_form', array( $this, 'setup_form_meta_boxes' ) );
-		add_action( 'add_meta_boxes_arc_form_entry', array( $this, 'setup_entry_meta_boxes' ) );
+		add_action( 'add_meta_boxes_tidy_form', array( $this, 'setup_form_meta_boxes' ) );
+		add_action( 'add_meta_boxes_tidy_form_entry', array( $this, 'setup_entry_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_form_data' ) );
 		add_action( 'save_post', array( $this, 'save_entry_data' ) );
 
-    add_action( 'post_updated_messages', array( $this, 'update_notices') );
+        add_action( 'post_updated_messages', array( $this, 'update_notices') );
 
 		// Edit post columns for entries post type
-		add_filter( 'manage_arc_form_entry_posts_columns', array( $this, 'entries_table_columns' ) );
-		add_action( 'manage_arc_form_entry_posts_custom_column', array( $this, 'entries_table_content' ), 10, 2 );
+		add_filter( 'manage_tidy_form_entry_posts_columns', array( $this, 'entries_table_columns' ) );
+		add_action( 'manage_tidy_form_entry_posts_custom_column', array( $this, 'entries_table_content' ), 10, 2 );
 
 		add_filter( 'pre_get_posts', array( $this, 'entries_table_filter' ) );
 
@@ -50,10 +50,10 @@ class Architect_Forms_Admin {
 		// Load the TinyMCE plugin : editor_plugin.js (wp2.5)
 		add_filter('mce_external_plugins', array( $this, 'register_tinymce_javascript' ) );
 		// Return the form names and IDs via Ajax
-		add_action('wp_ajax_arc_get_form_values', array( $this, 'get_tinymce_form_data' ) );
+		add_action('wp_ajax_tidy_get_form_values', array( $this, 'get_tinymce_form_data' ) );
 
     // Export action
-    add_action( 'admin_post_arc_export_entries', array('Architect_Forms_Data', 'export_form'), 1 );
+    add_action( 'admin_post_tidy_export_entries', array('Tidy_Forms_Data', 'export_form'), 1 );
 
 	}
 
@@ -67,21 +67,21 @@ class Architect_Forms_Admin {
 
 	public static function admin_scripts_styles() {
 
-		wp_enqueue_style( 'arc-forms-tinymce', arc_get_dir('css/tinymce.css'), false, arc_get_setting('version'), 'screen' );
+		wp_enqueue_style( 'tidy-forms-tinymce', tidy_get_dir('css/tinymce.css'), false, tidy_get_setting('version'), 'screen' );
 
 		$screen = get_current_screen()->id;
 
-		$arc_form_screens = array(
-				'arc_form',
-				'arc_form_entry',
-				'edit-arc_form_entry',
-				'arc_form_page_arc-form-entries',
+		$tidy_form_screens = array(
+				'tidy_form',
+				'tidy_form_entry',
+				'edit-tidy_form_entry',
+				'tidy_form_page_tidy-form-entries',
 			);
 
-		if ( in_array($screen, $arc_form_screens) ) {
-			wp_enqueue_style( 'arc-forms-admin', arc_get_dir('css/admin.css'), false, arc_get_setting('version'), 'screen' );
+		if ( in_array($screen, $tidy_form_screens) ) {
+			wp_enqueue_style( 'tidy-forms-admin', tidy_get_dir('css/admin.css'), false, tidy_get_setting('version'), 'screen' );
 
-			wp_enqueue_script( 'arc-forms-admin-js', arc_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), arc_get_setting('version'), true );
+			wp_enqueue_script( 'tidy-forms-admin-js', tidy_get_dir('js/admin.js'), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), tidy_get_setting('version'), true );
 		}
 	}
 
@@ -91,7 +91,7 @@ class Architect_Forms_Admin {
 		 * Custom form post type
 		 */
 		 $labels = array(
-			'name'                => __('WP Form Architect', 'dirtisgood'),
+			'name'                => __('Tidy Forms', 'dirtisgood'),
 			'singular_name'       => __('Form', 'dirtisgood'),
 			'add_new'             => __('Add New', 'dirtisgood'),
 			'add_new_item'        => __('Add New Form', 'dirtisgood'),
@@ -103,12 +103,12 @@ class Architect_Forms_Admin {
 			'not_found'           => __('No forms found', 'dirtisgood'), // USE THIS ADAM!
 			'not_found_in_trash'  => __('No forms found in Trash', 'dirtisgood'),
 			'parent_item_colon'   => '',
-			'menu_name'           => __('Form Architect', 'dirtisgood'),
+			'menu_name'           => __('Tidy Forms', 'dirtisgood'),
 		);
 
 		$args = array(
 			'labels'              => $labels,
-			'description'         => 'WP Form Architect admin',
+			'description'         => 'Tidy Forms admin',
 			'public'              => true,
 			'capability_type'     => 'post',
 			'has_archive'         => false,
@@ -120,7 +120,7 @@ class Architect_Forms_Admin {
 			'supports'            => array( 'title', 'author', 'revisions' ),
 		);
 
-		register_post_type( 'arc_form', $args );
+		register_post_type( 'tidy_form', $args );
 
 		/**
 		 * Entries post type
@@ -143,7 +143,7 @@ class Architect_Forms_Admin {
 
 		$args = array(
 			'labels'              => $labels,
-			'description'         => 'WP Form Arcitect entries',
+			'description'         => 'Tidy Form entries',
 			'public'              => true,
 			'capability_type'     => 'post',
 			'has_archive'         => false,
@@ -154,15 +154,15 @@ class Architect_Forms_Admin {
 			'supports'            => false,
 		);
 
-		register_post_type( 'arc_form_entry', $args );
+		register_post_type( 'tidy_form_entry', $args );
 	}
 
 	public static function entries_table_columns( $defaults ) {
 
-		if( isset($_GET['arc_form_id']) ) {
-			$form = get_post($_GET['arc_form_id']);
+		if( isset($_GET['tidy_form_id']) ) {
+			$form = get_post($_GET['tidy_form_id']);
 
-			$content = get_post_meta( $post_id, '_arc_form_data', true );
+			$content = get_post_meta( $post_id, '_tidy_form_data', true );
 			$fields = $content['fields'];
 			$max = max(3, count($fields));
 
@@ -195,7 +195,7 @@ class Architect_Forms_Admin {
 			echo sprintf('%1$s %2$s', $title, $actions );
 		} else {
 			// Get content from post meta
-			$meta = '_arc_' . $column_name;
+			$meta = '_tidy_' . $column_name;
 			echo get_post_meta( $post_id, $meta, true );
 		}
 	}
@@ -206,61 +206,61 @@ class Architect_Forms_Admin {
       return $query;
     }
 
-		if( is_admin() && 'edit-arc_form_entry' === get_current_screen()->id && isset( $_GET['arc_form_id'] ) ) {
-			$query->set( 'meta_key', '_arc_form_id' );
-			$query->set( 'meta_value', $_GET['arc_form_id'] );
+		if( is_admin() && 'edit-tidy_form_entry' === get_current_screen()->id && isset( $_GET['tidy_form_id'] ) ) {
+			$query->set( 'meta_key', '_tidy_form_id' );
+			$query->set( 'meta_value', $_GET['tidy_form_id'] );
 		}
 
 		return $query;
 	}
 
 	public static function register_submenu_page() {
-		add_submenu_page( 'edit.php?post_type=arc_form', 'Entries', 'Entries', 'edit_theme_options', 'arc-form-entries', array( 'Architect_Forms_Admin', 'render_entries_submenu' ) );
-		add_submenu_page( 'edit.php?post_type=arc_form', 'Export entries', 'Export', 'edit_theme_options', 'arc-form-export', array( 'Architect_Forms_Admin', 'render_export_submenu' ) );
+		add_submenu_page( 'edit.php?post_type=tidy_form', 'Entries', 'Entries', 'edit_theme_options', 'tidy-form-entries', array( 'Tidy_Forms_Admin', 'render_entries_submenu' ) );
+		add_submenu_page( 'edit.php?post_type=tidy_form', 'Export entries', 'Export', 'edit_theme_options', 'tidy-form-export', array( 'Tidy_Forms_Admin', 'render_export_submenu' ) );
 	}
 
 	public static function render_entries_submenu() {
-		$data_table = new Architect_List_Table();
+		$data_table = new Tidy_List_Table();
 		$data_table->prepare_items();
 
-		arc_get_view('entries', $data_table);
+		tidy_get_view('entries', $data_table);
 	}
 
 	public static function render_export_submenu() {
-		$forms = new WP_Query( array('post_type' => 'arc_form', 'posts_per_page' => '-1') );
+		$forms = new WP_Query( array('post_type' => 'tidy_form', 'posts_per_page' => '-1') );
 
 		$args = array(
 				'forms'      => $forms->posts,
 				'export_url' => plugins_url( 'export.php', __FILE__ ),
 			);
 
-		arc_get_view('export', $args);
+		tidy_get_view('export', $args);
 	}
 
 	public function setup_form_meta_boxes() {
 		add_meta_box(
-			'arc-form-fields',
+			'tidy-form-fields',
 			'Fields',
 			array( $this, 'render_fields_meta' ),
-			'arc_form',
+			'tidy_form',
 			'normal',
 			'default'
 		);
 
 		add_meta_box(
-			'arc-form-settings',
+			'tidy-form-settings',
 			'Form settings',
 			array( $this, 'render_settings_meta' ),
-			'arc_form',
+			'tidy_form',
 			'normal',
 			'default'
 		);
 
 		add_meta_box(
-			'arc-form-entries',
+			'tidy-form-entries',
 			'Form entries',
 			array( $this, 'render_entries_meta' ),
-			'arc_form',
+			'tidy_form',
 			'side',
 			'default'
 		);
@@ -269,19 +269,19 @@ class Architect_Forms_Admin {
 	public function setup_entry_meta_boxes() {
 
 		add_meta_box(
-			'arc-entry-data',
+			'tidy-entry-data',
 			'Form entry',
 			array( $this, 'render_entry_content' ),
-			'arc_form_entry',
+			'tidy_form_entry',
 			'normal',
 			'default'
 		);
 
 		add_meta_box(
-			'arc-entry-notes',
+			'tidy-entry-notes',
 			'Notes',
 			array( $this, 'render_entry_notes' ),
-			'arc_form_entry',
+			'tidy_form_entry',
 			'normal',
 			'default'
 		);
@@ -291,21 +291,21 @@ class Architect_Forms_Admin {
 	public function render_fields_meta( $post ) {
 		// Get fields data
 		// Use nonce for verification
-		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_fields_nonce' );
+		wp_nonce_field( plugin_basename( __FILE__ ), 'tidy_fields_nonce' );
 
 		// Get settings data
-		$content = get_post_meta( $post->ID, '_arc_form_data', true );
+		$content = get_post_meta( $post->ID, '_tidy_form_data', true );
 		$fields = $content['fields'];
 
 		// Include fields meta view
-		arc_get_view('form-fields-box', $fields);
+		tidy_get_view('form-fields-box', $fields);
 	}
 
 	public function render_settings_meta( $post ) {
 		// No nonce here, already set in fields meta box
 
 		// Get settings data
-		$content = get_post_meta( $post->ID, '_arc_form_data', true );
+		$content = get_post_meta( $post->ID, '_tidy_form_data', true );
 		$settings = $content['settings'];
 
 		// Give the submit text a default setting if none set
@@ -314,34 +314,34 @@ class Architect_Forms_Admin {
 		}
 
 		// Include settings meta view
-		arc_get_view('form-settings', $settings);
+		tidy_get_view('form-settings', $settings);
 	}
 
 	public function render_entries_meta( $post ) {
 
 		// Use nonce for verification
-		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_entries_export_nonce' );
+		wp_nonce_field( plugin_basename( __FILE__ ), 'tidy_entries_export_nonce' );
 
 		// Get entries count
-		$entry_count = get_post_meta( $post->ID, '_arc_form_entry_count', true );
+		$entry_count = get_post_meta( $post->ID, '_tidy_form_entry_count', true );
 
 		// Setup args
 		$args = array(
 				'form_id'     => $post->ID,
 				'entry_count' => $entry_count,
-				'entry_link'  => admin_url( 'edit.php?post_type=arc_form_entry&arc_form_id='. $post->ID ),
+				'entry_link'  => admin_url( 'edit.php?post_type=tidy_form_entry&tidy_form_id='. $post->ID ),
 				'export_url'  => plugins_url( 'export.php', __FILE__ ),
 			);
 
-		arc_get_view('form-entries-sidebar', $args);
+		tidy_get_view('form-entries-sidebar', $args);
 
 	}
 
 	public function render_entry_content( $post ) {
 		$entry_id = $post->ID;
-		$form_id = get_post_meta( $entry_id, '_arc_form_id', true );
+		$form_id = get_post_meta( $entry_id, '_tidy_form_id', true );
 
-		$content = get_post_meta( $form_id, '_arc_form_data', true );
+		$content = get_post_meta( $form_id, '_tidy_form_data', true );
 		$fields = $content['fields'];
 
 		$data = array();
@@ -349,24 +349,24 @@ class Architect_Forms_Admin {
 		foreach( $fields as $field ) {
 			$data[] = array(
 					'label' => $field['label'],
-					'entry' => get_post_meta( $entry_id, '_arc_' . $field['name'], true),
+					'entry' => get_post_meta( $entry_id, '_tidy_' . $field['name'], true),
 				);
 		}
 
-		arc_get_view('entry-data', $data);
+		tidy_get_view('entry-data', $data);
 	}
 
 	public function render_entry_notes( $post ) {
 		// Use nonce for verification
-		wp_nonce_field( plugin_basename( __FILE__ ), 'arc_entry_nonce' );
+		wp_nonce_field( plugin_basename( __FILE__ ), 'tidy_entry_nonce' );
 
-		$notes = get_post_meta( $post->ID, '_arc_entry_note', true );
+		$notes = get_post_meta( $post->ID, '_tidy_entry_note', true );
 
 		$data = array(
 				'notes' => $notes,
 			);
 
-		arc_get_view('entry-notes', $data);
+		tidy_get_view('entry-notes', $data);
 	}
 
 	public function save_form_data( $post_id ) {
@@ -379,7 +379,7 @@ class Architect_Forms_Admin {
 
 		// verify this came from the screen and with proper authorization,
 		// because save_post can be triggered at other times
-		if ( !isset( $_POST['arc_fields_nonce'] ) || !wp_verify_nonce( $_POST['arc_fields_nonce'], plugin_basename( __FILE__ ) ) ) {
+		if ( !isset( $_POST['tidy_fields_nonce'] ) || !wp_verify_nonce( $_POST['tidy_fields_nonce'], plugin_basename( __FILE__ ) ) ) {
 			return $post_id;
 		}
 
@@ -401,22 +401,22 @@ class Architect_Forms_Admin {
 
 		// Get fields array
 		$fields = array();
-		$field_count = $_POST['arc_fields_count'];
+		$field_count = $_POST['tidy_fields_count'];
 
 		for( $i=1; $i<=$field_count; $i++) {
-			$field_order = $_POST['arc_field_' . $i]['order'];
-			$fields[ $field_order ] = $_POST['arc_field_' . $i];
+			$field_order = $_POST['tidy_field_' . $i]['order'];
+			$fields[ $field_order ] = $_POST['tidy_field_' . $i];
 		}
 
 		// Get settings array
-		$settings = $_POST['arc_settings'];
+		$settings = $_POST['tidy_settings'];
 
 		$all_data = array(
 				'fields'   => $fields,
 				'settings' => $settings,
 			);
 
-    $key = '_arc_form_data';
+    $key = '_tidy_form_data';
 
     $current = get_post_meta( $post_id, $key, true );
     $value = $all_data;
@@ -442,7 +442,7 @@ class Architect_Forms_Admin {
 
 		// verify this came from the screen and with proper authorization,
 		// because save_post can be triggered at other times
-		if ( !isset( $_POST['arc_entry_nonce'] ) || !wp_verify_nonce( $_POST['arc_entry_nonce'], plugin_basename( __FILE__ ) ) ) {
+		if ( !isset( $_POST['tidy_entry_nonce'] ) || !wp_verify_nonce( $_POST['tidy_entry_nonce'], plugin_basename( __FILE__ ) ) ) {
 			return $post_id;
 		}
 
@@ -459,10 +459,10 @@ class Architect_Forms_Admin {
 			return $post_id;
 		}
 
-		$key = '_arc_entry_note';
+		$key = '_tidy_entry_note';
 
 		$current = get_post_meta( $post_id, $key, true );
-		$value = $_POST['arc_entry_notes'];
+		$value = $_POST['tidy_entry_notes'];
 
 		// add/update record (both are taken care of by update_post_meta)
 		if ( $value && '' == $current ) {
@@ -476,7 +476,7 @@ class Architect_Forms_Admin {
 	}
 
   public static function update_notices( $messages ) {
-    $messages['arc_form'] = array(
+    $messages['tidy_form'] = array(
       0  => '',
       1  => 'Form updated.',
       2  => 'Form updated.',
@@ -495,22 +495,22 @@ class Architect_Forms_Admin {
 
 	public function form_shortcode_helper( $post ) {
 
-		// Include shortcode view if on the arc_form admin screen
-		if( 'arc_form' === get_current_screen()->id ) {
-			arc_get_view('form-shortcode', $post);
+		// Include shortcode view if on the tidy_form admin screen
+		if( 'tidy_form' === get_current_screen()->id ) {
+			tidy_get_view('form-shortcode', $post);
 		}
 
 	}
 
 	public static function register_tinymce_buttons($buttons) {
-	   array_push($buttons, 'separator', 'architect_forms');
+	   array_push($buttons, 'separator', 'Tidy_Forms');
 
 	   return $buttons;
 	}
 
 	public static function register_tinymce_javascript($plugin_array) {
 
-	   $plugin_array['architect_forms'] = arc_get_dir('js/tinymce.js');
+	   $plugin_array['Tidy_Forms'] = tidy_get_dir('js/tinymce.js');
 
 	   return $plugin_array;
 	}
@@ -518,7 +518,7 @@ class Architect_Forms_Admin {
 	public static function get_tinymce_form_data() {
 		$form_data = array();
 		$args = array(
-				'post_type'      => 'arc_form',
+				'post_type'      => 'tidy_form',
 				'posts_per_page' => '-1',
 				'post_status'    => 'publish',
 			);

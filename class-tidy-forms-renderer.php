@@ -1,14 +1,14 @@
 <?php
 /**
- * WP Form Architect renderer class
+ * Tidy Forms renderer class
  *
- * @package 	WP Form Architect
- * @author 		Adam Onishi	<aonishi@wearearchitect.com>
- * @license 	GPL2
- * @copyright 	2015 Adam Onishi
+ * @package     Tidy Forms
+ * @author      Adam Onishi <onishiweb@gmail.com>
+ * @license     GPL2
+ * @copyright   2016 Adam Onishi
  */
 
-class Architect_Forms_Renderer {
+class Tidy_Forms_Renderer {
 	/**
 	 * An instance of the class
 	 *
@@ -22,8 +22,8 @@ class Architect_Forms_Renderer {
 
 		add_action( 'init', array( $this, 'setup_shortcode') );
 
-		add_filter( 'architect_form', array( 'Architect_Forms_Validator', 'process_form'), 5, 1 );
-		add_filter( 'architect_form', array( $this, 'render_form'), 10, 1 );
+		add_filter( 'tidy_form', array( 'Tidy_Forms_Validator', 'process_form'), 5, 1 );
+		add_filter( 'tidy_form', array( $this, 'render_form'), 10, 1 );
 
 	}
 
@@ -40,17 +40,17 @@ class Architect_Forms_Renderer {
 	}
 
 	public function setup_shortcode() {
-		add_shortcode( 'architect-form', array($this, 'setup_form') );
+		add_shortcode( 'tidy-form', array($this, 'setup_form') );
 	}
 
 	public static function setup_form( $atts ) {
-		$settings = shortcode_atts( arc_get_setting('setting_defaults'), $atts, 'architect-form' );
+		$settings = shortcode_atts( tidy_get_setting('setting_defaults'), $atts, 'tidy-form' );
 
 		$id = $settings['id'];
 
 		// get form details
 		$form = get_post( $id );
-		$content = get_post_meta( $id, '_arc_form_data', true );
+		$content = get_post_meta( $id, '_tidy_form_data', true );
 
 		// Add the title to general settings
 		$content['settings']['title'] = $form->post_title;
@@ -62,7 +62,7 @@ class Architect_Forms_Renderer {
 				'general'  => $content['settings'], // Form general settings
 			);
 
-		arc_get_view('form-container', $args );
+		tidy_get_view('form-container', $args );
 	}
 
 	public static function render_form( $args ) {
@@ -71,9 +71,9 @@ class Architect_Forms_Renderer {
 		self::$form = $args;
 
 		if( isset($args['submitted']) ) {
-			arc_get_view('form-confirmation');
+			tidy_get_view('form-confirmation');
 		} else {
-			arc_get_view('form');
+			tidy_get_view('form');
 		}
 
 		return $args;
@@ -86,7 +86,7 @@ class Architect_Forms_Renderer {
 
 		// Check if a custom ID has been set
 
-		$form_id = 'arc-form-' . $id;
+		$form_id = 'tidy-form-' . $id;
 
 		return $form_id;
 
@@ -95,7 +95,7 @@ class Architect_Forms_Renderer {
 	public static function get_form_classes() {
 		// Check for custom classes
 
-		$class = 'arc-form';
+		$class = 'tidy-form';
 
 		return $class;
 	}
@@ -154,7 +154,7 @@ class Architect_Forms_Renderer {
 
 		$field_method = 'get_' . $field['type'] . '_field';
 		$error = false;
-		$name = 'arc_' . $field['name'];
+		$name = 'tidy_' . $field['name'];
 
 		if( ! empty( self::$form['errors'][ $name ] ) ) {
 			$error = self::$form['errors'][ $name ];
@@ -165,11 +165,11 @@ class Architect_Forms_Renderer {
 		$output.= self::$field_method($field);
 
 		if( ! empty($field['description']) ) {
-			$output.= '<span class="arc-field-description">' . esc_html($field['description']) . '</span>';
+			$output.= '<span class="tidy-field-description">' . esc_html($field['description']) . '</span>';
 		}
 
 		if( ! empty($error) ) {
-			$output.= '<span class="arc-field-error">' . esc_html($error) . '</span>';
+			$output.= '<span class="tidy-field-error">' . esc_html($error) . '</span>';
 		}
 
 		$output.= self::field_after();
@@ -187,7 +187,7 @@ class Architect_Forms_Renderer {
 			$output = '<' . $before . ' class="' . esc_attr($classes) . '">';
 		}
 
-		return apply_filters( 'architect_form_field_before', $output );
+		return apply_filters( 'tidy_form_field_before', $output );
 	}
 
 	private static function field_after() {
@@ -198,7 +198,7 @@ class Architect_Forms_Renderer {
 			$output = '</' . $after . '>';
 		}
 
-		return apply_filters( 'architect_form_field_after', $output );
+		return apply_filters( 'tidy_form_field_after', $output );
 	}
 
 	private static function get_field_attributes($args) {
@@ -208,11 +208,11 @@ class Architect_Forms_Renderer {
 			$id = $args['custom_id'];
 		}
 
-		$class = 'arc-field-' . $args['type'];
+		$class = 'tidy-field-' . $args['type'];
 		$required = '';
 
 		if( !empty( $args['required'] ) ) {
-			$class.= ' arc-field-required';
+			$class.= ' tidy-field-required';
 			$required = ' required';
 		}
 
@@ -241,8 +241,8 @@ class Architect_Forms_Renderer {
 
 		$atts = self::get_field_attributes( $args );
 
-		$output = '<label for="arc-' . esc_attr($atts['id']) . '">' . esc_html($label) . '</label>';
-		$output.= '<input type="' . esc_attr($type) . '" name="arc_' . esc_attr($name) . '" id="arc-' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($atts['required']) . ' value="' . esc_attr($atts['value']) . '" >';
+		$output = '<label for="tidy-' . esc_attr($atts['id']) . '">' . esc_html($label) . '</label>';
+		$output.= '<input type="' . esc_attr($type) . '" name="tidy_' . esc_attr($name) . '" id="tidy-' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($atts['required']) . ' value="' . esc_attr($atts['value']) . '" >';
 
 		return $output;
 
@@ -253,8 +253,8 @@ class Architect_Forms_Renderer {
 
 		$atts = self::get_field_attributes( $args );
 
-		$output = '<label for="arc-' . esc_attr($atts['id']) . '">' . esc_html($label) . '</label>';
-		$output.= '<textarea name="arc_' . esc_attr($name) . '" id="arc-' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($required) . ' cols="80" rows="5">' . esc_html($atts['value']) . '</textarea>';
+		$output = '<label for="tidy-' . esc_attr($atts['id']) . '">' . esc_html($label) . '</label>';
+		$output.= '<textarea name="tidy_' . esc_attr($name) . '" id="tidy-' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($required) . ' cols="80" rows="5">' . esc_html($atts['value']) . '</textarea>';
 
 		return $output;
 	}
@@ -266,8 +266,8 @@ class Architect_Forms_Renderer {
 
 		$options = explode("\n", $input_options);
 
-		$output = '<label for="arc-' . esc_attr($atts['id']) . '">' . esc_html($label) . '</label>';
-		$output.= '<select name="arc_' . esc_attr($name) . '" id="arc-' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($atts['required']) . '>';
+		$output = '<label for="tidy-' . esc_attr($atts['id']) . '">' . esc_html($label) . '</label>';
+		$output.= '<select name="tidy_' . esc_attr($name) . '" id="tidy-' . esc_attr($atts['id']) . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($atts['required']) . '>';
 
 		foreach( $options as $option ) {
 			$labels = explode(' : ', $option);
@@ -294,7 +294,7 @@ class Architect_Forms_Renderer {
 
 		$options = explode("\n", $input_options);
 
-		$output = '<span class="arc-form-label">' . esc_html($label) . '</span>';
+		$output = '<span class="tidy-form-label">' . esc_html($label) . '</span>';
 
 		for($i=0; $i<count($options); $i++) {
 			$labels = explode(' : ', $options[$i]);
@@ -303,13 +303,13 @@ class Architect_Forms_Renderer {
 			$checked = checked( $atts['value'], $val, false );
 
 			if( count($labels) > 1 ) {
-				$output.= '<label for="arc-' . esc_attr($atts['id']) . '-' . $i . '">';
-				$output.= '<input type="radio" name="arc_' . esc_attr($name) . '" id="arc-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($checked) . ' value="' . esc_attr($val) . '">';
-				$output.= '<span class="arc-form-radio-label">' . esc_html($labels[1]) . '</span></label>';
+				$output.= '<label for="tidy-' . esc_attr($atts['id']) . '-' . $i . '">';
+				$output.= '<input type="radio" name="tidy_' . esc_attr($name) . '" id="tidy-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($checked) . ' value="' . esc_attr($val) . '">';
+				$output.= '<span class="tidy-form-radio-label">' . esc_html($labels[1]) . '</span></label>';
 			} else {
-				$output.= '<label for="arc-' . esc_attr($atts['id']) . '-' . $i . '">';
-				$output.= '<input type="radio" name="arc_' . esc_attr($name) . '" id="arc-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '"  ' . esc_attr($checked) . ' value="' . esc_attr($val) . '">';
-				$output.= '<span class="arc-form-radio-label">' . esc_html($val) . '</span></label>';
+				$output.= '<label for="tidy-' . esc_attr($atts['id']) . '-' . $i . '">';
+				$output.= '<input type="radio" name="tidy_' . esc_attr($name) . '" id="tidy-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '"  ' . esc_attr($checked) . ' value="' . esc_attr($val) . '">';
+				$output.= '<span class="tidy-form-radio-label">' . esc_html($val) . '</span></label>';
 			}
 		}
 
@@ -323,7 +323,7 @@ class Architect_Forms_Renderer {
 
 		$options = explode("\n", $input_options);
 
-		$output = '<span class="arc-form-label">' . esc_html($label) . '</span>';
+		$output = '<span class="tidy-form-label">' . esc_html($label) . '</span>';
 
 		for($i=0; $i<count($options); $i++) {
 			$labels = explode(' : ', $options[$i]);
@@ -341,13 +341,13 @@ class Architect_Forms_Renderer {
 			}
 
 			if( count($labels) > 1 ) {
-				$output.= '<label for="arc-' . esc_attr($atts['id']) . '-' . $i . '">';
-				$output.= '<input type="checkbox" name="arc_' . esc_attr($name) . '[]" id="arc-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($checked) . '  value="' . esc_attr($val) . '">';
-				$output.= '<span class="arc-form-checkbox-label">' . esc_html($labels[1]) . '</span></label>';
+				$output.= '<label for="tidy-' . esc_attr($atts['id']) . '-' . $i . '">';
+				$output.= '<input type="checkbox" name="tidy_' . esc_attr($name) . '[]" id="tidy-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($checked) . '  value="' . esc_attr($val) . '">';
+				$output.= '<span class="tidy-form-checkbox-label">' . esc_html($labels[1]) . '</span></label>';
 			} else {
-				$output.= '<label for="arc-' . esc_attr($atts['id']) . '-' . $i . '">';
-				$output.= '<input type="checkbox" name="arc_' . esc_attr($name) . '[]" id="arc-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($checked) . '  value="' . esc_attr($val) . '">';
-				$output.= '<span class="arc-form-checkbox-label">' . esc_html($val) . '</span></label>';
+				$output.= '<label for="tidy-' . esc_attr($atts['id']) . '-' . $i . '">';
+				$output.= '<input type="checkbox" name="tidy_' . esc_attr($name) . '[]" id="tidy-' . esc_attr($atts['id']) . '-' . $i . '" class="' . esc_attr($atts['class']) . '" ' . esc_attr($checked) . '  value="' . esc_attr($val) . '">';
+				$output.= '<span class="tidy-form-checkbox-label">' . esc_html($val) . '</span></label>';
 			}
 		}
 
@@ -357,7 +357,7 @@ class Architect_Forms_Renderer {
 	private static function get_title_field( $args = array() ) {
 		extract($args);
 
-		$output = '<span class="arc-form-title">' . esc_html($label) . '</span>';
+		$output = '<span class="tidy-form-title">' . esc_html($label) . '</span>';
 
 		return $output;
 	}
@@ -367,10 +367,10 @@ class Architect_Forms_Renderer {
 
 		$hidden_fields = '';
 
-		$output = self::field_before( 'arc-form-field-submit');
+		$output = self::field_before( 'tidy-form-field-submit');
 
-		$output.= '<input type="submit" name="arc_form_submit" class="arc-form-submit" value="' . esc_attr($text) . '">';
-		$output.= apply_filters( 'architect_form_hidden_fields', $hidden_fields );
+		$output.= '<input type="submit" name="tidy_form_submit" class="tidy-form-submit" value="' . esc_attr($text) . '">';
+		$output.= apply_filters( 'tidy_form_hidden_fields', $hidden_fields );
 
 		$output.= self::field_after();
 

@@ -1,28 +1,28 @@
-<div class="arc-fields-header">
-	<table class="widefat arc-fields-table">
+<div class="tidy-fields-header">
+	<table class="widefat tidy-fields-table">
 		<thead>
 			<tr>
 				<th class="row-title">#</th>
-				<th class="arc-long-col">Field name</th>
-				<th class="arc-long-col">Field type</th>
-				<th class="arc-action"></th>
-				<th class="arc-action"></th>
+				<th class="tidy-long-col">Field name</th>
+				<th class="tidy-long-col">Field type</th>
+				<th class="tidy-action"></th>
+				<th class="tidy-action"></th>
 			</tr>
 		</thead>
 	</table>
 
-	<div class="arc-fields-no-fields">
-		<?php _e('There are no fields currently. Click on the button below to add a new field.', 'arcforms'); ?>
+	<div class="tidy-fields-no-fields">
+		<?php _e('There are no fields currently. Click on the button below to add a new field.', 'tidyforms'); ?>
 	</div>
 </div>
 
-<div class="arc-fields arc-fields-sortable">
+<div class="tidy-fields tidy-fields-sortable">
 	<!-- Fields go here -->
 	<?php
 	if( ! empty($args) ):
 		$count = count($args);
 		foreach( $args as $field ):
-			arc_get_view('form-field', $field);
+			tidy_get_view('form-field', $field);
 		endforeach;
 	else:
 		$count = 0;
@@ -30,13 +30,13 @@
 	?>
 </div>
 
-<input type="hidden" name="arc_fields_count" id="arc-fields-count" value="<?php echo $count; ?>">
-<input type="button" class="button-secondary arc-button-add-field" value="Add field" arc-action-add-field>
+<input type="hidden" name="tidy_fields_count" id="tidy-fields-count" value="<?php echo $count; ?>">
+<input type="button" class="button-secondary tidy-button-add-field" value="Add field" tidy-action-add-field>
 
 <!-- Placeholder HTML to save building this all with JavaScript -->
-<?php arc_get_view('form-field'); ?>
+<?php tidy_get_view('form-field'); ?>
 
 <!-- For thickbox type selector -->
 <div style="display:none">
-	<?php arc_get_view('form-field-type-selector'); ?>
+	<?php tidy_get_view('form-field-type-selector'); ?>
 </div>

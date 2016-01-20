@@ -1,5 +1,5 @@
 // Modular JS file
-ARCHITECT_FORMS_TINYMCE = (function ($) {
+Tidy_Forms_TINYMCE = (function ($) {
 
 	// Breakpoints
 	var	init = function () {
@@ -11,16 +11,16 @@ ARCHITECT_FORMS_TINYMCE = (function ($) {
 		// this runs only when we know the whole DOM is ready
 		domReady = function () {
 
-			tinymce.PluginManager.add('architect_forms', function( editor, url ) {
-				editor.addButton('architect_forms', {
+			tinymce.PluginManager.add('Tidy_Forms', function( editor, url ) {
+				editor.addButton('Tidy_Forms', {
 					text: '',
-					tooltip: 'WP Architect Form',
-					icon: 'arc-form-mce-button',
+					tooltip: 'Tidy Forms',
+					icon: 'tidy-form-mce-button',
 					onclick: function() {
 
 						// todo: Add loading spinner
 
-						var request = {'action': 'arc_get_form_values'};
+						var request = {'action': 'tidy_get_form_values'};
 
 					    $.ajax({
 							type: 'POST',
@@ -33,13 +33,13 @@ ARCHITECT_FORMS_TINYMCE = (function ($) {
 									body: [
 										{
 											type: 'listbox',
-											name: 'architectFormsBox',
+											name: 'tidyFormsBox',
 											label: 'Select form',
 											values: response
 										}
 									],
 									onsubmit: function( e ) {
-										editor.insertContent( '[architect-form id="' + e.data.architectFormsBox + '"]');
+										editor.insertContent( '[tidy-form id="' + e.data.tidyFormsBox + '"]');
 									}
 								});
 							}
@@ -55,4 +55,4 @@ ARCHITECT_FORMS_TINYMCE = (function ($) {
 
 })(jQuery);
 
-ARCHITECT_FORMS_TINYMCE.go();
+Tidy_Forms_TINYMCE.go();

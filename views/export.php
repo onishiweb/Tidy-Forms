@@ -6,17 +6,17 @@
 
 		<ul>
 			<li>
-				<label for="arc-select-form">Form</label><br>
-				<select name="arc_export_form" id="arc-select-form">
+				<label for="tidy-select-form">Form</label><br>
+				<select name="tidy_export_form" id="tidy-select-form">
 					<?php foreach( $args['forms'] as $form ): ?>
 						<option value="<?php echo $form->ID; ?>"><?php echo $form->post_title; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</li>
 			<li>
-				<?php wp_nonce_field( 'arc_form_entries_export', 'arc_form_export_nonce', false ); ?>
-        <input type="hidden" name="action" value="arc_export_entries">
-				<input type="submit" class="button-primary" name="arc_export_entries" value="Export">
+				<?php wp_nonce_field( 'tidy_form_entries_export', 'tidy_form_export_nonce', false ); ?>
+        <input type="hidden" name="action" value="tidy_export_entries">
+				<input type="submit" class="button-primary" name="tidy_export_entries" value="Export">
 			</li>
 		</ul>
 	</form>

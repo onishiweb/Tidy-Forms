@@ -2,11 +2,14 @@
 /**
  * Helpers
  *
- * @package  TidyForms
+ * @package     Tidy Forms
+ * @author      Adam Onishi <onishiweb@gmail.com>
+ * @license     GPL2
+ * @copyright   2016 Adam Onishi
  */
 
 /**
- *  arc_get_setting
+ *  tidy_get_setting
  *
  *  This function will return a value from the settings array in the main class object
  *
@@ -14,24 +17,24 @@
  *  @return	[mixed]
  */
 
-function arc_get_setting( $name, $allow_filter = true ) {
+function tidy_get_setting( $name, $allow_filter = true ) {
 
 	// vars
 	$r = null;
-	$arc = Architect_Forms::get_instance();
+	$tidy = Tidy_Forms::get_instance();
 
 
 	// load from ACF if available
-	if( isset( $arc->settings[ $name ] ) ) {
+	if( isset( $tidy->settings[ $name ] ) ) {
 
-		$r = $arc->settings[ $name ];
+		$r = $tidy->settings[ $name ];
 
 	}
 
 	// filter for 3rd party customization
 
 	if( $allow_filter ) {
-		$r = apply_filters( "architect_forms_{$name}", $r );
+		$r = apply_filters( "Tidy_Forms_{$name}", $r );
 	}
 
 	// return
@@ -39,44 +42,44 @@ function arc_get_setting( $name, $allow_filter = true ) {
 }
 
 /**
- * arc_get_dir
+ * tidy_get_dir
  *
  * Returns the url to a file within the plugin folder
  *
  * @param  [string] $path the relative path from the root of the plugin folder
  * @return [string]
  */
-function arc_get_dir( $path ) {
+function tidy_get_dir( $path ) {
 
-	return arc_get_setting('dir') . $path;
+	return tidy_get_setting('dir') . $path;
 
 }
 
 /**
- * arc_get_path
+ * tidy_get_path
  *
  * Returns the path to a file within the plugin directory
  *
  * @param  [string] $path The relative path from the root of the plugin folder
  * @return [string]
  */
-function arc_get_path( $path ) {
+function tidy_get_path( $path ) {
 
-	return arc_get_setting('path') . $path;
+	return tidy_get_setting('path') . $path;
 
 }
 
 /**
- * arc_include
+ * tidy_include
  *
  * Includes file after checking whether the file exists
- * - based on arc_include
+ * - based on tidy_include
  *
  * @param  [string] $file path to the file to include
  */
-function arc_include( $file ) {
+function tidy_include( $file ) {
 
-	$path = arc_get_path( $file );;
+	$path = tidy_get_path( $file );;
 
 	if( file_exists($path) ) {
 
@@ -87,7 +90,7 @@ function arc_include( $file ) {
 }
 
 /**
- *  arc_get_view
+ *  tidy_get_view
  *
  *  This function will load in a file from the views folder and allow variables to be passed through
  *
@@ -95,10 +98,10 @@ function arc_include( $file ) {
  *  @param	[array] $args Variable for us in the view
  */
 
-function arc_get_view( $view_name = '', $args = array() ) {
+function tidy_get_view( $view_name = '', $args = array() ) {
 
 	// vars
-	$path = arc_get_path("views/{$view_name}.php");
+	$path = tidy_get_path("views/{$view_name}.php");
 
 	if( file_exists($path) ) {
 
@@ -109,14 +112,14 @@ function arc_get_view( $view_name = '', $args = array() ) {
 }
 
 /**
- * arc_isset_echo
+ * tidy_isset_echo
  *
  * This function checks whether an index is set in an array and if so prints it out
  *
  * @param  [array] $arr Array of data
  * @param  [string] $var Index to search for
  */
-function arc_isset_echo( $arr, $var ) {
+function tidy_isset_echo( $arr, $var ) {
 
 	if( isset( $arr[ $var ] ) ) {
 		echo $arr[ $var ];

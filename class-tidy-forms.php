@@ -1,14 +1,14 @@
 <?php
 /**
- * WP Form Architect main class file
+ * Tidy Forms main class file
  *
- * @package 	WP Form Architect
- * @author 		Adam Onishi	<aonishi@wearearchitect.com>
- * @license 	GPL2
- * @copyright 	2015 Adam Onishi
+ * @package     Tidy Forms
+ * @author      Adam Onishi <onishiweb@gmail.com>
+ * @license     GPL2
+ * @copyright   2016 Adam Onishi
  */
 
-class Architect_Forms {
+class Tidy_Forms {
 	/**
 	 * An instance of the class
 	 *
@@ -21,7 +21,7 @@ class Architect_Forms {
 	 *
 	 * @var string
 	 */
-	protected static $plugin_slug = 'arc-forms';
+	protected static $plugin_slug = 'tidy-forms';
 
 
 	private function __construct() {
@@ -42,9 +42,9 @@ class Architect_Forms {
 		$this->settings = array(
 
 			// basic
-			'name'               => __('WP Form Architect', 'arcforms'),
-			'version'            => '0.0.1',
-			'slug'               => 'arc-forms',
+			'name'               => __('Tidy Forms', 'tidyforms'),
+			'version'            => '1.0.0',
+			'slug'               => 'tidy-forms',
 
 			// urls
 			'basename'           => plugin_basename( __FILE__ ),
@@ -70,34 +70,34 @@ class Architect_Forms {
 			'setting_defaults'   => array(
 				'id'               => 0,
 				'all_fields_wrap'  => 'ul', // ul, div, or ''
-				'all_fields_class' => 'arc-form-wrap',
+				'all_fields_class' => 'tidy-form-wrap',
 				'field_wrap'       => 'li', // li, div, p, or ''
-				'field_class'      => 'arc-form-field',
-				'field_prefix'     => 'arc_',
+				'field_class'      => 'tidy-form-field',
+				'field_prefix'     => 'tidy_',
 			),
 		);
 
 		require_once('inc/helpers.php');
 
-		arc_include('class-arc-forms-data.php');
+		tidy_include('class-tidy-forms-data.php');
 
-		Architect_Forms_Data::get_instance();
+		Tidy_Forms_Data::get_instance();
 
 		if( ! is_admin() ) {
 			// TODO: Check if them customiser still works with these only being included when not in the admin
-			arc_include('inc/template-tags.php');
-			arc_include('class-arc-forms-renderer.php');
-			arc_include('class-arc-forms-validator.php');
+			tidy_include('inc/template-tags.php');
+			tidy_include('class-tidy-forms-renderer.php');
+			tidy_include('class-tidy-forms-validator.php');
 
-			Architect_Forms_Renderer::get_instance();
-			Architect_Forms_Validator::get_instance();
+			Tidy_Forms_Renderer::get_instance();
+			Tidy_Forms_Validator::get_instance();
 		}
 
 		if( is_admin() ) {
-			arc_include('class-arc-list-table.php');
-			arc_include('class-arc-forms-admin.php');
+			tidy_include('class-tidy-list-table.php');
+			tidy_include('class-tidy-forms-admin.php');
 
-			Architect_Forms_Admin::get_instance();
+			Tidy_Forms_Admin::get_instance();
 		}
 	}
 }

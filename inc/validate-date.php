@@ -11,7 +11,7 @@
  * @param type $format
  * @return boolean
  */
-function arc_validate_date($date = null, $format = 'YYYY-MM-DD')
+function tidy_validate_date($date = null, $format = 'YYYY-MM-DD')
 {
 	// Return FALSE if $date empty
 	if( empty( $date ) )

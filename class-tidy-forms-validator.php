@@ -1,14 +1,14 @@
 <?php
 /**
- * WP Form Architect validator class
+ * Tidy Forms validator class
  *
- * @package 	WP Form Architect
- * @author 		Adam Onishi	<aonishi@wearearchitect.com>
- * @license 	GPL2
- * @copyright 	2015 Adam Onishi
+ * @package     Tidy Forms
+ * @author      Adam Onishi <onishiweb@gmail.com>
+ * @license     GPL2
+ * @copyright   2016 Adam Onishi
  */
 
-class Architect_Forms_Validator {
+class Tidy_Forms_Validator {
 	/**
 	 * An instance of the class
 	 *
@@ -18,7 +18,7 @@ class Architect_Forms_Validator {
 
 	private function __construct() {
 		// Include validation libraries
-		arc_include('inc/validate-date.php');
+		tidy_include('inc/validate-date.php');
 	}
 
 	public static function get_instance() {
@@ -31,7 +31,7 @@ class Architect_Forms_Validator {
 
 	public static function process_form( $args ) {
 
-		if( $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_POST['arc_form_submit']) ) {
+		if( $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_POST['tidy_form_submit']) ) {
 			return self::validate_form( $args );
 		}
 
@@ -45,7 +45,7 @@ class Architect_Forms_Validator {
 
 		foreach($fields as $field) {
 			$type = $field['type'];
-			$name = 'arc_' . $field['name'];
+			$name = 'tidy_' . $field['name'];
 
 			if( isset($_POST[ $name ]) ) {
 				$value = stripslashes( $_POST[ $name ] );
@@ -57,20 +57,20 @@ class Architect_Forms_Validator {
 						$validation = 'validate_' .$field['text_validation'];
 
 						if( ! self::$validation( $value ) ) {
-							$errors[ $name ] = __('Error: Please check the information entered', 'arcforms');
+							$errors[ $name ] = __('Error: Please check the information entered', 'tidyforms');
 						}
 					}
 				case 'textarea':
 				case 'select':
 					if( isset($field['required']) && ! self::validate_required( $value ) ) {
-						$errors[ $name ] = __('Error: This is a required field', 'arcforms');
+						$errors[ $name ] = __('Error: This is a required field', 'tidyforms');
 					}
 
 					break;
 				case 'radio':
 				case 'checkbox':
 					if( isset($field['required']) && ! isset( $_POST[ $name ]) ) {
-						$errors[ $name ] = __('Error: This is a required field, please select an option', 'arcforms');
+						$errors[ $name ] = __('Error: This is a required field, please select an option', 'tidyforms');
 					}
 
 					break;
@@ -89,12 +89,12 @@ class Architect_Forms_Validator {
 		if( ! empty($errors) ) {
 			$args['errors'] = $errors;
 
-			add_action( 'architect_form_before_fields', array('Architect_Forms_Validator', 'get_error_notification') );
+			add_action( 'tidy_form_before_fields', array('Tidy_Forms_Validator', 'get_error_notification') );
 		} else {
 			// Save/send form data
-			do_action( 'architect_forms_after_validation', $args );
-			Architect_Forms_Data::email_entry($args);
-			Architect_Forms_Data::save_entry($args);
+			do_action( 'Tidy_Forms_after_validation', $args );
+			Tidy_Forms_Data::email_entry($args);
+			Tidy_Forms_Data::save_entry($args);
 
 			// Set thanks message
 			$args['submitted'] = true;
@@ -143,7 +143,7 @@ class Architect_Forms_Validator {
 
 	private static function validate_date( $value ) {
 
-		if( ! arc_validate_date($value, 'YYYY-MM-DD') ) {
+		if( ! tidy_validate_date($value, 'YYYY-MM-DD') ) {
 			return false;
 		}
 
@@ -152,8 +152,8 @@ class Architect_Forms_Validator {
 
 	public static function get_error_notification() {
 		// TODO: Add to general settings
-		echo '<div class="arc-forms-notification arc-forms-error">';
-		_e('Error: Sorry your form could not be submitted. Please check the fields below and submit again', 'arcforms');
+		echo '<div class="tidy-forms-notification tidy-forms-error">';
+		_e('Error: Sorry your form could not be submitted. Please check the fields below and submit again', 'tidyforms');
 		echo '</div>';
 	}
 
