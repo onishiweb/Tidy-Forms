@@ -298,7 +298,12 @@ class Tidy_Forms_Admin {
 		$fields = $content['fields'];
 
 		// Include fields meta view
-		tidy_get_view('form-fields-box', $fields);
+		if( isset($content['fields']) ) {
+            $fields = $content['fields'];
+            tidy_get_view('form-fields-box', $fields);
+        } else {
+            tidy_get_view('form-fields-box');
+        }
 	}
 
 	public function render_settings_meta( $post ) {
@@ -306,7 +311,12 @@ class Tidy_Forms_Admin {
 
 		// Get settings data
 		$content = get_post_meta( $post->ID, '_tidy_form_data', true );
-		$settings = $content['settings'];
+
+        if( isset($content['settings']) ) {
+            $settings = $content['settings'];
+        } else {
+            $settings = array();
+        }
 
 		// Give the submit text a default setting if none set
 		if( empty($settings['submit_text']) ) {
