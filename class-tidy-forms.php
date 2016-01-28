@@ -94,7 +94,7 @@ class Tidy_Forms {
 		}
 
 		if( is_admin() ) {
-			tidy_include('class-tidy-list-table.php');
+			tidy_include('class-tidy-forms-list-table.php');
 			tidy_include('class-tidy-forms-admin.php');
 
 			Tidy_Forms_Admin::get_instance();
